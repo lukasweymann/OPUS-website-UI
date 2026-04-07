@@ -1,0 +1,13 @@
+/* src/app/components/ui/SelectField/SelectField.module.css */
+
+.field {
+    display: grid;
+    gap: 6px;
+    min-width: 220px;
+}
+
+.label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-main);
+}

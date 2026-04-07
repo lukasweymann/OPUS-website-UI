@@ -1,0 +1,128 @@
+/* page.module.css */
+
+.wrap {
+    padding: clamp(14px, 4vw, 30px) clamp(14px, 8vw, 140px) 100px;
+    background: var(--main-background);
+    color: var(--main-copy);
+    display: grid;
+    gap: 14px;
+}
+
+.card {
+    border: 1px solid color-mix(in oklab, var(--main-copy) 12%, transparent);
+    background: var(--sample-box);
+    border-radius: var(--radius-lg, 14px);
+    box-shadow: var(--shadow-sm, 0 10px 24px rgba(0, 0, 0, .12));
+    padding: clamp(14px, 2vw, 18px);
+}
+
+/* Card header */
+.cardHead {
+    display: grid;
+    gap: 10px;
+}
+
+.dl {
+    justify-self: end;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: var(--dashboard-btn-active);
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid color-mix(in oklab, var(--dashboard-btn-active) 70%, transparent);
+}
+
+.dl:hover {
+    filter: brightness(1.05);
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(22px, 2.1vw, 30px);
+    line-height: 1.15;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+}
+
+.ver {
+    color: var(--desc-link-color);
+    font-weight: 800;
+}
+
+/* Meta row */
+.metaGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.meta {
+    border: 1px solid color-mix(in oklab, var(--main-copy) 10%, transparent);
+    background: color-mix(in oklab, var(--sample-box) 85%, transparent);
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.metaKey {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+}
+
+.metaVal {
+    display: block;
+    line-height: 1.55;
+}
+
+/* Content blocks inside card */
+.block {
+    margin-top: 10px;
+    display: grid;
+    gap: 10px;
+}
+
+/* IMPORTANT: keep content from painting the card corners */
+.content {
+    line-height: 1.65;
+    word-break: break-word;
+}
+
+.content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Links inside YAML HTML */
+.content a {
+    text-decoration: none;
+    color: var(--link);
+}
+
+.content a:hover,
+.wrap a:hover {
+    text-decoration: underline;
+    color: var(--link-hover);
+}
+
+.h2 {
+    margin: 8px 0 0;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}

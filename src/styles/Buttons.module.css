@@ -1,0 +1,153 @@
+/* Buttons.module.css
+   Minimal + “techy” (glass, subtle gradients, crisp borders).
+   Uses global tokens: --accent, --accent-soft, --surface, --surface-strong, --border,
+   --text-main, --text-muted, --shadow-sm, --ring
+*/
+
+:where(.primaryButton, .secondaryButton, .tertiaryButton) {
+  position: relative;
+  overflow: hidden;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.52rem 0.9rem;
+  border-radius: var(--radius-pill);
+
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+
+  border: 1px solid transparent;
+
+  /* “pro” feel: crisp line + soft lift */
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    filter 160ms ease;
+}
+
+:where(.primaryButton, .secondaryButton, .tertiaryButton)::before {
+  /* subtle sheen like modern dashboards */
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(circle at top left,
+      rgba(255, 255, 255, 0.14),
+      transparent 55%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+:where(.primaryButton, .secondaryButton, .tertiaryButton):hover::before {
+  opacity: 1;
+}
+
+:where(.primaryButton, .secondaryButton, .tertiaryButton):active {
+  transform: translateY(1px);
+}
+
+:where(.primaryButton, .secondaryButton, .tertiaryButton):focus-visible {
+  outline: none;
+  box-shadow: var(--ring), var(--shadow-sm), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+:where(.primaryButton, .secondaryButton, .tertiaryButton)[aria-disabled="true"],
+:where(.primaryButton, .secondaryButton, .tertiaryButton):disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* PRIMARY — “Dashboard” / main CTA
+   Deep accent gradient + controlled glow
+*/
+.primaryButton {
+  color: #ffffff;
+  background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 92%, #000),
+      var(--accent));
+  border-color: color-mix(in srgb, var(--accent) 55%, rgba(148, 163, 184, 0.35));
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(15, 23, 42, 0.65),
+    0 0 24px rgba(142, 117, 255, 0.18);
+}
+
+.primaryButton:hover {
+  filter: brightness(1.05);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.26),
+    0 0 0 1px rgba(15, 23, 42, 0.75),
+    0 0 30px rgba(142, 117, 255, 0.24);
+}
+
+/* SECONDARY — “Corpora / Synthetic”
+   Glassy outline with a faint accent tint on hover
+*/
+.secondaryButton {
+  color: var(--text-main);
+  border-color: var(--border);
+  background: linear-gradient(135deg,
+      color-mix(in srgb, var(--surface-strong) 88%, transparent),
+      color-mix(in srgb, var(--surface) 92%, transparent));
+
+  /* “glass” */
+  backdrop-filter: blur(10px) saturate(1.15);
+}
+
+.secondaryButton:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent-soft) 55%, var(--surface-strong)),
+      color-mix(in srgb, var(--surface) 92%, transparent));
+}
+
+/* TERTIARY — low emphasis nav links
+   Quiet, but still “designed” on hover
+*/
+.tertiaryButton {
+  color: var(--text-muted);
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.tertiaryButton:hover {
+  color: var(--text-main);
+  border-color: var(--border);
+  background: rgba(15, 23, 42, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+/* Dark-mode nuance: tertiary hover should feel like the OPUS glass blocks */
+@media (prefers-color-scheme: dark) {
+  .tertiaryButton:hover {
+    background: rgba(15, 23, 42, 0.70);
+  }
+}
+
+/* Motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  :where(.primaryButton, .secondaryButton, .tertiaryButton),
+  :where(.primaryButton, .secondaryButton, .tertiaryButton)::before {
+    transition: none;
+  }
+}

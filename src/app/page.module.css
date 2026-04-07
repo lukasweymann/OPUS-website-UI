@@ -1,0 +1,98 @@
+.page {
+    color: var(--text-main);
+    background: var(--bg);
+    padding-top: 30px;
+}
+
+.overview {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 32px;
+    align-items: flex-start;
+
+    padding: 40px clamp(16px, 8vw, 140px) 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.summary {
+    max-width: 540px;
+}
+
+.summary h2 {
+    margin: 0 0 10px;
+    font-size: clamp(20px, 2.2vw, 32px);
+    line-height: 1.4;
+}
+
+.kpis {
+    display: grid;
+    gap: 6px;
+}
+
+.kpis p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.kpis p>span,
+.kpiLink span {
+    color: var(--accent);
+    letter-spacing: normal;
+    font-weight: 800;
+    font-size: 1.25rem;
+    /* close to your 22px feel but responsive-safe */
+}
+
+.kpiLink {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.kpiLink:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.note {
+    margin-top: 10px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.note span {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.partners {
+    padding: 0 clamp(16px, 8vw, 140px) 60px;
+    color: var(--text-main);
+}
+
+.partners h2 {
+    margin: 16px 0 10px;
+    font-size: clamp(18px, 2vw, 24px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Single meaningful breakpoint: stack columns */
+@media (max-width: 980px) {
+    .overview {
+        grid-template-columns: 1fr;
+        padding: 30px clamp(16px, 7vw, 90px);
+        gap: 20px;
+    }
+
+    .summary {
+        max-width: none;
+    }
+}

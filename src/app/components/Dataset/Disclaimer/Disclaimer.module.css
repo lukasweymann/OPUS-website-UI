@@ -1,0 +1,98 @@
+/* CorpusDisclaimer.module.css — theme-safe (Canvas/CanvasText), “notice” panel */
+
+.notice {
+    --notice-accent: var(--accent, var(--dashboard-btn-active, #612ef8));
+
+    margin-top: 18px;
+    padding: 16px;
+
+    border-radius: var(--radius-2xl, 16px);
+    border: 1px solid color-mix(in oklab, CanvasText 14%, transparent);
+
+    /* Canvas adapts to light/dark via color-scheme (your toggler sets it) */
+    background:
+        radial-gradient(120% 160% at 12% 0%,
+            color-mix(in oklab, var(--notice-accent) 12%, transparent),
+            transparent 58%),
+        linear-gradient(135deg,
+            color-mix(in oklab, Canvas 94%, CanvasText 6%),
+            Canvas);
+
+    box-shadow:
+        0 10px 26px color-mix(in oklab, CanvasText 12%, transparent),
+        0 0 0 1px color-mix(in oklab, var(--notice-accent) 14%, transparent) inset;
+}
+
+/* Dark mode: deepen the panel so white/near-white copy pops */
+:root[data-theme="dark"] .notice {
+    /* darker “glass” base */
+    background:
+        radial-gradient(120% 160% at 12% 0%,
+            color-mix(in oklab, var(--notice-accent) 8%, transparent),
+            transparent 60%),
+        linear-gradient(135deg,
+            color-mix(in oklab, Canvas 72%, #080a1b 28%),
+            color-mix(in oklab, Canvas 64%, #10152b 36%));
+
+    border-color: color-mix(in oklab, CanvasText 18%, transparent);
+
+    box-shadow:
+        0 16px 34px color-mix(in oklab, #000 55%, transparent),
+        0 0 0 1px color-mix(in oklab, var(--notice-accent) 16%, transparent) inset;
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 8px 0;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--notice-accent);
+    box-shadow:
+        0 0 0 4px color-mix(in oklab, var(--notice-accent) 18%, transparent),
+        0 10px 22px -14px color-mix(in oklab, var(--notice-accent) 50%, transparent);
+    flex: 0 0 auto;
+}
+
+.title {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, CanvasText 92%, transparent);
+}
+
+.p {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: color-mix(in oklab, CanvasText 92%, transparent);
+}
+
+.list {
+    margin: 0 0 12px 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 6px;
+    line-height: 1.6;
+    color: color-mix(in oklab, CanvasText 92%, transparent);
+}
+
+.list li::marker {
+    color: color-mix(in oklab, var(--notice-accent) 80%, CanvasText);
+}
+
+.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.95em;
+    padding: 0.08rem 0.38rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--notice-accent) 28%, transparent);
+    background: color-mix(in oklab, var(--notice-accent) 10%, Canvas);
+    color: color-mix(in oklab, CanvasText 92%, transparent);
+}

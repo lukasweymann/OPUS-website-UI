@@ -1,0 +1,56 @@
+.page {
+    padding: 30px clamp(16px, 8vw, 140px);
+    min-height: 50vh;
+    background: var(--bg);
+    color: var(--text-main);
+}
+
+.h1 {
+    margin: 0 0 5px;
+    font-size: clamp(1.1rem, 2.2vw, 1.65rem);
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+}
+
+.count {
+    color: var(--text-muted);
+    font-size: 0.95em;
+    font-weight: 600;
+}
+
+/* Empty state */
+.empty {
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+}
+
+.emptyImg {
+    display: block;
+    width: min(520px, 100%);
+    height: auto;
+    margin-top: 14px;
+}
+
+/* Skeletons for loading.jsx (optional) */
+.skelTitle,
+.skelBox {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-sm);
+}
+
+.skelTitle {
+    height: 40px;
+    width: min(720px, 100%);
+    margin-bottom: 14px;
+}
+
+.skelBox {
+    height: 120px;
+    width: 100%;
+    margin-top: 12px;
+}

@@ -1,0 +1,133 @@
+/* components/ReleaseTable/ReleaseTable.module.css */
+
+.wrap {
+    display: grid;
+    gap: 10px;
+}
+
+.toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    width: fit-content;
+    padding: 10px 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--table-border);
+    background: var(--surface);
+    color: var(--text-main);
+    box-shadow: var(--shadow-sm);
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle:hover {
+    border-color: color-mix(in oklab, var(--table-border) 60%, var(--accent));
+}
+
+.year {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--table-border);
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.panel {
+    border-radius: var(--radius-lg);
+}
+
+.tableWrap {
+    overflow: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--table-border);
+    background: var(--table-main);
+    box-shadow: var(--shadow-sm);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+    min-width: 520px;
+}
+
+.table thead th {
+    background: var(--surface-strong);
+    border-bottom: 1px solid var(--table-border);
+    padding: 10px 12px;
+    font-weight: 800;
+}
+
+.table tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid color-mix(in oklab, var(--table-border) 60%, transparent);
+    vertical-align: top;
+}
+
+.table tbody tr:nth-child(even) td {
+    background: var(--table-even-row);
+}
+
+.modelCell {
+    width: 100%;
+}
+
+.link {
+    text-decoration: none;
+    color: var(--link);
+    display: inline-grid;
+    gap: 4px;
+}
+
+.link:hover {
+    color: var(--link-hover);
+}
+
+.name {
+    font-weight: 650;
+    word-break: break-word;
+}
+
+.meta {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    word-break: break-word;
+}
+
+.thGo,
+.goCell {
+    text-align: center;
+    width: 180px;
+    white-space: nowrap;
+}
+
+.go {
+    display: inline-grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--table-border);
+    background: var(--surface);
+    color: var(--text-main);
+    text-decoration: none;
+}
+
+.go:hover {
+    border-color: color-mix(in oklab, var(--table-border) 60%, var(--accent));
+    color: var(--text-main);
+}

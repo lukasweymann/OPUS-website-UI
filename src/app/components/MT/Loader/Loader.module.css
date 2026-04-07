@@ -1,0 +1,10 @@
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+}
+
+.loader h2 {
+    margin-right: 30px;
+}

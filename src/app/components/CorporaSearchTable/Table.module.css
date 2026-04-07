@@ -1,0 +1,174 @@
+/* CorporaTable.module.css — cleaned + consistent */
+
+.wrap {
+    width: 100%;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin: 0 0 7px;
+    flex-wrap: wrap;
+}
+
+.search {
+    display: grid;
+    gap: 6px;
+}
+
+.label {
+    font-weight: 650;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.input {
+    height: 26px;
+    width: min(320px, 100%);
+    padding: 0 12px;
+
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+
+    background: var(--surface-strong);
+    color: var(--text-main);
+    font: inherit;
+}
+
+.input::placeholder {
+    color: var(--text-muted);
+}
+
+.input:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+.pager {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.meta {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.select {
+    min-width: 90px;
+}
+
+/* Table wrapper (horizontal scroll done right) */
+.tableWrap {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-sm);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 860px;
+    /* ensures columns don’t collapse into unreadable soup */
+}
+
+.thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    text-align: left;
+    padding: 2px 12px;
+    background: var(--surface-strong);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.table tbody tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+
+.table tbody tr:hover {
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.table td {
+    padding: 0px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.thRight {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.thNum {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.thName {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sort {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.sortBtn {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.sortBtn:hover {
+    color: var(--link-hover);
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.sentShort {
+    display: none;
+}
+
+.empty {
+    margin-top: 14px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    border-radius: var(--radius-lg);
+}
+
+/* Only breakpoint kept: header label shrink */
+@media (max-width: 1000px) {
+    .sentFull {
+        display: none;
+    }
+
+    .sentShort {
+        display: inline;
+    }
+}

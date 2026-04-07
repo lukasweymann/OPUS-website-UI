@@ -1,0 +1,10 @@
+.bench {
+    max-width: 220px;
+    word-break: break-word;
+}
+
+
+
+.sumLabel {
+    color: var(--text-muted);
+}

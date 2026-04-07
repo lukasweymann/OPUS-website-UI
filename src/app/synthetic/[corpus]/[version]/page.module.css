@@ -1,0 +1,201 @@
+/* app/synthetic/[corpus]/[version]/page.module.css */
+
+.wrap {
+    padding: var(--page-pad);
+    max-width: 1200px;
+    margin: 0 auto;
+    color: var(--text-main);
+}
+
+.top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--space-3);
+}
+
+.dl {
+    text-decoration: none;
+    color: #fff;
+    background: var(--accent);
+    border: 1px solid color-mix(in oklab, var(--accent) 60%, var(--border));
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+}
+
+.dl:hover {
+    filter: brightness(1.05);
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+}
+
+.title {
+    margin: 0 0 var(--space-3) 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    letter-spacing: -0.02em;
+}
+
+.ver {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: color-mix(in oklab, var(--accent) 12%, transparent);
+    color: color-mix(in oklab, var(--text-main) 88%, var(--accent));
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+}
+
+.metaRow {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-4);
+}
+
+.meta {
+    display: grid;
+    gap: 4px;
+    min-width: 260px;
+}
+
+.metaKey {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.metaVal {
+    color: var(--text-main);
+}
+
+.metaVal a,
+.metaVal :global(a) {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.metaVal a:hover,
+.metaVal :global(a:hover) {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.h2 {
+    margin: var(--space-4) 0 var(--space-2) 0;
+    font-size: 1.05rem;
+}
+
+.p {
+    margin: 0 0 var(--space-4) 0;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.contentBlock {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.content {
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.content :global(a) {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.content :global(a:hover) {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.actions {
+    margin-top: var(--space-4);
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.copyBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    color: var(--text-main);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.copyBtn:hover {
+    border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+}
+
+.copyBtn[data-copied="1"] {
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+}
+
+.graphs {
+    min-height: 320px;
+}
+
+.controls {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pickerField {
+    width: min(560px, 100%);
+}
+
+.clear {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.clear:hover {
+    color: var(--text-main);
+    border-color: color-mix(in oklab, var(--accent) 25%, var(--border));
+}
+
+.results {
+    margin-top: var(--space-4);
+}

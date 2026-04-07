@@ -1,0 +1,54 @@
+/* Search.module.css — button matches circular icon buttons (table style) */
+
+.wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 40%;
+    flex-wrap: wrap;
+}
+
+.field {
+    width: clamp(160px, 22vw, 240px);
+}
+
+.btn {
+    display: inline-grid;
+    place-items: center;
+
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--link);
+
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.btn:hover {
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+    color: var(--link-hover);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: var(--ring), var(--shadow-sm);
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.icon {
+    fill: currentColor;
+}

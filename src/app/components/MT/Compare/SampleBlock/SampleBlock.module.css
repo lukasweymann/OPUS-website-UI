@@ -1,0 +1,73 @@
+/* components/SampleBlock/SampleBlock.module.css */
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 6px 0;
+}
+
+.k {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.v p {
+    margin: 0;
+    line-height: 1.45;
+    color: var(--text-main);
+    overflow-wrap: anywhere;
+}
+
+.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+/* model tones */
+.m1 {
+    color: #5580e4;
+}
+
+.m2 {
+    color: #f68558;
+}
+
+.m3 {
+    color: #2cb9b1;
+}
+
+.diff {
+    color: var(--text-muted);
+}
+
+.add {
+    color: var(--success-fg);
+}
+
+.rem {
+    color: #f43f5e;
+}
+
+/* minimal fallback; you can map this to a var later */
+
+.diffs {
+    display: grid;
+    gap: 4px;
+    margin-top: 6px;
+}

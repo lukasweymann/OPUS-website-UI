@@ -1,0 +1,86 @@
+/* src/app/mt/release-history/page.module.css */
+
+.wrap {
+    padding: var(--page-pad);
+    color: var(--text-main);
+    background: transparent;
+}
+
+.head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 0 0 14px 0;
+}
+
+.h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    letter-spacing: 0.02em;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+    align-items: start;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--table-border);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    min-width: 160px;
+}
+
+.pillTxt {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pillX {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--table-border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.pillX:hover {
+    color: var(--text-main);
+    border-color: color-mix(in oklab, var(--table-border) 70%, var(--accent));
+}
+
+.list {
+    display: grid;
+    gap: 12px;
+}
+
+.empty {
+    padding: 14px 16px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--table-border);
+    background: var(--surface);
+    color: var(--text-muted);
+}

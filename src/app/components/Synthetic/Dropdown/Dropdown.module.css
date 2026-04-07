@@ -1,0 +1,44 @@
+/* components/SyntheticTable/SyntheticDropdown.module.css */
+
+.wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.select {
+    min-width: 140px;
+}
+
+/* circular icon buttons like the table ones */
+.iconBtn {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--table-border);
+    background: var(--surface-strong, var(--surface));
+    color: var(--text-main);
+
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.iconBtn:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in oklab, var(--accent) 35%, var(--table-border));
+}
+
+.iconBtn:disabled,
+.iconBtn[data-disabled="1"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.iconBtn[data-copied="1"] {
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--table-border));
+}

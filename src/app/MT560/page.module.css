@@ -1,0 +1,81 @@
+.pageContainer {
+    padding: 60px 90px;
+    color: var(--text-main);
+}
+
+.pageContainer h1 {
+    margin-bottom: 5px;
+}
+
+.pageContainer h2 {
+    margin: 30px 0 0 0;
+}
+
+.pageContainer p {
+    width: 90%;
+    margin: 10px 0;
+    line-height: 1.55;
+    color: var(--text-main);
+}
+
+/* “code quote” block – signature surface + soft corners */
+.pageContainer blockquote {
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+
+    background: var(--surface-strong, var(--surface));
+    color: var(--text-main);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+
+    padding: 10px 14px;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* ensure long code doesn’t explode layout */
+.pageContainer blockquote pre {
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* lists */
+.pageContainer ul {
+    margin: 0 30px;
+}
+
+.pageContainer ul li {
+    margin: 7px 0;
+    line-height: 1.55;
+    color: var(--text-main);
+}
+
+/* links */
+.pageContainer a {
+    text-decoration: none;
+    color: var(--link);
+}
+
+.pageContainer a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* keep your breakpoints as-is */
+@media only screen and (max-width: 1200px) {
+    .pageContainer {
+        padding: 40px 30px;
+    }
+}
+
+@media only screen and (max-width: 760px) {
+    .pageContainer {
+        padding: 40px 30px;
+    }
+}

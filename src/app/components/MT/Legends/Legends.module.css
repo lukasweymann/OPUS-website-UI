@@ -1,0 +1,50 @@
+.container {
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+    font-size: 12px;
+}
+
+.swatch {
+    margin-right: 5px;
+    height: 15px;
+    width: 15px;
+    border-radius: 2px;
+}
+
+/* color variants */
+.opus {
+    background-color: #54aaff;
+}
+
+.external {
+    background-color: #f68558;
+}
+
+.hplt {
+    background-color: #9e0c0c;
+}
+
+.contributed {
+    background-color: #5c8374;
+}
+
+@media only screen and (max-width: 540px) {
+    .container {
+        flex-wrap: wrap;
+        height: 90px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .item {
+        margin-right: 20px;
+    }
+}

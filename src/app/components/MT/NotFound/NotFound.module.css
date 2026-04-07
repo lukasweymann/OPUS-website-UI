@@ -1,0 +1,29 @@
+/* components/NotFoundDashboard/NotFoundDashboard.module.css */
+
+.wrap {
+    margin-top: var(--space-6);
+    padding: var(--space-5) var(--space-5);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.rule {
+    height: 1px;
+    width: 100%;
+    margin: var(--space-4) 0;
+
+    background: linear-gradient(90deg,
+            #5580e4 0%,
+            #f68558 100%);
+    opacity: 0.95;
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    line-height: 1.5;
+    font-weight: 750;
+    color: var(--text-main);
+}

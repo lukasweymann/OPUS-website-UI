@@ -1,0 +1,131 @@
+/* app/compare/page.module.css */
+
+.wrap {
+    padding: var(--page-pad);
+    color: var(--text-main);
+}
+
+.head {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    padding: 16px 18px;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.h1 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+    letter-spacing: -0.02em;
+}
+
+.meta {
+    margin: 10px 0 0;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: baseline;
+}
+
+.metaKey {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.metaVal {
+    color: var(--text-main);
+    font-weight: 650;
+}
+
+.dot {
+    opacity: 0.65;
+}
+
+.models {
+    margin-top: 12px;
+    display: grid;
+    gap: 6px;
+}
+
+.m {
+    text-decoration: none;
+    word-break: break-word;
+    line-height: 1.35;
+    font-weight: 650;
+}
+
+.m:hover {
+    text-decoration: underline;
+}
+
+.m1 {
+    color: #5580e4;
+}
+
+.m2 {
+    color: #f68558;
+}
+
+.m3 {
+    color: #2cb9b1;
+}
+
+.ctrl {
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    padding: 10px 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tgl,
+.tglOn,
+.btn {
+    border: 1px solid var(--border);
+    background: var(--surface-strong, var(--surface));
+    color: var(--text-main);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.tglOn {
+    border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+    box-shadow: var(--shadow-sm);
+}
+
+.pager {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.range {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.list {
+    margin-top: 12px;
+    display: grid;
+    gap: 10px;
+}

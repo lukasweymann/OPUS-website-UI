@@ -1,0 +1,88 @@
+.wrap {
+    width: 100%;
+    min-width: 0;
+    min-height: 260px;
+}
+
+/* Tooltip card */
+.tip {
+    pointer-events: none;
+    max-width: 360px;
+
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+
+    background: var(--surface-strong, var(--surface));
+    box-shadow: var(--shadow-sm);
+}
+
+.tipHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.tipTitle {
+    font-weight: 750;
+    color: var(--text-main);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.badge {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1;
+
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+:root[data-theme="dark"] .badge {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.tipRows {
+    display: grid;
+    gap: 6px;
+}
+
+.tipRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.k {
+    color: var(--text-muted);
+}
+
+.v {
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+}
+
+@media (max-width: 1080px) {
+    .wrap {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 440px) {
+    .wrap {
+        min-width: 320px;
+    }
+}

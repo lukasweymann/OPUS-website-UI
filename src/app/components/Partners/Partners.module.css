@@ -1,0 +1,29 @@
+/* components/Partners.module.css — trimmed, no partner-specific hacks */
+
+.wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    place-items: center;
+    gap: clamp(16px, 6vw, 40px) clamp(32px, 8vw, 100px);
+    padding: 20px 0 60px;
+}
+
+.link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    display: block;
+    width: 120px;
+    /* consistent visual width */
+    height: auto;
+    /* keep aspect ratio */
+    filter: saturate(1);
+    transition: transform .12s ease;
+}
+
+.logo:hover {
+    transform: translateY(-1px);
+}

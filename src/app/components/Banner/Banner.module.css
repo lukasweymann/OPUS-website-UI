@@ -1,0 +1,48 @@
+.wrap {
+    position: relative;
+    overflow: visible;
+    /* IMPORTANT: allow dropdowns to escape */
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(12px, 3vw, 40px);
+
+    padding: clamp(20px, 4vw, 30px) clamp(15px, 8vw, 120px);
+    min-height: 210px;
+    box-sizing: border-box;
+
+    color: var(--text-main);
+    background: radial-gradient(circle at top left, var(--bg-grad-a), var(--bg));
+    border: 1px solid var(--border);
+    border-left: 0;
+    border-right: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+/* This element clips glows/decoration only */
+.clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    /* never blocks interactions */
+    border-radius: inherit;
+    /* if you add rounding later */
+}
+
+/* Move the glow here */
+.clip::before {
+    content: "";
+    position: absolute;
+    inset: -35%;
+    background: radial-gradient(circle at top right, var(--accent-soft), transparent 60%);
+    opacity: 0.9;
+}
+
+/* Content stays above */
+.logo,
+.box {
+    position: relative;
+    z-index: 1;
+}

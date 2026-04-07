@@ -1,0 +1,73 @@
+.nameCell {
+    font-weight: 700;
+}
+
+.nameLink {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.nameLink:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.ver {
+    margin-left: 8px;
+    font-weight: 650;
+    font-style: italic;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+.num {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.dd {
+    white-space: nowrap;
+}
+
+.sampleLink {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-pill);
+    margin-left: 5px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--link);
+
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.sampleLink:hover {
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+    color: var(--link-hover);
+}
+
+.sampleLink:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+/* switch to compact numbers on smaller widths */
+.compact {
+    display: none;
+}
+
+@media (max-width: 1100px) {
+    .full {
+        display: none;
+    }
+
+    .compact {
+        display: inline;
+    }
+}

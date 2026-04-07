@@ -1,0 +1,76 @@
+/* components/SampleNotFound/SampleNotFound.module.css */
+
+.wrap {
+    padding: var(--page-pad);
+    color: var(--text-main);
+}
+
+.card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-6);
+    display: grid;
+    gap: var(--space-5);
+}
+
+.h1 {
+    margin: 0;
+    font-size: clamp(1.1rem, 1.2vw + 1rem, 1.5rem);
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+}
+
+.p {
+    margin: 10px 0 0 0;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.em {
+    font-weight: 800;
+}
+
+.link {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+}
+
+.img {
+    max-width: 100%;
+    height: auto;
+    opacity: 0.95;
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 800;
+
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--border));
+    background: var(--accent);
+    color: #fff;
+}
+
+.cta:hover {
+    filter: brightness(1.05);
+}

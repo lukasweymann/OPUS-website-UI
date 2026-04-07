@@ -1,0 +1,35 @@
+frontend/.next
+frontend/node_modules
+node_modules
+.env
+.env.local
+frontend/.env
+
+db_scores/venv/
+.venv/
+.next/dev/
+.next/
+.next
+
+data/opus/*
+!data/opus/.gitkeep
+
+# Python venv
+.venv/
+data/opus/*.db
+data/opus/*.db-shm
+data/opus/*.db-wal
+# Local dev databases
+dev-opus/
+dev-langpairs.db
+dev-scores.db
+devscores.db
+
+# Generic local SQLite scratch DBs (if you expect more)
+*.sqlite3
+
+# Local logs
+ingest.log
+*.log
+data/opus/*
+!data/opus/.gitkeep

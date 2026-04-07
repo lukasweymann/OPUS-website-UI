@@ -1,0 +1,70 @@
+/* components/LanguageGraphsSynthetic/LanguageGraphsSynthetic.module.css */
+
+.wrap {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.head {
+    margin-bottom: var(--space-3);
+}
+
+.h2 {
+    margin: 0 0 6px 0;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+}
+
+.p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.chart {
+    width: 100%;
+    min-width: 100%;
+    height: 300px
+        /* pick something reasonable */
+}
+
+/* Tooltip (match your other chart tooltips) */
+.tip {
+    pointer-events: none;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-strong, var(--surface));
+    box-shadow: var(--shadow-sm);
+    max-width: 360px;
+}
+
+.tipTitle {
+    font-weight: 750;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tipRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.k {
+    color: var(--text-muted);
+}
+
+.v {
+    color: var(--text-main);
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+}

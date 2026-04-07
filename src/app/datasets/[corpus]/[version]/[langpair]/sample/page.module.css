@@ -1,0 +1,104 @@
+.wrap {
+    padding: clamp(18px, 4vw, 46px) clamp(14px, 6vw, 120px);
+    color: var(--main-copy);
+    background: var(--main-background);
+    min-height: 60vh;
+}
+
+.card {
+    border-radius: var(--radius-xl, 18px);
+    border: 1px solid var(--table-border);
+    background: color-mix(in oklab, var(--main-background) 92%, white 8%);
+    box-shadow: var(--shadow-sm);
+    padding: clamp(14px, 2.2vw, 22px);
+}
+
+.head {
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+}
+
+.ver {
+    margin-left: 10px;
+    font-weight: 700;
+    opacity: 0.85;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.sub {
+    margin: 10px 0 0 0;
+    opacity: 0.9;
+}
+
+.strong {
+    font-weight: 800;
+}
+
+.corpusLink {
+    color: var(--desc-link-color);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.corpusLink:hover {
+    color: var(--navlink-hover-color);
+}
+
+.toolbar {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.controls {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid color-mix(in oklab, var(--table-border) 65%, transparent);
+}
+
+.rows {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.pager {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.meta {
+    font-size: 0.92rem;
+    opacity: 0.82;
+}
+
+.list {
+    margin-top: 14px;
+    display: grid;
+    gap: 10px;
+}

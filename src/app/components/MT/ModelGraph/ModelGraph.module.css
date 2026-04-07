@@ -1,0 +1,65 @@
+/* components/MT/ModelGraph/ModelGraph.module.css */
+
+.wrap {
+    margin-top: var(--space-4);
+    width: 100%;
+    min-width: 0;
+    min-height: 260px;
+}
+
+/* Signature tooltip: clean, solid, readable */
+.tip {
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-strong, var(--surface));
+    box-shadow: var(--shadow-sm);
+    max-width: 420px;
+}
+
+.tipTitle {
+    font-weight: 850;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.tipBody {
+    display: grid;
+    gap: 10px;
+}
+
+.tipBlock {
+    display: grid;
+    gap: 6px;
+}
+
+.tipSub {
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.tipRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.tipKey {
+    color: var(--text-muted);
+}
+
+.tipVal {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 440px) {
+    .wrap {
+        min-width: 320px;
+    }
+}

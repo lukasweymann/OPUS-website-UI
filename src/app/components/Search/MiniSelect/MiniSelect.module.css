@@ -1,0 +1,154 @@
+.box {
+    position: relative;
+    z-index: 40;
+}
+
+/* Trigger button */
+.btn {
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    color: var(--text-main);
+
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-align: left;
+
+    cursor: pointer;
+    user-select: none;
+
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover {
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: var(--ring), var(--shadow-sm);
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.caret {
+    opacity: 0.85;
+    font-size: 0.85rem;
+}
+
+/* Popover */
+.pop {
+    position: absolute;
+    z-index: 40;
+    inset-inline: 0;
+    margin-top: 8px;
+
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-sm);
+
+    padding: 8px;
+    display: grid;
+    gap: 8px;
+}
+
+/* Search inside popover */
+.search {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px;
+
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-main);
+
+    font: inherit;
+    font-size: 0.9rem;
+
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.search:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+/* Options list */
+.list {
+    max-height: min(40vh, 280px);
+    overflow: auto;
+    margin: 0;
+    padding: 4px;
+
+    list-style: none;
+    display: grid;
+    gap: 2px;
+}
+
+/* Option */
+.item {
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+
+    cursor: pointer;
+    color: var(--text-main);
+
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1.2;
+
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.item:hover {
+    background: rgba(37, 99, 235, 0.06);
+}
+
+.active {
+    background: rgba(37, 99, 235, 0.09);
+}
+
+.selected {
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid color-mix(in srgb, var(--link) 28%, var(--border));
+}
+
+.empty {
+    padding: 10px;
+    color: var(--text-muted);
+}
+
+/* Prevent overflow and make pop width match the button */
+.box,
+.box * {
+    box-sizing: border-box;
+}
+
+.pop {
+    min-width: 100%;
+    max-width: min(520px, 100vw - 24px);
+    overflow: hidden;
+    /* keeps the search/input from poking out */
+}
+
+.search {
+    width: 100%;
+    max-width: 100%;
+}

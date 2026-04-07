@@ -1,0 +1,90 @@
+/* SizesTable.module.css — minimal + consistent with the API HTML style */
+
+.wrap {
+    margin: 9px 0 30px;
+    color: var(--text-main);
+}
+
+.scroller {
+    max-height: 320px;
+    overflow: auto;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Sticky header */
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    text-align: left;
+    padding: 8px 12px;
+
+    background: var(--surface-strong);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    border-bottom: 1px solid var(--border);
+}
+
+/* Rows */
+.table tbody tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+/* @media (prefers-color-scheme: dark) {
+    .table tbody tr:nth-child(even) {
+        background: rgba(15, 23, 42, 0.55);
+    }
+} */
+
+.table tbody tr:hover {
+    background: rgba(37, 99, 235, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+    .table tbody tr:hover {
+        background: rgba(96, 165, 250, 0.10);
+    }
+}
+
+/* Cells */
+.table td {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.corpusCell {
+    width: 100%;
+}
+
+/* Numeric columns */
+.num {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Links */
+.link {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}

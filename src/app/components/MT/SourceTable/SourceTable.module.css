@@ -1,0 +1,105 @@
+.wrap {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    background: var(--table-main);
+    border: 1px solid var(--table-border);
+    box-shadow: var(--shadow-sm);
+    margin-left: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+    font-size: 13px;
+    line-height: 1.2;
+    color: var(--text-main);
+}
+
+.head {
+    background: var(--surface-strong);
+}
+
+.table th,
+.table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--table-border);
+    vertical-align: top;
+}
+
+.table th {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.row:nth-child(even) td {
+    background: var(--table-even-row);
+}
+
+/* alignment */
+.c {
+    text-align: center;
+}
+
+.r {
+    text-align: right;
+}
+
+.id {
+    width: 52px;
+    text-align: right;
+    color: var(--text-muted);
+}
+
+.bench {
+    max-width: 240px;
+    word-break: break-word;
+}
+
+.model {
+    max-width: 520px;
+    word-break: break-word;
+}
+
+/* links */
+.link {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.iconBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--link);
+    text-decoration: none;
+}
+
+.iconBtn:hover {
+    border-color: color-mix(in oklab, var(--link) 35%, var(--table-border));
+    background: color-mix(in oklab, var(--surface) 85%, white 15%);
+}
+
+.muted {
+    color: var(--text-muted);
+}
+
+/* summary row */
+.sum td {
+    font-weight: 700;
+    background: var(--surface-strong);
+}
+
+.sumLabel {
+    color: var(--text-muted);
+}

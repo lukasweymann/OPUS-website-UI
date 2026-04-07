@@ -1,0 +1,63 @@
+.opusToolsContainer {
+    padding: 40px 90px 80px 90px;
+    color: var(--text-main);
+}
+
+.opusToolsContainer .mainTitle {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px 0;
+}
+
+.opusToolsContainer h2 {
+    margin-top: 20px;
+    color: var(--text-main);
+}
+
+.opusToolsContainer p {
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 92%;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+.opusToolsContainer ul {
+    margin: 10px 30px;
+}
+
+.opusToolsContainer ul li {
+    margin: 10px 0;
+    line-height: 1.55;
+    color: var(--text-main);
+}
+
+/* links */
+.opusToolsContainer a {
+    text-decoration: none;
+    color: var(--link);
+}
+
+.opusToolsContainer a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .opusToolsContainer {
+        padding: 30px 30px 60px 30px;
+        color: var(--text-main);
+    }
+}
+
+@media only screen and (max-width: 760px) {
+    .opusToolsContainer .mainTitle {
+        font-size: 24px;
+    }
+
+    .opusToolsContainer h2 {
+        font-size: 20px;
+    }
+}

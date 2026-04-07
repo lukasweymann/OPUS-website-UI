@@ -1,0 +1,56 @@
+.page {
+    background: var(--bg);
+    color: var(--text-main);
+}
+
+/* NEW: one shared container for BOTH top + grid */
+.container {
+    padding: 30px clamp(16px, 8vw, 140px) 60px;
+    max-width: 1200px;
+    /* match your other pages */
+    margin: 0 auto;
+    width: 100%;
+}
+
+.h1 {
+    margin: 0 0 10px;
+    font-size: 1.35rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.h1 span {
+    font-weight: 800;
+}
+
+.lead {
+    margin: 0 0 10px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.stack {
+    display: grid;
+    gap: 14px;
+}
+
+/* divider stays aligned with container */
+.rule {
+    height: 1px;
+    border: 0;
+    background: var(--border);
+    margin: 26px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 26px;
+}
+
+@media (max-width: 980px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,122 @@
+.card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 1.1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.head {
+    display: grid;
+    gap: 0.3rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    font-weight: 650;
+    color: var(--text-main);
+}
+
+.where {
+    margin: 0;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.45;
+}
+
+.foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 14px;
+}
+
+/* meta stays left, wraps freely */
+.meta {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.35;
+    min-width: 0;
+    /* allow wrapping inside grid */
+}
+
+.year {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* UPDATED: pin actions to bottom-right */
+.actions {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    justify-self: end;
+    align-self: end;
+    white-space: nowrap;
+}
+
+/* buttons unchanged */
+.btn,
+.btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+
+    height: 32px;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-pill);
+
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-main);
+
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover,
+.btnPrimary:hover {
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+.btnPrimary {
+    background: var(--accent);
+    color: #fff;
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    box-shadow: var(--shadow-sm);
+}
+
+.btnPrimary:hover {
+    filter: brightness(1.05);
+}
+
+/* Mobile: allow wrapping naturally but keep actions right-aligned */
+@media (max-width: 550px) {
+    .foot {
+        grid-template-columns: 1fr;
+    }
+
+    .actions {
+        justify-self: start;
+        /* or keep end if you prefer */
+    }
+}

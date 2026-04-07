@@ -1,0 +1,92 @@
+/* components/SyntheticTable/SyntheticTable.module.css */
+
+.wrap {
+    margin-top: var(--space-3);
+}
+
+.scroller {
+    overflow: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--table-border);
+    background: var(--table-main);
+    box-shadow: var(--shadow-sm);
+}
+
+/* table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 720px;
+    /* keeps columns readable; scroller handles overflow */
+}
+
+.head th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    background: var(--surface-strong, var(--surface));
+    color: var(--text-main);
+    border-bottom: 1px solid var(--table-border);
+
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 10px 12px;
+}
+
+.body td {
+    padding: 10px 12px;
+    font-size: 0.92rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--table-border) 60%, transparent);
+}
+
+.body tr:nth-child(even) td {
+    background: var(--table-even-row);
+}
+
+.body tr:hover td {
+    background: color-mix(in oklab, var(--table-even-row) 70%, transparent);
+}
+
+
+
+/* columns */
+.thName {
+    width: 100%;
+}
+
+.thNum,
+.thRight {
+    white-space: nowrap;
+}
+
+.thNum {
+    text-align: right;
+}
+
+.thRight {
+    text-align: right;
+}
+
+/* responsive header label swap */
+.sentShort {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .sentFull {
+        display: none;
+    }
+
+    .sentShort {
+        display: inline;
+    }
+}
+
+@media (max-width: 610px) {
+    .table {
+        min-width: 0;
+        /* allow tighter */
+    }
+}

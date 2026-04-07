@@ -1,0 +1,54 @@
+/* components/CompareModelGraph/CompareModelGraph.module.css */
+
+.wrap {
+    margin-top: var(--space-4);
+}
+
+.chart {
+    height: 270px;
+    min-width: 360px;
+}
+
+/* Tooltip: signature, readable, not flashy */
+.tip {
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-strong, var(--surface));
+    box-shadow: var(--shadow-sm);
+    max-width: 360px;
+}
+
+.tipTitle {
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.tipRows {
+    display: grid;
+    gap: 6px;
+}
+
+.tipRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.tipKey {
+    color: var(--text-muted);
+}
+
+.tipVal {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+@media (max-width: 440px) {
+    .chart {
+        min-width: 320px;
+    }
+}
