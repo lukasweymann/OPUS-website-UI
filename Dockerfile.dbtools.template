@@ -1,0 +1,57 @@
+FROM node:24-bookworm
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+  && apt-get -qq -y install \
+       bash \
+       python3 \
+       python3-pip \
+       python3-venv \
+       jq \
+       sqlite3 \
+       git \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/app
+
+COPY python_tools ./python_tools
+COPY db_scores /opt/db_scores
+
+RUN python3 -m venv /opt/pyenv
+ENV VIRTUAL_ENV=/opt/pyenv
+ENV PATH="/opt/pyenv/bin:${PATH}"
+
+ENV GIT_REPO_URL=https://github.com/Helsinki-NLP/synOPUS
+ENV GIT_BRANCH=main
+ENV ROOT_SUBDIR=corpus
+ENV YAML_FILENAME=statistics.yaml
+ENV TOP_KEY=bitexts
+ENV LANGPAIRS_DB_PATH=/opt/langpairs/langpairs.db
+ENV OPUSAPI_DB=/opt/opus/opusdata.db
+ENV LANGPAIRS_DB=/opt/langpairs/langpairs.db
+ENV SCORES_DB=/opt/scores/scores.db
+ENV PYTHON_BIN=/opt/pyenv/bin/python
+ENV NODE_ENV=production
+ENV OPUS_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main/corpus
+ENV OPUS_EMAIL_SERVER=mail.domain.com
+ENV OPUS_EMAIL_USER=info@domain.com
+ENV OPUS_EMAIL_PASSWORD=password123
+ENV OPUS_EMAIL_RECEIVER=someguy@domain.com
+ENV BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main
+ENV SYN_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/synOPUS
+ENV SAMPLE_BASE=https://raw.githubusercontent.com/Helsinki-NLP/OPUS-website/master/public_html
+ENV SYNTH_SAMPLE_BASE=https://opus.nlpl.eu/legacy/synthetic
+ENV BASE=https://raw.githubusercontent.com/Helsinki-NLP
+ENV VIRTUAL_HOST=opus.nlpl.eu
+ENV VIRTUAL_PORT=3000
+ENV LETSENCRYPT_HOST=opus.nlpl.eu
+ENV LETSENCRYPT_EMAIL=email@domain.com
+
+
+RUN pip install --no-cache-dir \
+      -r /opt/db_scores/requirements.txt \
+      "git+https://github.com/lukasweymann/OpusTools.git@master#egg=opustools&subdirectory=opustools_pkg" \
+      ruamel.yaml \
+      PyYAML==6.0.2 \
+      requests
