@@ -14,13 +14,3 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
 
-      # OPUS_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main/corpus
-      # OPUS_EMAIL_SERVER=mail.domain.com
-      # - OPUS_EMAIL_USER=info@domain.com
-      # - OPUS_EMAIL_PASSWORD=password123
-      # - OPUS_EMAIL_RECEIVER=someguy@domain.com
-      # - BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main
-      # - SYN_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/synOPUS
-      # - SAMPLE_BASE=https://raw.githubusercontent.com/Helsinki-NLP/OPUS-website/master/public_html
-      # - SYNTH_SAMPLE_BASE=https://opus.nlpl.eu/legacy/synthetic
-      # - BASE=https://raw.githubusercontent.com/Helsinki-NLP

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-UPDATE_DB="${UPDATE_DB:-0}"
+# UPDATE_DB="${UPDATE_DB:-0}"
+UPDATE_DB=1
 HOST_DB_DIR="./data/opus"
 HOST_DB="$HOST_DB_DIR/opusdata.db"
 BOOTSTRAP_IMAGE="opus-dbtools:latest"
