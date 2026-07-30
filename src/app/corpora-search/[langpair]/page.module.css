@@ -1,7 +1,8 @@
 .page {
-    padding: 30px clamp(16px, 8vw, 140px);
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: 30px 0 60px;
     min-height: 50vh;
-    background: var(--bg);
     color: var(--text-main);
 }
 

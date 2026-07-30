@@ -1,5 +1,3 @@
-/* Stats.module.css — signature “tech card + table” */
-
 .wrap {
     margin-top: 22px;
 }
@@ -13,7 +11,7 @@
     font-size: 1.05rem;
     font-weight: 800;
     letter-spacing: 0.01em;
-    color: var(--text-main, var(--main-copy));
+    color: var(--text-main);
 }
 
 .title::before {
@@ -21,23 +19,22 @@
     width: 9px;
     height: 9px;
     border-radius: 999px;
-    background: var(--accent, var(--dashboard-btn-active));
+    background: var(--accent);
     box-shadow:
-        0 0 0 4px color-mix(in oklab, var(--accent, var(--dashboard-btn-active)) 18%, transparent),
-        0 10px 22px -14px color-mix(in oklab, var(--accent, var(--dashboard-btn-active)) 45%, transparent);
+        0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent),
+        0 10px 22px -14px color-mix(in oklab, var(--accent) 45%, transparent);
 }
 
-/* Card shell that matches your OPUS-API vibe */
 .scroller {
     position: relative;
     overflow: auto;
 
-    border-radius: var(--radius-xl, 14px);
-    border: 1px solid color-mix(in oklab, var(--border, var(--table-border)) 60%, transparent);
+    border-radius: var(--radius-lg);
+    border: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
 
     background:
         radial-gradient(120% 120% at 10% 0%,
-            color-mix(in oklab, var(--accent, var(--dashboard-btn-active)) 16%, transparent),
+            color-mix(in oklab, var(--accent) 16%, transparent),
             transparent 55%),
         linear-gradient(135deg,
             color-mix(in oklab, var(--table-main) 92%, black 8%),
@@ -56,11 +53,10 @@
     opacity: 0.65;
 
     background: radial-gradient(circle at top right,
-            color-mix(in oklab, var(--accent, var(--dashboard-btn-active)) 18%, transparent),
+            color-mix(in oklab, var(--accent) 18%, transparent),
             transparent 60%);
 }
 
-/* Table */
 .table {
     width: 100%;
     border-collapse: separate;
@@ -68,10 +64,8 @@
 
     position: relative;
     z-index: 1;
-    /* above glow */
 }
 
-/* Signature header: slightly glassy + sticky */
 .head th {
     position: sticky;
     top: 0;
@@ -85,38 +79,35 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
 
-    color: color-mix(in oklab, var(--text-main, var(--main-copy)) 90%, var(--text-muted, var(--secondary-copy)));
+    color: color-mix(in oklab, var(--text-main) 90%, var(--text-muted));
     background:
         linear-gradient(135deg,
-            color-mix(in oklab, var(--banner-background) 86%, transparent),
-            color-mix(in oklab, var(--banner-background) 94%, transparent));
+            color-mix(in oklab, var(--surface-strong) 86%, transparent),
+            color-mix(in oklab, var(--surface-strong) 94%, transparent));
 
     border-bottom: 1px solid color-mix(in oklab, var(--table-border) 75%, transparent);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 }
 
-/* KPI row */
 .body td {
     padding: 12px 12px;
     font-size: 1rem;
     font-weight: 800;
-    color: var(--text-main, var(--main-copy));
+    color: var(--text-main);
     font-variant-numeric: tabular-nums;
 
     border-top: 1px solid color-mix(in oklab, var(--table-border) 60%, transparent);
 }
 
-/* Zebra + hover, subtle and “techy” */
 .body tr:nth-child(even) td {
     background: color-mix(in oklab, var(--table-even-row) 85%, transparent);
 }
 
 .body tr:hover td {
-    background: color-mix(in oklab, var(--accent, var(--dashboard-btn-active)) 8%, transparent);
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
 }
 
-/* Alignment: numbers read better right-aligned */
 .table :is(th, td) {
     text-align: right;
 }
@@ -125,7 +116,6 @@
     text-align: left;
 }
 
-/* Responsive hide stays as you had it */
 .hideSm {
     display: table-cell;
 }

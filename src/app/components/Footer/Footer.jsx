@@ -145,21 +145,6 @@ export default function Footer() {
           >
             Opus Legacy
           </a>
-
-          <a
-            className={s.counter}
-            href="https://clustrmaps.com/site/19vsj"
-            target="_blank"
-            rel="noreferrer"
-            title="Visit tracker"
-            aria-label="Visit tracker"
-          >
-            <img
-              className={s.counterImg}
-              alt=""
-              src="//clustrmaps.com/map_v2.png?cl=ffffff&w=a&t=tt&d=jb3_gRwq0W-55WUXelIQXTVQXy4zDuu5yhp8fuyAEZw"
-            />
-          </a>
         </aside>
       </div>
     </footer>

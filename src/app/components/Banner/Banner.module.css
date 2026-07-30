@@ -1,14 +1,8 @@
 .wrap {
     position: relative;
     overflow: visible;
-    /* IMPORTANT: allow dropdowns to escape */
-
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: clamp(12px, 3vw, 40px);
-
-    padding: clamp(20px, 4vw, 30px) clamp(15px, 8vw, 120px);
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
     min-height: 210px;
     box-sizing: border-box;
 
@@ -20,29 +14,51 @@
     box-shadow: var(--shadow-sm);
 }
 
-/* This element clips glows/decoration only */
-.clip {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-    /* never blocks interactions */
-    border-radius: inherit;
-    /* if you add rounding later */
+.content {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(28px, 6vw, 96px);
+
+    width: var(--page-container-width);
+    min-height: inherit;
+    margin: 0 auto;
+    padding-block: clamp(20px, 4vw, 30px);
+    box-sizing: border-box;
 }
 
-/* Move the glow here */
-.clip::before {
-    content: "";
-    position: absolute;
-    inset: -35%;
-    background: radial-gradient(circle at top right, var(--accent-soft), transparent 60%);
-    opacity: 0.9;
+.logo {
+    justify-self: start;
+    max-width: min(280px, 100%);
+    height: auto;
 }
 
-/* Content stays above */
-.logo,
 .box {
     position: relative;
     z-index: 1;
+    justify-self: start;
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.title {
+    margin: 0;
+}
+
+@media (max-width: 760px) {
+    .content {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .logo,
+    .box {
+        justify-self: center;
+    }
+
+    .box {
+        justify-items: center;
+    }
 }

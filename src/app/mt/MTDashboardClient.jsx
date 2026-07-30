@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-import { Search, Repeat } from "react-feather";
+import { Repeat, Search } from "lucide-react";
 
 import dynamic from "next/dynamic";
 const MainGraph = dynamic(

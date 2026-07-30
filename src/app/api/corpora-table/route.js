@@ -107,7 +107,6 @@ export async function GET(req) {
         return NextResponse.json(cleanTableData, { status: 200 });
     } catch (err) {
         console.error("API error:", err);
-        console.log("-------------------------------------------------------------------------")
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

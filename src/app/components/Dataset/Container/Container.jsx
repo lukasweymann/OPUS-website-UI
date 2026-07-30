@@ -127,7 +127,7 @@ export default function CorpusPageContainer({ version = "" }) {
         const data = await safeJson(res);
 
         if (!alive) return;
-        // expects { values: ... } like your old axios usage
+        // expects { values: ... } from the overlap endpoint
         setOverlapData(data);
         setStatus((p) => ({ ...p, tsv: "ok" }));
       } catch (e) {
@@ -193,7 +193,6 @@ export default function CorpusPageContainer({ version = "" }) {
           />
         </div>
       )}
-      pk_live_ab7b2bef0a9efcde4b01442f0edfc2601bdbf3deb940404a
       <p className={s.note}>
         <span>A note on formats:</span> TMX files contain only unique
         translation units. Moses downloads include all non-empty alignment units

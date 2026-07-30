@@ -12,6 +12,7 @@ const LanguageGraphs = dynamic(
 
 import StatsTable from "@/app/components/Dataset/Stats/Stats";
 import CopyBibtexButton from "./CopyBibtexButton";
+import SafeRichText from "@/app/components/ui/SafeRichText/SafeRichText";
 
 import s from "./page.module.css";
 import { callPythonReadData } from "@/lib/pythonClient";
@@ -144,9 +145,10 @@ export default async function CorpusPage({ params }) {
                 {license && (
                   <div className={s.meta}>
                     <span className={s.metaKey}>License</span>
-                    <span
+                    <SafeRichText
+                      as="span"
                       className={s.metaVal}
-                      dangerouslySetInnerHTML={{ __html: license }}
+                      html={license}
                     />
                   </div>
                 )}
@@ -156,26 +158,17 @@ export default async function CorpusPage({ params }) {
             {copyright && (
               <div className={s.block}>
                 <h2 className={s.h2}>Copyright</h2>
-                <div
-                  className={s.content}
-                  dangerouslySetInnerHTML={{ __html: copyright }}
-                />
+                <SafeRichText className={s.content} html={copyright} />
               </div>
             )}
 
             {(description || cite) && (
               <div className={s.block}>
                 {description && (
-                  <div
-                    className={s.content}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                  />
+                  <SafeRichText className={s.content} html={description} />
                 )}
                 {cite && (
-                  <div
-                    className={s.content}
-                    dangerouslySetInnerHTML={{ __html: cite }}
-                  />
+                  <SafeRichText className={s.content} html={cite} />
                 )}
 
                 {bibtexText && (

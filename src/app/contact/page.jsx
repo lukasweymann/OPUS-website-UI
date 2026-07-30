@@ -53,12 +53,19 @@ export default function ContactPage() {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, url, message }),
+        body: JSON.stringify({
+          name,
+          email,
+          url,
+          message,
+          captchaToken: token,
+        }),
       });
 
-      if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(text || `Request failed (${res.status})`);
+      const payload = await res.json().catch(() => null);
+
+      if (!res.ok || payload?.status !== "SUCCESS") {
+        throw new Error(payload?.error || `Request failed (${res.status})`);
       }
 
       setStatus("Sent");

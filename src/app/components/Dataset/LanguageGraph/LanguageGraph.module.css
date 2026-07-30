@@ -1,26 +1,12 @@
 .shellSingle,
 .shellDouble {
-    border-radius: var(--radius-xl, 18px);
-    border: 1px solid color-mix(in oklab, CanvasText 14%, transparent);
-    background:
-        radial-gradient(120% 140% at 10% 0%,
-            color-mix(in oklab, var(--accent, #8e75ff) 14%, transparent),
-            transparent 60%),
-        linear-gradient(135deg,
-            color-mix(in oklab, Canvas 92%, #000 8%),
-            color-mix(in oklab, Canvas 86%, #000 14%));
-    box-shadow:
-        0 24px 50px color-mix(in oklab, #000 28%, transparent),
-        0 0 0 1px color-mix(in oklab, CanvasText 10%, transparent) inset;
-    padding: clamp(14px, 2.4vw, 22px);
     display: grid;
-    gap: 14px;
-    margin-top: 20px;
+    gap: 16px;
+    min-width: 0;
 }
 
 .shellDouble {
-    /* extra vertical room when the second chart appears */
-    gap: 16px;
+    gap: 18px;
 }
 
 .head {
@@ -49,22 +35,21 @@
 
 .chart,
 .chart2 {
-    height: 320px;
-    border-radius: var(--radius-lg, 14px);
-    border: 1px solid color-mix(in oklab, CanvasText 12%, transparent);
-    background: color-mix(in oklab, Canvas 94%, #000 6%);
-    overflow: hidden;
+    height: 340px;
     width: 100%;
     min-width: 0;
     min-height: 260px;
+    padding-top: 4px;
 }
 
 .chart2 {
-    height: 300px;
+    height: 370px;
+    padding-top: 18px;
+    border-top: 1px solid color-mix(in oklab, CanvasText 12%, transparent);
 }
 
-/* status area */
-.subhead {
+.subhead,
+.tipRows {
     display: grid;
     gap: 6px;
 }
@@ -82,36 +67,6 @@
     color: color-mix(in oklab, CanvasText 75%, transparent);
 }
 
-.spinner {
-    width: 16px;
-    height: 16px;
-    border-radius: 999px;
-    border: 2px solid color-mix(in oklab, CanvasText 22%, transparent);
-    border-top-color: color-mix(in oklab, var(--accent, #8e75ff) 85%, white 15%);
-    animation: spin 0.85s linear infinite;
-}
-
-.chart,
-.chart2 {
-    height: clamp(280px, 42vh, 360px);
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* LanguageGraph.module.css */
-
-.chart {
-    height: 340px;
-}
-
-.chart2 {
-    height: 340px;
-}
-
 .hintRow {
     margin-top: 8px;
     display: flex;
@@ -124,21 +79,16 @@
 }
 
 .empty {
-    padding: 10px 12px;
-    border-radius: var(--radius-md, 10px);
-    border: 1px solid color-mix(in oklab, CanvasText 14%, transparent);
-    background: color-mix(in oklab, Canvas 92%, #000 8%);
     color: color-mix(in oklab, CanvasText 75%, transparent);
 }
 
-/* ───────── Signature Tooltip ───────── */
 .tip {
     min-width: 220px;
     border-radius: 12px;
     border: 1px solid color-mix(in oklab, CanvasText 14%, transparent);
     background:
         radial-gradient(120% 160% at 12% 0%,
-            color-mix(in oklab, var(--accent, #8e75ff) 16%, transparent),
+            color-mix(in oklab, var(--accent) 16%, transparent),
             transparent 60%),
         linear-gradient(135deg,
             color-mix(in oklab, Canvas 78%, #000 22%),
@@ -156,11 +106,6 @@
     letter-spacing: 0.01em;
     margin-bottom: 8px;
     color: color-mix(in oklab, CanvasText 92%, transparent);
-}
-
-.tipRows {
-    display: grid;
-    gap: 6px;
 }
 
 .tipRow {

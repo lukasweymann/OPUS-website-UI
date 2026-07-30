@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Cross as Hamburger } from "hamburger-react";
 
 import s from "./Banner.module.css";
 
@@ -59,7 +58,9 @@ export default function DashboardBanner() {
             aria-controls="dashboard-menu"
             onClick={() => setOpen((v) => !v)}
           >
-            <Hamburger toggled={open} toggle={setOpen} />
+            <span className={s.burgerLine} />
+            <span className={s.burgerLine} />
+            <span className={s.burgerLine} />
           </button>
         </div>
 

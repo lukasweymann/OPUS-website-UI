@@ -39,6 +39,8 @@ services:
       - OPUS_EMAIL_USER=info@domain.com
       - OPUS_EMAIL_PASSWORD=password123
       - OPUS_EMAIL_RECEIVER=someguy@domain.com
+      - OPUS_HCAPTCHA_SECRET=
+      - OPUS_EMAIL_TLS_REJECT_UNAUTHORIZED=true
   
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -70,12 +72,43 @@ By executing the following Docker compose command:
 $ docker-compose up -d # in newer Docker environments you might need to use `docker compose up -d` instead
 ``` 
 
+## Local development
+
+The local Node version is pinned in `.nvmrc`, and the package manager is pinned
+in `package.json`.
+
+With `nvm`:
+
+```shell
+$ nvm install
+$ nvm use
+$ corepack enable
+$ corepack install
+```
+
+To prepare the local Python environment, development SQLite DBs, `.env.local`,
+and Node dependencies:
+
+```shell
+$ ./bin/dev-bootstrap.sh
+```
+
+After bootstrapping:
+
+```shell
+$ source .venv/bin/activate
+$ pnpm dev
+```
+
 ## Building the service outside a Docker environment
 
-To build de Next.js webapp you can run the following shell command:
+To build the Next.js webapp you can run:
 
 ```
-$ pnpm install && pnpm run build
+$ corepack enable
+$ corepack install
+$ pnpm install --frozen-lockfile
+$ pnpm run build
 ```
 
 And it will be locally available at http://localhost:3000
@@ -94,7 +127,7 @@ The OPUS website is organised in 9 different pages:
 From top to bottom, the page includes a search composed of two dropdowns that lead to the /corpus-result-table (see 6.2). The search leads to a table showing all the corpora that include the languages searched. The dropdowns work with the languagelist coming from the OPUS API, they query to match target languages available for the source language selected in order to avoid empty results.
 Underneath, on the left side, there are some important numbers about the OPUS collection. On the right, a treemap showing corpora (excluding ELRA and ELRC collections) and the size each of these corpora make up of the entire collection. 
 Afterwards, there is the list of contributors, each of them linked to their respective website.
-At the end, the footer shows some useful links related to the project as well as a visitor count. There is, of course, a link to the prior website for those who still prefer it. 
+At the end, the footer shows some useful links related to the project. There is, of course, a link to the prior website for those who still prefer it.
 
 ### 2) Corpus result page 
 This page shows the search results coming from either the selectors in the homepage or any other page (present on the navbar in the second case). One finds corpora containing the language pair searched, with the possibility to see a sample (see 6.3), on each row dropdowns are available to select the format and download it. 
@@ -128,6 +161,46 @@ Upon availability of info for overlaps, a last graph will show displaying the ov
 Please, do notice that this website is a hybrid between static pages and dynamically retrieved data, where the biggest part is statically generated data at build time for improved SEO, so whenever an update is made, it is required to rebuild the website. Knowing this, the best approach would be to bulk upload updates and create a new build. More on that later.
 
 A rebuild takes several minutes, but since it consists on building a new Docker image, restarts will take virtually no downtime.
+
+### Automatic OPUS DB refresh
+
+The website API and the statically generated corpus pages depend on the local
+OpusTools SQLite DB. The API can only see fresh corpus data after that DB has
+been updated, and dedicated corpus pages only appear after the Next.js app is
+rebuilt with the updated DB.
+
+For low-maintenance operation, use:
+
+```shell
+$ make auto-refresh
+```
+
+This command is intentionally conservative:
+
+- it updates a candidate copy at `data/opus/opusdata.candidate.db`
+- it validates the candidate DB before touching the live host DB
+- it compares the old and updated corpus lists
+- it rebuilds/redeploys Docker only when corpora were added or removed
+- it leaves the currently running container untouched while the DB update runs
+
+On a new server, if `data/opus/opusdata.db` does not exist yet, the command will
+seed a candidate DB, run the real OpusTools update on it, validate it, promote it
+to `data/opus/opusdata.db`, build the Docker image, and start the app.
+
+To test locally before enabling a timer:
+
+```shell
+$ bash -n bin/auto-refresh-opus-db.sh
+$ make -n auto-refresh
+$ make auto-refresh
+```
+
+The first real run may take over an hour because the OpusTools DB update is
+long. A second run, when no corpora changed, should update a candidate DB,
+detect the same corpus-list hash, and skip the app rebuild/redeploy.
+
+For unattended production use, run `make auto-refresh` daily with systemd or
+cron. A systemd timer example is available in `docs/auto-refresh.md`.
 
 ### Parts of the website that could need regular updating: 
 

@@ -145,49 +145,50 @@ export default async function Home() {
   } = await getHomeData();
 
   return (
-    <>
-      <main className={s.page}>
+    <main className={s.page}>
+      <div className={s.container}>
         {yamlToJson && (
           <div className={s.news}>
-            {" "}
-            <News news={yamlToJson.NEWS} />{" "}
+            <News news={yamlToJson.NEWS} />
           </div>
         )}
         <Banner languageList={cleanLanguages} />
-      </main>
 
-      <section className={s.overview}>
-        <div className={s.summary}>
-          <h2>An overview of the OPUS collection</h2>
+        <section className={s.overview}>
+          <div className={s.summary}>
+            <h2>An overview of the OPUS collection</h2>
 
-          <div className={s.kpis}>
-            <p>
-              <Link href="/corpora" className={s.kpiLink}>
-                <span>{totalCorporaCount.toLocaleString("en-US")}</span> corpora
-              </Link>
-            </p>
-            <p>
-              <span>{total.toLocaleString("en-US")}</span> total sentence pairs
-            </p>
-            <p>
-              <span>{cleanLanguages.length}</span> languages available
-            </p>
+            <div className={s.kpis}>
+              <p>
+                <Link href="/corpora" className={s.kpiLink}>
+                  <span>{totalCorporaCount.toLocaleString("en-US")}</span>{" "}
+                  corpora
+                </Link>
+              </p>
+              <p>
+                <span>{total.toLocaleString("en-US")}</span> total sentence
+                pairs
+              </p>
+              <p>
+                <span>{cleanLanguages.length}</span> languages available
+              </p>
 
-            <p className={s.note}>
-              This table displays <span>{totalCleanCorpora}</span> corpora,
-              which make up a total{" "}
-              <span>{biggestDatasetsPercentage.toFixed(2)}%</span> of the entire{" "}
-              <span>OPUS</span> collection
-            </p>
+              <p className={s.note}>
+                This table displays <span>{totalCleanCorpora}</span> corpora,
+                which make up a total{" "}
+                <span>{biggestDatasetsPercentage.toFixed(2)}%</span> of the
+                entire <span>OPUS</span> collection
+              </p>
+            </div>
           </div>
-        </div>
-        <SizesTable corpora={biggestDatasets} />
-      </section>
+          <SizesTable corpora={biggestDatasets} />
+        </section>
 
-      <section className={s.partners}>
-        <h2>Our contributors</h2>
-        <Partners />
-      </section>
-    </>
+        <section className={s.partners}>
+          <h2>Our contributors</h2>
+          <Partners />
+        </section>
+      </div>
+    </main>
   );
 }

@@ -1,3 +1,4 @@
+import SafeRichText from "@/app/components/ui/SafeRichText/SafeRichText";
 import s from "./News.module.css";
 
 export default function News({ news = [] }) {
@@ -15,10 +16,7 @@ export default function News({ news = [] }) {
       <div id="news-list" className={s.list}>
         {news.map((n, i) => (
           <article key={i} className={s.card}>
-            <p
-              className={s.title}
-              dangerouslySetInnerHTML={{ __html: n.name }}
-            />
+            <SafeRichText as="p" className={s.title} html={n.name} />
             <p className={s.date}>{n["release_date"]}</p>
           </article>
         ))}

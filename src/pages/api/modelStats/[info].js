@@ -1,5 +1,12 @@
+async function fetchText(url) {
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Request failed with status ${response.status}`);
+	}
+	return response.text();
+}
+
 export default function languagePairs(req, res) {
-	const axios = require("axios");
 	const originValue = req.query.info.split("&")[0];
 	const targetValue = req.query.info.split("&")[1];
 	const scoreValue = req.query.info.split("&")[2];
@@ -12,11 +19,11 @@ export default function languagePairs(req, res) {
 
 		if (benchmarkValue === "none") {
 			try {
-				const opusRes = await axios.get(
+				const opusText = await fetchText(
 					`${repo}OPUS-MT-leaderboard/master/scores/${originValue}-${targetValue}/${benchmarkValue}/${scoreValue}-scores.txt`
 				);
 
-				const opusData = opusRes.data.split("\n").map((r) => r.split("\t"));
+				const opusData = opusText.split("\n").map((r) => r.split("\t"));
 
 				if (modelSizesIncluded) {
 					opusData.forEach((model) => {
@@ -36,7 +43,7 @@ export default function languagePairs(req, res) {
 					});
 				}
 
-				const externalRes = await axios.get(
+				const externalText = await fetchText(
 					`${repo}External-MT-leaderboard/master/scores/${originValue}-${targetValue}/${benchmarkValue}/${scoreValue}-scores.txt`
 				);
 
@@ -45,11 +52,11 @@ export default function languagePairs(req, res) {
 
 				if (contributed === "contributed") {
 					try {
-						const contributedRes = await axios.get(
+						const contributedText = await fetchText(
 							`${repo}Contributed-MT-leaderboard/master/scores/${originValue}-${targetValue}/${benchmarkValue}/${scoreValue}-scores.txt`
 						);
 
-						const contributedResponse = contributedRes.data
+						const contributedResponse = contributedText
 							.split("\n")
 							.map((r) => r.split("\t"));
 
@@ -59,7 +66,7 @@ export default function languagePairs(req, res) {
 					}
 				}
 
-				const externalData = externalRes.data
+				const externalData = externalText
 					.split("\n")
 					.map((r) => r.split("\t"));
 

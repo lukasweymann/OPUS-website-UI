@@ -1,7 +1,7 @@
 "use client";
 
-import { Copy } from "react-feather";
-import { toast, Toaster } from "react-hot-toast";
+import { Copy } from "lucide-react";
+import { toast } from "../ui/Toast/toast";
 
 import s from "./Publication.module.css";
 
@@ -80,9 +80,6 @@ export default function Publication({
           )}
         </div>
       </footer>
-
-      {/* One global Toaster in your app layout is ideal, but keeping it here won’t break anything */}
-      <Toaster />
     </article>
   );
 }

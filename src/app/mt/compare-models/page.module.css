@@ -1,12 +1,14 @@
 /* src/app/mt/compare-models/CompareModels.module.css */
 
 .page {
-    padding: 30px 60px;
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: var(--page-shell-padding);
 }
 
 @media (max-width: 1200px) {
     .page {
-        padding: 25px;
+        padding: var(--page-shell-padding);
     }
 }
 
@@ -40,7 +42,8 @@
     line-height: 1.55;
 }
 
-.top {
+.top,
+.head2 {
     display: flex;
     justify-content: space-between;
     gap: 12px;
@@ -49,12 +52,14 @@
     margin-bottom: 10px;
 }
 
-.metrics {
+.metrics,
+.titles {
     display: grid;
     gap: 6px;
 }
 
-.k {
+.k,
+.lbl {
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.08em;
@@ -115,14 +120,6 @@
     gap: 6px;
     min-width: min(560px, 100%);
     position: relative;
-}
-
-.lbl {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
 }
 
 .sel {
@@ -206,20 +203,6 @@
     background: linear-gradient(90deg, #5580e4, #f68558);
     opacity: 0.9;
     border-radius: 999px;
-}
-
-.head2 {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-}
-
-.titles {
-    display: grid;
-    gap: 6px;
 }
 
 .t {

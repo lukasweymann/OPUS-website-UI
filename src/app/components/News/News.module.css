@@ -1,7 +1,10 @@
 /* News.module.css — minimal, polished, consistent with the API HTML look */
 
 .news {
-    padding: 0 clamp(15px, 8vw, 140px) 20px;
+    padding: 0;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
 }
 
 /* Summary as a button */
@@ -104,6 +107,9 @@
     display: flex;
     gap: 12px;
     overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 
     padding: 10px 0 6px;
     scroll-snap-type: x mandatory;
@@ -111,8 +117,9 @@
 
 /* Cards */
 .card {
+    flex: 0 0 clamp(220px, 40vw, 400px);
     scroll-snap-align: start;
-    min-width: clamp(220px, 40vw, 400px);
+    min-width: 0;
 
     border-radius: 12px;
     padding: 14px;

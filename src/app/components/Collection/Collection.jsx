@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRightCircle } from "react-feather";
+import { CircleArrowRight as ArrowRightCircle } from "lucide-react";
 
 import s from "./Collection.module.css";
 

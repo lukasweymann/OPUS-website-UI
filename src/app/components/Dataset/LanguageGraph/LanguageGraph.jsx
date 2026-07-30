@@ -17,6 +17,7 @@ import {
   codeToLangTransformer,
   DataFormatter,
 } from "../../../../../hooks/hooks";
+import LoaderSpinner from "../../ui/LoaderSpinner/LoaderSpinner";
 import PairsGraph from "../PairsGraph/PairsGraph";
 import s from "./LanguageGraph.module.css";
 
@@ -220,7 +221,7 @@ export default function LanguageGraphs({ graphValues = [] }) {
 
             {status === "loading" && (
               <div className={s.loading}>
-                <span className={s.spinner} aria-hidden="true" />
+                <LoaderSpinner size={16} decorative />
                 <span>Loading pairs for {currentLangLabel || "…"}</span>
               </div>
             )}

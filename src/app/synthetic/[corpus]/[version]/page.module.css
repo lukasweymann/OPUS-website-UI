@@ -1,9 +1,9 @@
 /* app/synthetic/[corpus]/[version]/page.module.css */
 
 .wrap {
-    padding: var(--page-pad);
-    max-width: 1200px;
+    width: var(--page-container-width);
     margin: 0 auto;
+    padding: var(--page-shell-padding);
     color: var(--text-main);
 }
 
@@ -91,13 +91,13 @@
 }
 
 .metaVal a,
-.metaVal :global(a) {
+.content a {
     color: var(--link);
     text-decoration: none;
 }
 
 .metaVal a:hover,
-.metaVal :global(a:hover) {
+.content a:hover {
     color: var(--link-hover);
     text-decoration: underline;
 }
@@ -122,16 +122,6 @@
 .content {
     line-height: 1.6;
     word-break: break-word;
-}
-
-.content :global(a) {
-    color: var(--link);
-    text-decoration: none;
-}
-
-.content :global(a:hover) {
-    color: var(--link-hover);
-    text-decoration: underline;
 }
 
 .actions {

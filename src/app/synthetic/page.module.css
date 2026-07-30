@@ -1,11 +1,12 @@
 .page {
-    background: var(--bg);
     color: var(--text-main);
 }
 
 /* keep content aligned like the rest of the site */
 .shell {
-    padding: 30px clamp(16px, 8vw, 140px) 60px;
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: var(--page-shell-padding);
 }
 
 .header {

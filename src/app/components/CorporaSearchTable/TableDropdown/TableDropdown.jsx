@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Download, Link as LinkIcon, Check } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { toast } from "../../ui/Toast/toast";
 import s from "./TableDropdown.module.css";
 
 function optKey(o) {

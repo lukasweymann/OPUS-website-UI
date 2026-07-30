@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Eye } from "react-feather";
+import { Eye } from "lucide-react";
 import TableDropdown from "../TableDropdown/TableDropdown";
 
 import s from "./TableRow.module.css";

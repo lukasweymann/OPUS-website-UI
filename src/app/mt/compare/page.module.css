@@ -1,7 +1,9 @@
 /* app/compare/page.module.css */
 
 .wrap {
-    padding: var(--page-pad);
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: var(--page-shell-padding);
     color: var(--text-main);
 }
 

@@ -1,10 +1,24 @@
 .loader {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 60px 0;
+    justify-content: center;
+    gap: 22px;
+    padding: clamp(44px, 7vw, 72px) var(--space-4, 16px);
+    color: var(--text-main, CanvasText);
 }
 
 .loader h2 {
-    margin-right: 30px;
+    margin: 0;
+    color: inherit;
+    font-size: clamp(1.1rem, 1.4vw, 1.45rem);
+    font-weight: 750;
+    line-height: 1.2;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .loader {
+        flex-direction: column;
+        gap: 18px;
+    }
 }

@@ -24,6 +24,14 @@ function ok(data) {
     return NextResponse.json(data, { status: 200 });
 }
 
+function decodeParam(value = "") {
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return value;
+    }
+}
+
 function safeAvg(arr, pick = (x) => x, digits) {
     const vals = (arr || []).map(pick).map(Number).filter((n) => Number.isFinite(n));
     if (!vals.length) return null;
@@ -81,8 +89,8 @@ function mapModelTypeToCatalog(modelType) {
 
 export async function GET(_req, { params }) {
 
-    console.log("ACTUALLY BEING CALLED")
-    const info = params?.info ? decodeURIComponent(params.info) : "";
+    const routeParams = await params;
+    const info = routeParams?.info ? decodeParam(routeParams.info) : "";
     const parts = info.split("&");
 
     // origin&target&score&benchmark&modelType

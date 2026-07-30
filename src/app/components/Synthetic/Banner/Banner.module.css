@@ -1,26 +1,14 @@
 /* SyntheticBanner.module.css — minimal, consistent with your API HTML styling */
 
 .banner {
+    position: relative;
+    overflow: hidden;
     color: var(--text-main);
     background: var(--bg);
     border-bottom: 1px solid var(--border);
 }
 
-.inner {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    gap: clamp(12px, 3vw, 40px);
-    padding: clamp(20px, 4vw, 30px) clamp(16px, 8vw, 140px);
-
-    min-height: 210px;
-    /* aligns with your main banner height */
-    position: relative;
-}
-
-/* Subtle accent wash (very restrained) */
-.inner::before {
+.banner::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -29,13 +17,25 @@
     pointer-events: none;
 }
 
+.inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(12px, 3vw, 40px);
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 30px) 0;
+
+    min-height: 210px;
+    position: relative;
+    z-index: 1;
+}
+
 .logo {
     display: block;
     width: 280px;
     height: auto;
     max-width: min(280px, 100%);
-    position: relative;
-    z-index: 1;
 }
 
 .text {
@@ -43,8 +43,6 @@
     gap: 8px;
     min-width: min(320px, 100%);
     flex: 1;
-    position: relative;
-    z-index: 1;
 }
 
 /* Small uppercase label like your OPUS-API section titles */

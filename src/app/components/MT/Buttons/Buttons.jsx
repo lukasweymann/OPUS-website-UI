@@ -4,7 +4,7 @@ import { useMemo, useCallback, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Share2 } from "lucide-react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "../../ui/Toast/toast";
 
 import s from "./Buttons.module.css";
 
@@ -254,7 +254,6 @@ export default function DashboardButtons({
         >
           <Share2 size={18} />
         </button>
-        <Toaster />
       </div>
     </div>
   );

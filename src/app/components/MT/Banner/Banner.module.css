@@ -1,7 +1,8 @@
 /* components/DashboardBanner/DashboardBanner.module.css */
 
 .wrap {
-    margin: 20px 60px 0 60px;
+    width: var(--page-container-width);
+    margin: 20px auto 0;
     position: relative;
 
 }
@@ -53,14 +54,50 @@
 
 .burger {
     display: none;
-    border: 0;
-    background: transparent;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
     padding: 0;
     cursor: pointer;
     color: var(--text-main);
+    box-shadow: var(--shadow-sm);
+    gap: 5px;
+    transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
 }
 
-/* Mobile menu */
+.burger:hover {
+    border-color: color-mix(in oklab, var(--accent) 32%, var(--border));
+    background: color-mix(in oklab, var(--surface-strong) 88%, var(--accent-soft));
+}
+
+.burger:active {
+    transform: translateY(1px);
+}
+
+.burgerLine {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: currentColor;
+    transform-origin: center;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.burger[aria-expanded="true"] .burgerLine:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.burger[aria-expanded="true"] .burgerLine:nth-child(2) {
+    opacity: 0;
+}
+
+.burger[aria-expanded="true"] .burgerLine:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
 .menu {
     display: none;
     margin-top: 10px;
@@ -95,7 +132,6 @@
     text-underline-offset: 3px;
 }
 
-/* Breakpoint: show burger, hide desktop nav */
 @media (max-width: 950px) {
     .nav {
         display: none;
@@ -105,5 +141,6 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
     }
 }

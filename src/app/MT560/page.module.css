@@ -1,5 +1,7 @@
 .pageContainer {
-    padding: 60px 90px;
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: 60px 0;
     color: var(--text-main);
 }
 
@@ -70,12 +72,12 @@
 /* keep your breakpoints as-is */
 @media only screen and (max-width: 1200px) {
     .pageContainer {
-        padding: 40px 30px;
+        padding: 40px 0;
     }
 }
 
 @media only screen and (max-width: 760px) {
     .pageContainer {
-        padding: 40px 30px;
+        padding: 40px 0;
     }
 }

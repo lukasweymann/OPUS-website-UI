@@ -7,10 +7,6 @@
     box-shadow: var(--shadow-sm);
 }
 
-.sidetable {
-    margin-left: 20px;
-}
-
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -42,7 +38,6 @@
     background: var(--table-even-row);
 }
 
-/* alignment helpers */
 .c {
     text-align: center;
 }
@@ -51,7 +46,6 @@
     text-align: right;
 }
 
-/* tiny utilities used by tables */
 .id {
     width: 52px;
     text-align: right;
@@ -92,21 +86,4 @@
 .sum td {
     font-weight: 700;
     background: var(--surface-strong);
-}
-
-.iconCol {
-    width: 1%;
-    white-space: nowrap;
-    text-align: center;
-}
-
-.numCol {
-    width: 1%;
-    white-space: nowrap;
-    text-align: right;
-}
-
-.fit {
-    width: 1%;
-    white-space: nowrap;
 }

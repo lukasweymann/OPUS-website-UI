@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, Search, Share2, SquareX } from "lucide-react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "@/app/components/ui/Toast/toast";
 
 import dynamic from "next/dynamic";
 const CompareModelGraph = dynamic(
@@ -120,7 +120,7 @@ export default function CompareModelsClient({
         if (!alive) return;
 
         const json = await res.json().catch(() => null);
-        if (json === 404 || !json) {
+        if (!res.ok || json === 404 || !json) {
           setModels("notfound");
         } else {
           setModels(json);
@@ -242,8 +242,6 @@ export default function CompareModelsClient({
   return (
     <Suspense fallback={<CompareModelsFallback />}>
       <main className={s.page}>
-        <Toaster />
-
         {showBadUrl && (
           <section className={s.card}>
             <h1 className={s.h1}>Missing URL parameters</h1>

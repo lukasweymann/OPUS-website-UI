@@ -16,6 +16,7 @@ import SyntheticTable from "@/app/components/Synthetic/ResultTable/ResultTable";
 
 import PairPicker from "./PairPicker";
 import CopyTextButton from "./CopyTextButton";
+import SafeRichText from "@/app/components/ui/SafeRichText/SafeRichText";
 
 import s from "./page.module.css";
 
@@ -138,9 +139,10 @@ export default async function SyntheticCorpusPage({ params, searchParams }) {
             {license && (
               <div className={s.meta}>
                 <span className={s.metaKey}>License</span>
-                <span
+                <SafeRichText
+                  as="span"
                   className={s.metaVal}
-                  dangerouslySetInnerHTML={{ __html: license }}
+                  html={license}
                 />
               </div>
             )}
@@ -150,26 +152,17 @@ export default async function SyntheticCorpusPage({ params, searchParams }) {
         {copyright && (
           <>
             <h2 className={s.h2}>Copyright</h2>
-            <div
-              className={s.content}
-              dangerouslySetInnerHTML={{ __html: copyright }}
-            />
+            <SafeRichText className={s.content} html={copyright} />
           </>
         )}
 
         {(description || cite) && (
           <div className={s.contentBlock}>
             {description && (
-              <div
-                className={s.content}
-                dangerouslySetInnerHTML={{ __html: description }}
-              />
+              <SafeRichText className={s.content} html={description} />
             )}
             {cite && (
-              <div
-                className={s.content}
-                dangerouslySetInnerHTML={{ __html: cite }}
-              />
+              <SafeRichText className={s.content} html={cite} />
             )}
           </div>
         )}

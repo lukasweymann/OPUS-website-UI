@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Roboto_Mono } from "next/font/google";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
-import { Toaster } from "react-hot-toast";
+import ToastProvider from "./components/ui/Toast/ToastProvider";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
 
@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
 
         <Navbar />
         {children}
-        <Toaster position="top-right" />
+        <ToastProvider />
         <Footer />
       </body>
     </html>

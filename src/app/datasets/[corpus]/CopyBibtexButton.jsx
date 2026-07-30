@@ -1,8 +1,8 @@
 "use client";
 
-import { Copy } from "react-feather";
-import { toast } from "react-hot-toast";
-import s from "./page.module.css";
+import { Copy } from "lucide-react";
+import { toast } from "../../components/ui/Toast/toast";
+import buttonStyles from "@/styles/Buttons.module.css";
 
 async function copyNative(text) {
   // modern
@@ -28,7 +28,7 @@ export default function CopyBibtexButton({ text }) {
   return (
     <button
       type="button"
-      className={s.copy}
+      className={buttonStyles.secondaryButton}
       onClick={async () => {
         try {
           const ok = await copyNative(text);
@@ -39,7 +39,7 @@ export default function CopyBibtexButton({ text }) {
         }
       }}
     >
-      Copy BibTeX <Copy width={18} className={s.copyI} />
+      Copy BibTeX <Copy size={18} aria-hidden="true" />
     </button>
   );
 }

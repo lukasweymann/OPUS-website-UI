@@ -1,22 +1,20 @@
-/* page.module.css */
-
 .wrap {
-    padding: clamp(14px, 4vw, 30px) clamp(14px, 8vw, 140px) 100px;
-    background: var(--main-background);
-    color: var(--main-copy);
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: 30px 0 100px;
+    color: var(--text-main);
     display: grid;
     gap: 14px;
 }
 
 .card {
-    border: 1px solid color-mix(in oklab, var(--main-copy) 12%, transparent);
-    background: var(--sample-box);
-    border-radius: var(--radius-lg, 14px);
-    box-shadow: var(--shadow-sm, 0 10px 24px rgba(0, 0, 0, .12));
+    border: 1px solid color-mix(in oklab, var(--text-main) 12%, transparent);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
     padding: clamp(14px, 2vw, 18px);
 }
 
-/* Card header */
 .cardHead {
     display: grid;
     gap: 10px;
@@ -30,11 +28,11 @@
     height: 34px;
     padding: 0 12px;
     border-radius: 999px;
-    background: var(--dashboard-btn-active);
+    background: var(--accent);
     color: #fff;
     font-weight: 700;
     letter-spacing: 0.02em;
-    border: 1px solid color-mix(in oklab, var(--dashboard-btn-active) 70%, transparent);
+    border: 1px solid color-mix(in oklab, var(--accent) 70%, transparent);
 }
 
 .dl:hover {
@@ -52,11 +50,10 @@
 }
 
 .ver {
-    color: var(--desc-link-color);
+    color: var(--link);
     font-weight: 800;
 }
 
-/* Meta row */
 .metaGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -65,8 +62,8 @@
 }
 
 .meta {
-    border: 1px solid color-mix(in oklab, var(--main-copy) 10%, transparent);
-    background: color-mix(in oklab, var(--sample-box) 85%, transparent);
+    border: 1px solid color-mix(in oklab, var(--text-main) 10%, transparent);
+    background: color-mix(in oklab, var(--surface) 85%, transparent);
     border-radius: 12px;
     padding: 10px 12px;
 }
@@ -85,14 +82,12 @@
     line-height: 1.55;
 }
 
-/* Content blocks inside card */
 .block {
     margin-top: 10px;
     display: grid;
     gap: 10px;
 }
 
-/* IMPORTANT: keep content from painting the card corners */
 .content {
     line-height: 1.65;
     word-break: break-word;
@@ -103,7 +98,6 @@
     word-wrap: break-word;
 }
 
-/* Links inside YAML HTML */
 .content a {
     text-decoration: none;
     color: var(--link);

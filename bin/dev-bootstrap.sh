@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="/home/lukas/Desktop/OPUS-Web"
+PROJECT_ROOT="/home/lukas/OPUS-website-UI"
 
 cd "$PROJECT_ROOT"
 
@@ -55,12 +55,23 @@ PYTHON_BIN=$PROJECT_ROOT/.venv/bin/python
 OPUSAPI_DB=$PROJECT_ROOT/dev-opus/opusdata.db
 LANGPAIRS_DB=$PROJECT_ROOT/dev-langpairs.db
 SCORES_DB=$PROJECT_ROOT/dev-scores.db
+
+OPUS_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main/corpus
+BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main
+SYN_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/synOPUS
+SAMPLE_BASE=https://raw.githubusercontent.com/Helsinki-NLP/OPUS-website/master/public_html
+SYNTH_SAMPLE_BASE=https://opus.nlpl.eu/legacy/synthetic
+BASE=https://raw.githubusercontent.com/Helsinki-NLP
 EOF
 
 echo "Wrote .env.local:"
 cat "$ENV_FILE"
 
-echo "==> 7. Node deps (pnpm install)"
+echo "==> 7. Node package manager"
+corepack enable
+corepack install
+
+echo "==> 8. Node deps (pnpm install)"
 pnpm install
 
 echo

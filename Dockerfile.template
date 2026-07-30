@@ -16,7 +16,7 @@ RUN apt-get update \
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY python_tools ./python_tools
 COPY db_scores /opt/db_scores
@@ -51,6 +51,8 @@ ENV OPUS_EMAIL_SERVER=mail.domain.com
 ENV OPUS_EMAIL_USER=info@domain.com
 ENV OPUS_EMAIL_PASSWORD=password123
 ENV OPUS_EMAIL_RECEIVER=someguy@domain.com
+ENV OPUS_HCAPTCHA_SECRET=
+ENV OPUS_EMAIL_TLS_REJECT_UNAUTHORIZED=true
 ENV BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main
 ENV SYN_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/synOPUS
 ENV SAMPLE_BASE=https://raw.githubusercontent.com/Helsinki-NLP/OPUS-website/master/public_html
@@ -69,9 +71,8 @@ RUN mkdir -p /opt/scores && \
     python python_tools/scores_ingest_sqlite.py
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm i --lockfile-only
-RUN pnpm install --fix-lockfile
-# RUN pnpm install --frozen-lockfile
+RUN corepack install
+RUN pnpm install --frozen-lockfile
 
 COPY hooks ./hooks
 COPY src ./src

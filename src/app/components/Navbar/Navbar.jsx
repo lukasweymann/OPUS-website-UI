@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Hamburger from "hamburger-react";
 
 import Logo from "../../../../public/logos/opus_medium.png";
 import LogoWhite from "../../../../public/logos/opus_medium-white.png";
@@ -80,13 +79,25 @@ export default function Navbar() {
         ))}
       </div>
 
-      {/* Mobile hamburger */}
-      <div className={styles.burger}>
-        <Hamburger toggled={isOpen} toggle={setIsOpen} size={20} />
-      </div>
+      {/* Mobile menu toggle */}
+      <button
+        type="button"
+        className={`${styles.burger} ${isOpen ? styles.burgerOpen : ""}`}
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isOpen}
+        aria-controls="site-menu"
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span className={styles.burgerLine} />
+        <span className={styles.burgerLine} />
+        <span className={styles.burgerLine} />
+      </button>
 
       {/* Mobile menu */}
-      <div className={`${styles.menu} ${isOpen ? styles.menuOpen : ""}`}>
+      <div
+        id="site-menu"
+        className={`${styles.menu} ${isOpen ? styles.menuOpen : ""}`}
+      >
         <ThemeToggle />
         {NAV_LINKS.map(({ href, label, variant }) => (
           <Link

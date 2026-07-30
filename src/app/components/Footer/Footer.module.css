@@ -132,18 +132,3 @@
     color: var(--link-hover);
     border-color: color-mix(in srgb, var(--link) 28%, var(--border));
 }
-
-.counter {
-    display: inline-flex;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--surface-strong);
-    box-shadow: var(--shadow-sm);
-}
-
-.counterImg {
-    display: block;
-    width: 250px;
-    height: auto;
-}
