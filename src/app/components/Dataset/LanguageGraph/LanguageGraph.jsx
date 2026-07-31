@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState, useEffect } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   BarChart,
   Bar,
@@ -22,9 +22,95 @@ import PairsGraph from "../PairsGraph/PairsGraph";
 import s from "./LanguageGraph.module.css";
 
 const nfCompact = new Intl.NumberFormat("en", { notation: "compact" });
+const DEFAULT_BRUSH_END = 10;
 
 function asString(v) {
   return Array.isArray(v) ? v[0] : v || "";
+}
+
+function defaultBrushRange(len) {
+  const max = Math.max(0, len - 1);
+  return {
+    startIndex: 0,
+    endIndex: Math.min(DEFAULT_BRUSH_END, max),
+  };
+}
+
+function clampIndex(value, fallback, max) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.max(0, Math.min(Math.round(n), max));
+}
+
+function normalizeBrushRange(range, len, fallback = defaultBrushRange(len)) {
+  const max = Math.max(0, len - 1);
+  if (max <= 0) return { startIndex: 0, endIndex: 0 };
+
+  const safeFallback = {
+    startIndex: clampIndex(fallback?.startIndex, 0, max),
+    endIndex: clampIndex(
+      fallback?.endIndex,
+      Math.min(DEFAULT_BRUSH_END, max),
+      max,
+    ),
+  };
+
+  let startIndex = clampIndex(range?.startIndex, safeFallback.startIndex, max);
+  let endIndex = clampIndex(range?.endIndex, safeFallback.endIndex, max);
+
+  if (endIndex < startIndex) {
+    [startIndex, endIndex] = [endIndex, startIndex];
+  }
+
+  if (endIndex === startIndex && max > 0) {
+    if (startIndex === max) startIndex -= 1;
+    else endIndex += 1;
+  }
+
+  return { startIndex, endIndex };
+}
+
+function sameBrushRange(a, b) {
+  return a?.startIndex === b?.startIndex && a?.endIndex === b?.endIndex;
+}
+
+function sameGraphValues(a, b) {
+  if (a === b) return true;
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) {
+    return false;
+  }
+
+  return a.every((row, index) => {
+    const other = b[index];
+    return (
+      row?.name === other?.name &&
+      row?.sentences === other?.sentences &&
+      row?.perc === other?.perc
+    );
+  });
+}
+
+function useStableGraphValues(graphValues) {
+  const rows = Array.isArray(graphValues) ? graphValues : [];
+  const rowsRef = useRef(rows);
+
+  if (!sameGraphValues(rowsRef.current, rows)) {
+    rowsRef.current = rows;
+  }
+
+  return rowsRef.current;
+}
+
+function isFullRangeReset(next, previous, len) {
+  const max = Math.max(0, len - 1);
+  const previousSpan = (previous?.endIndex ?? 0) - (previous?.startIndex ?? 0);
+
+  return (
+    max > DEFAULT_BRUSH_END &&
+    next.startIndex === 0 &&
+    next.endIndex === max &&
+    previousSpan < max
+  );
 }
 
 function Tip({ title, rows }) {
@@ -62,48 +148,101 @@ function LangTooltip({ active, payload, label }) {
 export default function LanguageGraphs({ graphValues = [] }) {
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
 
   const corpus = useMemo(() => asString(params?.corpus), [params]);
+  const chartValues = useStableGraphValues(graphValues);
 
   const [status, setStatus] = useState("idle");
   const [currentLang, setCurrentLang] = useState("");
   const [pairs, setPairs] = useState([]);
 
-  const hasData = Array.isArray(graphValues) && graphValues.length > 0;
+  const hasData = chartValues.length > 0;
 
-  const len = graphValues?.length ?? 0;
+  const len = chartValues.length;
   const showBrush = len > 1;
 
-  const lastGoodRef = useRef({
-    startIndex: 0,
-    endIndex: Math.min(10, Math.max(1, len - 1)),
-  });
+  const lastGoodRef = useRef(defaultBrushRange(len));
+  const brushGestureRef = useRef(false);
+  const brushGestureTimerRef = useRef(null);
+  const brushRef = useRef(defaultBrushRange(len));
 
-  const [brush, setBrush] = useState(() => {
-    if (len <= 1) return { startIndex: 0, endIndex: 1 };
-    return { startIndex: 0, endIndex: Math.min(10, len - 1) };
-  });
+  const [brush, setBrush] = useState(() => defaultBrushRange(len));
+  const [brushRevision, setBrushRevision] = useState(0);
 
   useEffect(() => {
-    if (len <= 1) return;
     setBrush((prev) => {
-      const max = len - 1;
-      const s = Math.max(
-        0,
-        Math.min(prev?.startIndex ?? lastGoodRef.current.startIndex, max),
-      );
-      const desiredEnd = prev?.endIndex ?? lastGoodRef.current.endIndex;
-      const e = Math.max(1, Math.min(desiredEnd, max));
-      const next = { startIndex: s, endIndex: e };
+      const next = normalizeBrushRange(prev, len, lastGoodRef.current);
       lastGoodRef.current = next;
-      return next;
+      brushRef.current = next;
+      return sameBrushRange(prev, next) ? prev : next;
     });
   }, [len]);
 
-  const brushKey = useMemo(() => {
-    return `${corpus}::${searchParams?.toString() ?? ""}`;
-  }, [corpus, searchParams]);
+  useEffect(() => {
+    return () => {
+      if (brushGestureTimerRef.current) {
+        clearTimeout(brushGestureTimerRef.current);
+      }
+    };
+  }, []);
+
+  const brushKey = useMemo(
+    () => `${corpus}::${len}::${brushRevision}`,
+    [corpus, len, brushRevision],
+  );
+
+  const endBrushGesture = useCallback(() => {
+    if (brushGestureTimerRef.current) {
+      clearTimeout(brushGestureTimerRef.current);
+    }
+
+    brushGestureTimerRef.current = window.setTimeout(() => {
+      brushGestureRef.current = false;
+    }, 250);
+  }, []);
+
+  const onChartPointerDown = useCallback((event) => {
+    if (event.target?.closest?.(".recharts-brush")) {
+      brushGestureRef.current = true;
+
+      if (brushGestureTimerRef.current) {
+        clearTimeout(brushGestureTimerRef.current);
+      }
+
+      brushGestureTimerRef.current = window.setTimeout(() => {
+        brushGestureRef.current = false;
+      }, 3000);
+    }
+  }, []);
+
+  const onBrushChange = useCallback(
+    (range) => {
+      if (!range || len <= 1) return;
+
+      const fallback = normalizeBrushRange(
+        brushRef.current,
+        len,
+        lastGoodRef.current,
+      );
+      const next = normalizeBrushRange(range, len, fallback);
+
+      if (
+        !brushGestureRef.current &&
+        isFullRangeReset(next, fallback, len)
+      ) {
+        lastGoodRef.current = fallback;
+        brushRef.current = fallback;
+        setBrush(fallback);
+        setBrushRevision((revision) => revision + 1);
+        return;
+      }
+
+      lastGoodRef.current = next;
+      brushRef.current = next;
+      setBrush((prev) => (sameBrushRange(prev, next) ? prev : next));
+    },
+    [len],
+  );
 
   const fetchPairs = useCallback(
     async (source) => {
@@ -169,10 +308,15 @@ export default function LanguageGraphs({ graphValues = [] }) {
             </p>
           </header>
 
-          <div className={s.chart}>
+          <div
+            className={s.chart}
+            onPointerDownCapture={onChartPointerDown}
+            onPointerUpCapture={endBrushGesture}
+            onPointerCancelCapture={endBrushGesture}
+          >
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
-                data={graphValues}
+                data={chartValues}
                 margin={{ top: 8, right: 10, left: 0, bottom: 8 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
@@ -186,19 +330,12 @@ export default function LanguageGraphs({ graphValues = [] }) {
                 {showBrush && (
                   <Brush
                     key={brushKey}
+                    dataKey="name"
                     height={18}
                     startIndex={brush.startIndex}
                     endIndex={brush.endIndex}
-                    data={graphValues}
-                    onChange={(r) => {
-                      if (!r || len <= 1) return;
-                      const max = len - 1;
-                      const s = Math.max(0, Math.min(r.startIndex ?? 0, max));
-                      const e = Math.max(1, Math.min(r.endIndex ?? max, max));
-                      const next = { startIndex: s, endIndex: e };
-                      lastGoodRef.current = next;
-                      setBrush(next);
-                    }}
+                    data={chartValues}
+                    onChange={onBrushChange}
                   />
                 )}
 
