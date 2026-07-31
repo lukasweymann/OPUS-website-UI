@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   BarChart,
   Bar,
@@ -16,9 +16,20 @@ import {
   codeToLangTransformer,
   DataFormatter,
 } from "../../../../../hooks/hooks";
+import LoaderSpinner from "../../ui/LoaderSpinner/LoaderSpinner";
 import s from "../LanguageGraph/LanguageGraph.module.css";
 
 const nfCompact = new Intl.NumberFormat("en", { notation: "compact" });
+const GRAPH_LOADER_SIZE = 22;
+
+function isBrushEvent(event) {
+  return Boolean(event?.target?.closest?.(".recharts-brush"));
+}
+
+function payloadFromLabel(rows, label, dataKey) {
+  if (label == null) return null;
+  return rows.find((row) => String(row?.[dataKey]) === String(label)) ?? null;
+}
 
 function Tip({ title, rows }) {
   return (
@@ -88,9 +99,13 @@ export default function PairsGraph({
   currentLangLabel = "",
   status = "idle", // idle | loading | ready | error
   onPickPair, // (payload) => void
+  pairLoading = false,
+  loadingPairLabel = "",
   windowSize = 10,
 }) {
   const data = useMemo(() => withLabel(pairs), [pairs]);
+  const activePairRef = useRef(null);
+  const directBarClickRef = useRef(0);
 
   const chartKey = useMemo(
     () => `pairs__${currentLang || "none"}__${data.length}`,
@@ -102,15 +117,52 @@ export default function PairsGraph({
     [data.length, windowSize],
   );
 
+  const onChartClick = useCallback(
+    (chartState, event) => {
+      if (isBrushEvent(event)) return;
+      if (Date.now() - directBarClickRef.current < 100) return;
+
+      const payload =
+        payloadFromLabel(data, chartState?.activeLabel, "pairLabel") ??
+        activePairRef.current;
+      if (payload) onPickPair?.(payload);
+    },
+    [data, onPickPair],
+  );
+
+  const onChartMouseMove = useCallback(
+    (chartState) => {
+      activePairRef.current = chartState?.isTooltipActive
+        ? payloadFromLabel(data, chartState.activeLabel, "pairLabel")
+        : null;
+    },
+    [data],
+  );
+
+  const onChartMouseLeave = useCallback(() => {
+    activePairRef.current = null;
+  }, []);
+
+  const onBarDirectClick = useCallback(
+    (bar) => {
+      directBarClickRef.current = Date.now();
+      onPickPair?.(bar?.payload);
+    },
+    [onPickPair],
+  );
+
   if (status !== "ready" || data.length === 0) return null;
 
   return (
-    <div className={s.chart2}>
+    <div className={`${s.chart2} ${s.clickableChart}`}>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
           key={chartKey}
           data={data}
           margin={{ top: 8, right: 10, left: 0, bottom: 8 }}
+          onClick={onChartClick}
+          onMouseMove={onChartMouseMove}
+          onMouseLeave={onChartMouseLeave}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="pairLabel" fontSize={12} tickMargin={8} />
@@ -132,16 +184,24 @@ export default function PairsGraph({
             dataKey="alignment_pairs"
             fill="#2CB9B1"
             activeBar={{ fill: "#86E3DA" }}
-            onClick={(bar) => onPickPair?.(bar?.payload)}
+            cursor="pointer"
+            onClick={onBarDirectClick}
           />
         </BarChart>
       </ResponsiveContainer>
 
       <div className={s.hintRow}>
-        <span className={s.hintTiny}>
-          Showing pairs for{" "}
-          <strong>{currentLangLabel || currentLang || "…"}</strong>
-        </span>
+        {pairLoading ? (
+          <span className={s.loading}>
+            <LoaderSpinner size={GRAPH_LOADER_SIZE} decorative />
+            <span>Loading downloads for {loadingPairLabel || "pair"}…</span>
+          </span>
+        ) : (
+          <span className={s.hintTiny}>
+            Showing pairs for{" "}
+            <strong>{currentLangLabel || currentLang || "…"}</strong>
+          </span>
+        )}
       </div>
     </div>
   );

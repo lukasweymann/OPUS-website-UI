@@ -48,6 +48,17 @@
     border-top: 1px solid color-mix(in oklab, CanvasText 12%, transparent);
 }
 
+.clickableChart :global(.recharts-surface),
+.clickableChart :global(.recharts-bar-rectangle),
+.clickableChart :global(.recharts-tooltip-cursor) {
+    cursor: pointer;
+}
+
+.clickableChart :global(.recharts-brush),
+.clickableChart :global(.recharts-brush *) {
+    cursor: default;
+}
+
 .subhead,
 .tipRows {
     display: grid;

@@ -80,6 +80,15 @@
     font-weight: 700;
 }
 
+.loadingMsg {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
 .msgErr {
     margin-top: 14px;
     font-weight: 800;
