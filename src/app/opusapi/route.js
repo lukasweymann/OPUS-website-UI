@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { callPythonReadData } from "@/lib/pythonClient";
+import { withApiDocsChrome } from "@/lib/apiDocsShell";
 
 export const runtime = "nodejs";
 
@@ -13,7 +14,7 @@ export async function GET(req) {
   if (!hasQueryParams) {
     const base = `https://opus.nlpl.eu/opusapi`;
 
-    const html = `<!doctype html>
+    const html = withApiDocsChrome(`<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -345,7 +346,7 @@ export async function GET(req) {
     </div>
   </div>
 </body>
-</html>`;
+</html>`, { page: "opusapi" });
 
     return new Response(html, {
       status: 200,

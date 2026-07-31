@@ -12,6 +12,19 @@
 
     --font-sans: system-ui, -apple-system, 'JetBrains Mono', Roboto, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, Monaco, "Liberation Mono", "Courier New", monospace;
+
+    --text-body: 1rem;
+    --text-body-line: 1.62;
+    --text-copy: 1rem;
+    --text-copy-line: 1.65;
+    --text-muted-size: 0.98rem;
+    --text-label: 0.86rem;
+    --text-chip: 0.88rem;
+    --text-code: 0.94rem;
+    --text-small: 0.92rem;
+    --heading-lg: clamp(2rem, 3vw, 2.45rem);
+    --heading-md: clamp(1.25rem, 2vw, 1.45rem);
+
     --radius-md: 14px;
     --radius-lg: 18px;
     --radius-pill: 999px;
@@ -105,7 +118,8 @@ body {
     margin: 0;
     background: radial-gradient(circle at top left, var(--bg-grad-a), var(--bg));
     color: var(--text-main);
-    line-height: 1.5;
+    font-size: var(--text-body);
+    line-height: var(--text-body-line);
 }
 
 a {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { callScoresApi } from "@/lib/scoresApiClient";
+import { withApiDocsChrome } from "@/lib/apiDocsShell";
 
 export const runtime = "nodejs";
 
@@ -26,7 +27,7 @@ export async function GET(req) {
     if (!hasFilters) {
         const base = `${url.protocol}//${url.host}/scoresapi`;
 
-        const html = `<!doctype html>
+        const html = withApiDocsChrome(`<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -244,7 +245,7 @@ export async function GET(req) {
     Base URL (local): <code>${base}</code>
   </p>
 </body>
-</html>`;
+</html>`);
 
         return new NextResponse(html, {
             status: 200,

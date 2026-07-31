@@ -10,7 +10,9 @@
     align-items: flex-start;
     gap: clamp(16px, 6vw, 60px);
 
-    padding: clamp(24px, 5vw, 60px) clamp(16px, 8vw, 140px);
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 60px) 0;
     flex-wrap: wrap;
 }
 
@@ -31,7 +33,8 @@
 
 .h3 {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: var(--text-small);
+    line-height: 1.35;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -50,6 +53,8 @@
 .link {
     color: var(--text-muted);
     text-decoration: none;
+    font-size: var(--text-small);
+    line-height: 1.55;
     width: fit-content;
 }
 
@@ -101,7 +106,8 @@
 .note {
     margin: 14px 0 0;
     color: var(--text-muted);
-    font-size: 0.92rem;
+    font-size: var(--text-small);
+    line-height: 1.55;
 }
 
 /* Right side meta */
@@ -117,7 +123,8 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    font-size: 0.78rem;
+    font-size: var(--text-label);
+    line-height: 1.35;
 
     padding: 0.5rem 0.65rem;
     border-radius: var(--radius-pill);
