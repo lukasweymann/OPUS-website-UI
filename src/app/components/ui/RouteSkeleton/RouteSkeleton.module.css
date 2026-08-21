@@ -1,0 +1,160 @@
+.wrap {
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: var(--page-shell-padding);
+    display: grid;
+    gap: 14px;
+    color: var(--text-main);
+    min-height: 50vh;
+}
+
+.card {
+    border: 1px solid color-mix(in oklab, var(--text-main) 12%, transparent);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: clamp(14px, 2vw, 18px);
+    display: grid;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.line,
+.pill,
+.button,
+.bar {
+    display: block;
+    background:
+        linear-gradient(90deg,
+            color-mix(in oklab, var(--text-main) 8%, transparent),
+            color-mix(in oklab, var(--accent) 18%, transparent),
+            color-mix(in oklab, var(--text-main) 8%, transparent));
+    background-size: 220% 100%;
+    animation: shimmer 1.35s ease-in-out infinite;
+}
+
+.line {
+    width: var(--w);
+    max-width: 100%;
+    height: 13px;
+    border-radius: 999px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pill {
+    width: min(240px, 100%);
+    height: 38px;
+    border-radius: var(--radius-pill);
+}
+
+.button {
+    width: 44px;
+    height: 38px;
+    border-radius: var(--radius-pill);
+}
+
+.split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 14px;
+}
+
+.split > div {
+    min-width: 0;
+}
+
+.chart {
+    height: 280px;
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(6px, 1vw, 14px);
+    padding: 20px 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.bar {
+    flex: 1 1 0;
+    min-width: 8px;
+    height: var(--h);
+    border-radius: 7px 7px 0 0;
+}
+
+.table {
+    display: grid;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 12px;
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tableRow:last-child {
+    border-bottom: 0;
+}
+
+.list,
+.samples {
+    display: grid;
+    gap: 10px;
+}
+
+.listRow,
+.sample {
+    display: grid;
+    gap: 9px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 130% 0;
+    }
+
+    100% {
+        background-position: -130% 0;
+    }
+}
+
+@media (max-width: 980px) {
+    .split {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .tableRow {
+        grid-template-columns: 1fr 90px;
+    }
+
+    .tableRow .line:nth-child(n + 3) {
+        display: none;
+    }
+
+    .chart {
+        gap: 5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .line,
+    .pill,
+    .button,
+    .bar {
+        animation-duration: 2.8s;
+    }
+}

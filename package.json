@@ -13,21 +13,18 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@hcaptcha/react-hcaptcha": "^1.8.1",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "all-iso-language-codes": "^1.0.12",
-    "diff": "^5.1.0",
-    "js-yaml": "^4.1.0",
-    "lucide-react": "^0.372.0",
-    "next": "16.1.0",
+    "diff": "^5.2.2",
+    "js-yaml": "^4.3.0",
+    "lucide-react": "^1.28.0",
+    "next": "16.3.1",
     "nextjs-progressbar": "^0.0.16",
-    "nodemailer": "^6.9.6",
-    "nodemailer-smtp-transport": "^2.7.4",
-    "nwdiff": "^1.0.3",
+    "nodemailer": "^9.0.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-tooltip": "^5.21.5",
     "recharts": "^3.6.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
     "baseline-browser-mapping": "^2.9.8"

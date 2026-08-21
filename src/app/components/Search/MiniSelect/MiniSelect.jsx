@@ -152,6 +152,7 @@ export default function MiniSelect({
         onClick={() => !disabled && setOpen((o) => !o)}
         onKeyDown={onBtnKeyDown}
         disabled={disabled}
+        autoComplete="off"
         ref={btnRef}
       >
         {selectedLabel || placeholder}

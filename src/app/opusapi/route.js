@@ -46,30 +46,14 @@ export async function GET(req) {
       align-items: flex-start;
       padding: 3rem 1.5rem;
     }
-    .card {
+    .docs {
       width: 100%;
-      max-width: 900px;
-      border-radius: 1.5rem;
-      padding: 2rem 2.25rem;
-      background: linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
-      border: 1px solid rgba(148,163,184,0.2);
-      box-shadow:
-        0 30px 60px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(15,23,42,0.9);
+      max-width: none;
       position: relative;
-      overflow: hidden;
     }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -30%;
-      background: radial-gradient(circle at top right, rgba(128, 22, 249, 0.16), transparent 60%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-    .card-inner {
-      position: relative;
-      z-index: 1;
+    .docs-inner {
+      display: grid;
+      gap: 1.75rem;
     }
     .badge {
       display: inline-flex;
@@ -82,6 +66,8 @@ export async function GET(req) {
       color: var(--text-muted);
       background: rgba(15,23,42,0.7);
       backdrop-filter: blur(10px);
+      justify-self: start;
+      width: max-content;
     }
     .badge-dot {
       width: 7px;
@@ -93,21 +79,21 @@ export async function GET(req) {
     h1 {
       margin: 0.75rem 0 0.25rem;
       font-size: 2.3rem;
-      letter-spacing: 0.03em;
+      letter-spacing: 0;
     }
     .subtitle {
-      margin: 0.25rem 0 1.75rem;
+      margin: 0.25rem 0 0;
+      padding-bottom: 0.65rem;
       font-size: 0.98rem;
       color: var(--text-muted);
-      max-width: 32rem;
+      max-width: 46rem;
     }
     .grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
-      gap: 1.75rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
     }
     @media (max-width: 800px) {
-      .card { padding: 1.5rem 1.25rem; border-radius: 1.2rem; }
       .grid { grid-template-columns: minmax(0, 1fr); }
       h1 { font-size: 1.9rem; }
     }
@@ -116,27 +102,33 @@ export async function GET(req) {
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 0.75rem;
+      margin: 0 0 0.75rem;
     }
     .param-list {
       display: grid;
-      gap: 0.6rem;
-      margin-bottom: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      column-gap: 2.4rem;
+      row-gap: 0;
+      margin: 0;
     }
     .param {
-      display: flex;
-      gap: 0.75rem;
-      align-items: baseline;
+      display: grid;
+      gap: 0.25rem;
+      align-content: start;
+      padding: 0.78rem 0;
+      border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
     }
+    .param:last-child { border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent); }
     .param-name {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.85rem;
-      padding: 0.15rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.35);
-      background: rgba(15,23,42,0.7);
+      padding: 0;
+      border: 0;
+      background: transparent;
       color: var(--accent);
       white-space: nowrap;
+      justify-self: start;
+      width: max-content;
     }
     .param-desc {
       font-size: 0.9rem;
@@ -147,22 +139,20 @@ export async function GET(req) {
       font-weight: 500;
     }
     .examples {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      display: grid;
+      gap: 0;
     }
     .example-block {
-      border-radius: 0.9rem;
-      padding: 0.85rem 0.9rem;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(30,64,175,0.4);
+      padding: 1rem 0;
+      border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
     }
+    .example-block:last-child { border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent); }
     .example-label {
       font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.12em;
       color: var(--text-muted);
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.45rem;
     }
     .code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -170,9 +160,38 @@ export async function GET(req) {
       background: var(--code-bg);
       border-radius: 0.6rem;
       padding: 0.4rem 0.45rem;
-      display: inline-block;
+      display: block;
       color: var(--text-main);
-      word-break: break-all;
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+    .code-action {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 2.35rem;
+      gap: 0.55rem;
+      align-items: start;
+    }
+    .example-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.35rem;
+      height: 2.35rem;
+      border-radius: 8px;
+      border: 1px solid color-mix(in oklab, var(--accent) 54%, var(--border));
+      background: color-mix(in oklab, var(--accent) 18%, transparent);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+    .example-link:hover,
+    .example-link:focus-visible {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      outline: none;
     }
     .muted {
       color: var(--text-muted);
@@ -194,7 +213,9 @@ export async function GET(req) {
       background: rgba(15,23,42,0.85);
     }
     .footer-note {
-      margin-top: 1.75rem;
+      margin: 0.75rem 0 0;
+      padding-top: 0.9rem;
+      border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
       font-size: 0.78rem;
       color: var(--text-muted);
     }
@@ -202,8 +223,8 @@ export async function GET(req) {
 </head>
 <body>
   <div class="shell">
-    <div class="card">
-      <div class="card-inner">
+    <div class="docs">
+      <div class="docs-inner">
         <div class="badge">
           <span class="badge-dot"></span>
           <span>OPUS-API • HTTP interface</span>
@@ -275,8 +296,11 @@ export async function GET(req) {
                   <span class="pill">preprocessing</span>
                   <span class="pill">version</span>
                 </div>
-                <div class="code">
-                  ${base}?corpus=OpenSubtitles&source=en&target=fi&preprocessing=xml&version=latest
+                <div class="code-action">
+                  <div class="code">
+                    ${base}?corpus=OpenSubtitles&source=en&target=fi&preprocessing=xml&version=latest
+                  </div>
+                  <a class="example-link" href="${base}?corpus=OpenSubtitles&amp;source=en&amp;target=fi&amp;preprocessing=xml&amp;version=latest" target="_blank" rel="noopener noreferrer" aria-label="Open query corpora example">↗</a>
                 </div>
               </div>
 
@@ -285,8 +309,11 @@ export async function GET(req) {
                 <div class="pill-row">
                   <span class="pill">corpora=True</span>
                 </div>
-                <div class="code">
-                  ${base}?corpora=True
+                <div class="code-action">
+                  <div class="code">
+                    ${base}?corpora=True
+                  </div>
+                  <a class="example-link" href="${base}?corpora=True" target="_blank" rel="noopener noreferrer" aria-label="Open available corpora example">↗</a>
                 </div>
               </div>
 
@@ -295,8 +322,11 @@ export async function GET(req) {
                 <div class="pill-row">
                   <span class="pill">languages=True</span>
                 </div>
-                <div class="code">
-                  ${base}?languages=True
+                <div class="code-action">
+                  <div class="code">
+                    ${base}?languages=True
+                  </div>
+                  <a class="example-link" href="${base}?languages=True" target="_blank" rel="noopener noreferrer" aria-label="Open all languages example">↗</a>
                 </div>
               </div>
 
@@ -306,8 +336,11 @@ export async function GET(req) {
                   <span class="pill">languages=True</span>
                   <span class="pill">corpus</span>
                 </div>
-                <div class="code">
-                  ${base}?languages=True&corpus=OpenSubtitles
+                <div class="code-action">
+                  <div class="code">
+                    ${base}?languages=True&corpus=OpenSubtitles
+                  </div>
+                  <a class="example-link" href="${base}?languages=True&amp;corpus=OpenSubtitles" target="_blank" rel="noopener noreferrer" aria-label="Open languages for a corpus example">↗</a>
                 </div>
               </div>
 
@@ -317,8 +350,11 @@ export async function GET(req) {
                   <span class="pill">languages=True</span>
                   <span class="pill">source</span>
                 </div>
-                <div class="code">
-                  ${base}?languages=True&source=fi
+                <div class="code-action">
+                  <div class="code">
+                    ${base}?languages=True&source=fi
+                  </div>
+                  <a class="example-link" href="${base}?languages=True&amp;source=fi" target="_blank" rel="noopener noreferrer" aria-label="Open target languages for a source example">↗</a>
                 </div>
               </div>
 
@@ -329,8 +365,11 @@ export async function GET(req) {
                   <span class="pill">corpus</span>
                   <span class="pill">source</span>
                 </div>
-                <div class="code">
-                  ${base}?languages=True&corpus=OpenSubtitles&source=fi
+                <div class="code-action">
+                  <div class="code">
+                    ${base}?languages=True&corpus=OpenSubtitles&source=fi
+                  </div>
+                  <a class="example-link" href="${base}?languages=True&amp;corpus=OpenSubtitles&amp;source=fi" target="_blank" rel="noopener noreferrer" aria-label="Open target languages for a source in a corpus example">↗</a>
                 </div>
               </div>
             </div>

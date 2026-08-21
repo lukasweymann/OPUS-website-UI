@@ -4,10 +4,11 @@ import s from "./Banner.module.css";
 import Logo from "@/../public/logos/banner-logo.png";
 import LogoDark from "@/../public/logos/banner-logo-white.png";
 
-export default function Banner() {
+export default function Banner({ children }) {
   return (
     <section className={s.wrap}>
       <div className={s.content}>
+        {children && <div className={s.news}>{children}</div>}
         <Image
           src={Logo}
           width={280}
@@ -24,7 +25,7 @@ export default function Banner() {
         />
         <div className={s.box}>
           <h1 className={s.title}>Find your corpora</h1>
-          <SearchWithSuspense />
+          <SearchWithSuspense className={s.search} />
         </div>
       </div>
     </section>

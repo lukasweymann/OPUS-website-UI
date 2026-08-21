@@ -10,10 +10,11 @@
 .h,
 .hAlt {
     margin: 0;
-    font-size: 18px;
-    letter-spacing: 0.12em;
+    font-size: clamp(1.12rem, 0.45vw + 1rem, 1.28rem);
+    font-weight: 850;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--text-main);
 }
 
 .p,
@@ -39,11 +40,8 @@
 
 .res {
     margin-top: 16px;
-    padding: 14px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface-strong);
-    box-shadow: var(--shadow-sm);
+    padding-top: 14px;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
 }
 
 .resHead {
@@ -51,14 +49,15 @@
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .resTitle {
     margin: 0;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 0.01em;
+    font-size: clamp(1.12rem, 0.45vw + 1rem, 1.26rem);
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 1.25;
 }
 
 .note {

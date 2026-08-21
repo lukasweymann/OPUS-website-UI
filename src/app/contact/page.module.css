@@ -7,12 +7,7 @@
 
 .card {
     width: 100%;
-    padding: clamp(18px, 2vw, 26px);
-
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
+    padding: clamp(10px, 1.6vw, 18px) 0 0;
 }
 
 .head {
@@ -160,12 +155,8 @@
 .contribCard {
     width: 100%;
     margin: 14px 0 0;
-    padding: clamp(18px, 2vw, 26px);
-
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
+    padding: clamp(12px, 1.6vw, 18px) 0 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
 }
 
 .h3 {

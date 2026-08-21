@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   BarChart,
@@ -66,8 +66,15 @@ function OverlapTooltip({ active, payload, label }) {
   );
 }
 
+function payloadFromLabel(rows, label) {
+  if (label == null) return null;
+  return rows.find((row) => String(row?.name) === String(label)) ?? null;
+}
+
 export default function Overlaps({ values, result }) {
   const router = useRouter();
+  const activeCorpusRef = useRef(null);
+  const directBarClickRef = useRef(0);
 
   const data = useMemo(() => {
     const rows = tsvRows(values);
@@ -111,6 +118,47 @@ export default function Overlaps({ values, result }) {
   const overlapFill = "#76CDEC"; // keep as your “overlap cyan”
   const overlapActive = "#A7E6FA"; // lighter active bar
 
+  const goToCorpus = useCallback(
+    (payload) => {
+      if (!payload?.corpus) return;
+      router.push(`/datasets/${encodeURIComponent(payload.corpus)}`);
+    },
+    [router],
+  );
+
+  const onChartClick = useCallback(
+    (chartState) => {
+      if (Date.now() - directBarClickRef.current < 100) return;
+
+      const payload =
+        payloadFromLabel(data, chartState?.activeLabel) ??
+        activeCorpusRef.current;
+      goToCorpus(payload);
+    },
+    [data, goToCorpus],
+  );
+
+  const onChartMouseMove = useCallback(
+    (chartState) => {
+      activeCorpusRef.current = chartState?.isTooltipActive
+        ? payloadFromLabel(data, chartState.activeLabel)
+        : null;
+    },
+    [data],
+  );
+
+  const onChartMouseLeave = useCallback(() => {
+    activeCorpusRef.current = null;
+  }, []);
+
+  const onBarDirectClick = useCallback(
+    (bar) => {
+      directBarClickRef.current = Date.now();
+      goToCorpus(bar?.payload);
+    },
+    [goToCorpus],
+  );
+
   return (
     <section className={s.wrap}>
       <header className={s.head}>
@@ -122,29 +170,29 @@ export default function Overlaps({ values, result }) {
         </p>
       </header>
 
-      <div className={s.chart}>
+      <div className={`${s.chart} ${s.clickableChart}`}>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={data}
             margin={{ top: 8, right: 10, left: 0, bottom: 8 }}
-            onClick={(node) => {
-              const p = node?.activePayload?.[0]?.payload;
-              if (!p?.corpus || !p?.version) return;
-              router.push(`/datasets/${p.corpus}/${p.version}`);
-            }}
+            onClick={onChartClick}
+            onMouseMove={onChartMouseMove}
+            onMouseLeave={onChartMouseLeave}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" fontSize={12} tickMargin={8} />
             <YAxis type="number" unit=" %" ticks={numbers} fontSize={12} />
             <Tooltip
               content={<OverlapTooltip />}
-              wrapperStyle={{ outline: "none" }}
+              wrapperStyle={{ outline: "none", zIndex: 50 }}
             />
 
             <Bar
               dataKey="perc"
               fill={overlapFill}
               activeBar={{ fill: overlapActive }}
+              cursor="pointer"
+              onClick={onBarDirectClick}
             />
           </BarChart>
         </ResponsiveContainer>

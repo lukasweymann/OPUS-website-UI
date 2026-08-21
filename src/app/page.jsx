@@ -147,12 +147,9 @@ export default async function Home() {
   return (
     <main className={s.page}>
       <div className={s.container}>
-        {yamlToJson && (
-          <div className={s.news}>
-            <News news={yamlToJson.NEWS} />
-          </div>
-        )}
-        <Banner languageList={cleanLanguages} />
+        <Banner languageList={cleanLanguages}>
+          {yamlToJson && <News news={yamlToJson.NEWS} />}
+        </Banner>
 
         <section className={s.overview}>
           <div className={s.summary}>

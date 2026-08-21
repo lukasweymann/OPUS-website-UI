@@ -28,12 +28,20 @@
 }
 
 .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    padding: var(--space-5);
-    margin-bottom: var(--space-4);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.card:first-of-type {
+    padding-top: var(--space-4);
+}
+
+.card:last-of-type {
+    border-bottom: 0;
+}
+
+.card > section {
+    margin-top: 0;
 }
 
 .title {
@@ -186,6 +194,17 @@
     border-color: color-mix(in oklab, var(--accent) 25%, var(--border));
 }
 
+.clear:disabled {
+    cursor: wait;
+    opacity: 0.58;
+}
+
+.pickerLoading {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+}
+
 .results {
-    margin-top: var(--space-4);
+    margin-top: var(--space-3);
 }

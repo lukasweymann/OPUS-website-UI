@@ -2,8 +2,28 @@
 set -euo pipefail
 
 PROJECT_ROOT="/home/lukas/OPUS-website-UI"
+UPDATE_DB="${UPDATE_DB:-0}"
 
 cd "$PROJECT_ROOT"
+
+case "${1:-}" in
+  --update-db)
+    UPDATE_DB=1
+    ;;
+  --no-update-db|"")
+    ;;
+  -h|--help)
+    echo "Usage: $0 [--update-db|--no-update-db]"
+    echo
+    echo "Set UPDATE_DB=1 or pass --update-db to refresh dev-opus/opusdata.db."
+    exit 0
+    ;;
+  *)
+    echo "Unknown option: $1" >&2
+    echo "Usage: $0 [--update-db|--no-update-db]" >&2
+    exit 2
+    ;;
+esac
 
 echo "==> 1. Python venv"
 if [ ! -d ".venv" ]; then
@@ -25,9 +45,17 @@ pip install \
 echo "==> 3. (Optional) OPUS dev DB (opusdata.db) – skip if already built"
 if [ ! -f "dev-opus/opusdata.db" ]; then
   opus_get -l -d RF -s en -t sv --local_db
-  # opus_get -u -db ~/.OpusTools/opusdata.db --suppress_prompts
   mkdir -p dev-opus
   cp ~/.OpusTools/opusdata.db dev-opus/opusdata.db
+else
+  echo "Dev OPUS DB already exists. Skipping seed."
+fi
+
+if [ "$UPDATE_DB" = "1" ]; then
+  echo "==> 3b. Updating OPUS dev DB"
+  opus_get -u -db "$PROJECT_ROOT/dev-opus/opusdata.db" --suppress_prompts
+else
+  echo "==> 3b. Skipping OPUS dev DB update. Set UPDATE_DB=1 or pass --update-db to refresh it."
 fi
 
 echo "==> 4. Synthetic/langpairs dev DB"

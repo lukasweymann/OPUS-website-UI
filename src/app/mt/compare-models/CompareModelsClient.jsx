@@ -437,10 +437,12 @@ export default function CompareModelsClient({
               <header className={s.head2}>
                 <div className={s.titles}>
                   <p className={s.t}>
-                    Model 1: <span className={s.m1}>{m1}</span>
+                    Model 1:{" "}
+                    <span className={`${s.m1} ${s.modelName}`}>{m1}</span>
                   </p>
                   <p className={s.t}>
-                    Model 2: <span className={s.m2}>{m2}</span>
+                    Model 2:{" "}
+                    <span className={`${s.m2} ${s.modelName}`}>{m2}</span>
                   </p>
                 </div>
 

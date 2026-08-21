@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
+    height: 100%;
 }
 
 .head {
@@ -17,9 +18,9 @@
 
 .title {
     margin: 0;
-    font-size: 1.05rem;
-    line-height: 1.35;
-    font-weight: 650;
+    font-size: clamp(1.12rem, 0.45vw + 1rem, 1.28rem);
+    line-height: 1.28;
+    font-weight: 760;
     color: var(--text-main);
 }
 
@@ -31,6 +32,7 @@
 }
 
 .foot {
+    margin-top: auto;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;

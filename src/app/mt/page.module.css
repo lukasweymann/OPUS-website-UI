@@ -6,9 +6,20 @@
     overflow: hidden;
 }
 
-.mainContainer,
+.mainContainer {
+    display: flex;
+    justify-content: space-between;
+    min-height: 75vh;
+    margin-top: 15px;
+}
+
+.balancedResults {
+    gap: 24px;
+}
+
 .benchmarkResultsContainer {
     display: flex;
+    gap: 24px;
     justify-content: space-between;
     min-height: 75vh;
     margin-top: 15px;
@@ -24,7 +35,8 @@
 }
 
 .graphsLast {
-    width: 60%;
+    width: 50%;
+    flex: 0 0 calc(50% - 12px);
 }
 
 .tableContainerTwo {
@@ -32,8 +44,21 @@
     margin-left: 20px;
 }
 
+.balancedResults .graphs,
+.balancedResults .tableContainerTwo {
+    width: 50%;
+    flex: 0 0 calc(50% - 12px);
+}
+
+.balancedResults .tableContainerTwo {
+    margin-left: 0;
+    overflow-x: auto;
+}
+
 .tableContainerThree {
-    width: 100%;
+    width: 50%;
+    flex: 0 0 calc(50% - 12px);
+    overflow-x: auto;
 }
 
 .tableContainerCont table {
@@ -119,6 +144,12 @@
         width: 100%;
     }
 
+    .balancedResults .graphs,
+    .balancedResults .tableContainerTwo {
+        width: 100%;
+        flex-basis: auto;
+    }
+
     .mainContainer .graphs {
         display: flex;
     }
@@ -138,6 +169,12 @@
 @media only screen and (max-width: 940px) {
     .benchmarkResultsContainer {
         flex-direction: column;
+    }
+
+    .graphsLast,
+    .tableContainerThree {
+        width: 100%;
+        flex-basis: auto;
     }
 
     .tableContainerThree {

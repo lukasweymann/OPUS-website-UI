@@ -6,10 +6,9 @@
 
 .scroller {
     overflow: auto;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     border: 1px solid var(--table-border);
     background: var(--table-main);
-    box-shadow: var(--shadow-sm);
 }
 
 /* table */

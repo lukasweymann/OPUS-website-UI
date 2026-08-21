@@ -53,6 +53,50 @@
     box-shadow: var(--shadow-sm);
 }
 
+.soft .controls {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
+}
+
+.soft .tableWrap {
+    border-radius: var(--radius-md);
+    border-color: var(--table-border);
+    background: var(--table-main);
+    box-shadow: none;
+}
+
+.soft .thead th {
+    background: var(--table-main);
+    border-bottom-color: var(--table-border);
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.soft .table td {
+    border-bottom-color: color-mix(in oklab, var(--table-border) 62%, transparent);
+}
+
+.soft .table td,
+.soft .table tfoot th {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.table tfoot th {
+    padding: 0 10px;
+    border-bottom: 0;
+    color: var(--text-main);
+}
+
+.soft .empty {
+    padding: 10px 0;
+    border: 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
+    background: transparent;
+    border-radius: 0;
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;

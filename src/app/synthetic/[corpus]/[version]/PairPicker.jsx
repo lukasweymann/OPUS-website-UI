@@ -1,9 +1,10 @@
 // app/synthetic/[corpus]/[version]/PairPicker.jsx
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import MiniSelect from "@/app/components/Search/MiniSelect/MiniSelect";
+import LoaderSpinner from "@/app/components/ui/LoaderSpinner/LoaderSpinner";
 import s from "./page.module.css";
 
 export default function PairPicker({
@@ -15,6 +16,7 @@ export default function PairPicker({
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
+  const [pending, startTransition] = useTransition();
 
   const current = useMemo(() => {
     const v = typeof value === "string" ? value : "";
@@ -26,25 +28,41 @@ export default function PairPicker({
     if (next) params.set("pair", next);
     else params.delete("pair");
 
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const qs = params.toString();
+    const href = qs ? `${pathname}?${qs}` : pathname;
+
+    startTransition(() => {
+      router.replace(href, { scroll: false });
+    });
   }
 
   return (
-    <div className={s.picker}>
+    <div className={s.picker} aria-busy={pending ? "true" : undefined}>
       <div className={s.pickerField}>
         <MiniSelect
           options={options}
           value={current}
           onChange={(v) => setPair(v)}
           placeholder="Select language pair…"
-          disabled={!options.length}
+          disabled={pending || !options.length}
         />
       </div>
 
       {current && (
-        <button type="button" className={s.clear} onClick={() => setPair("")}>
+        <button
+          type="button"
+          className={s.clear}
+          onClick={() => setPair("")}
+          disabled={pending}
+        >
           Clear
         </button>
+      )}
+
+      {pending && (
+        <span className={s.pickerLoading}>
+          <LoaderSpinner size={22} label="Loading downloads" />
+        </span>
       )}
     </div>
   );

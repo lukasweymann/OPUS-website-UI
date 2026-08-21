@@ -28,6 +28,7 @@ export default function CorporaTable({
   tableData = [],
   langPair = [],
   showAllVersionsByDefault = false,
+  softSurface = false,
 }) {
   const [q, setQ] = useState("");
   const [showAllVersions, setShowAllVersions] = useState(
@@ -89,7 +90,7 @@ export default function CorporaTable({
   const total = sorted.length;
 
   return (
-    <section className={s.wrap}>
+    <section className={`${s.wrap} ${softSurface ? s.soft : ""}`}>
       <div className={s.controls}>
         <div className={s.search}>
           <label className={s.label} htmlFor="corpora-search">

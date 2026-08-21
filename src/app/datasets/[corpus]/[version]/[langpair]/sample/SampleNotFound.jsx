@@ -6,12 +6,24 @@ import notFoundImg from "@/../public/img/notfound.svg";
 import s from "./SampleNotFound.module.css";
 import { languagePairName } from "../../../../../../../hooks/hooks";
 
-export default function SampleNotFound({ corpus, langpair, version, mode }) {
-  const backHref = (mode = "synth"
-    ? `/synthetic/${encodeURIComponent(corpus)}/${version}`
-    : `/datasets/${encodeURIComponent(corpus)}`);
+function splitLangpair(langpair = "") {
+  let raw = String(langpair);
+  try {
+    raw = decodeURIComponent(raw);
+  } catch {
+    // Keep the original value if it is not a valid encoded component.
+  }
 
-  const languagePairFormatted = languagePairName([langpair]);
+  return raw.includes("&") ? raw.split("&") : raw.split("-");
+}
+
+export default function SampleNotFound({ corpus, langpair, version, mode }) {
+  const backHref =
+    mode === "synth"
+      ? `/synthetic/${encodeURIComponent(corpus)}/${version}`
+      : `/datasets/${encodeURIComponent(corpus)}`;
+
+  const languagePairFormatted = languagePairName(splitLangpair(langpair));
 
   return (
     <section className={s.wrap} role="status" aria-live="polite">

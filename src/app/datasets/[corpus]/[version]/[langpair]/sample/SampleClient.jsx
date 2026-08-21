@@ -14,6 +14,17 @@ import {
 
 import s from "./page.module.css";
 
+function splitLangpair(langpair = "") {
+  let raw = String(langpair);
+  try {
+    raw = decodeURIComponent(raw);
+  } catch {
+    // Keep the original value if it is not a valid encoded component.
+  }
+
+  return raw.includes("&") ? raw.split("&") : raw.split("-");
+}
+
 export default function SampleClient({
   corpus,
   version,
@@ -52,7 +63,7 @@ export default function SampleClient({
 
   const pairPretty = useMemo(() => {
     if (!langpair) return null;
-    return languagePairName(String(langpair).split("%26"));
+    return languagePairName(splitLangpair(langpair));
   }, [langpair]);
 
   const tsvFileName = `${corpus}-${version}-${langpair}`;

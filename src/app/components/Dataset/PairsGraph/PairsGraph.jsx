@@ -20,7 +20,7 @@ import LoaderSpinner from "../../ui/LoaderSpinner/LoaderSpinner";
 import s from "../LanguageGraph/LanguageGraph.module.css";
 
 const nfCompact = new Intl.NumberFormat("en", { notation: "compact" });
-const GRAPH_LOADER_SIZE = 22;
+const GRAPH_LOADER_SIZE = 26;
 
 function isBrushEvent(event) {
   return Boolean(event?.target?.closest?.(".recharts-brush"));

@@ -1,0 +1,151 @@
+.wrap {
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: 30px 0 100px;
+    display: grid;
+    gap: 14px;
+    color: var(--text-main);
+}
+
+.card {
+    border: 1px solid color-mix(in oklab, var(--text-main) 12%, transparent);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: clamp(14px, 2vw, 18px);
+    display: grid;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.metaGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.miniCard {
+    border: 1px solid color-mix(in oklab, var(--text-main) 10%, transparent);
+    background: color-mix(in oklab, var(--surface) 85%, transparent);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.line,
+.pill,
+.button,
+.select,
+.bar {
+    display: block;
+    background:
+        linear-gradient(90deg,
+            color-mix(in oklab, var(--text-main) 8%, transparent),
+            color-mix(in oklab, var(--accent) 18%, transparent),
+            color-mix(in oklab, var(--text-main) 8%, transparent));
+    background-size: 220% 100%;
+    animation: shimmer 1.35s ease-in-out infinite;
+}
+
+.line {
+    width: var(--w);
+    max-width: 100%;
+    height: 13px;
+    border-radius: 999px;
+}
+
+.pill {
+    width: 110px;
+    height: 20px;
+    border-radius: 999px;
+}
+
+.button {
+    width: 92px;
+    height: 34px;
+    border-radius: 999px;
+}
+
+.table {
+    display: grid;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 1fr 160px 120px;
+    gap: 12px;
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tableRow:last-child {
+    border-bottom: 0;
+}
+
+.chart {
+    height: 280px;
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(8px, 1.4vw, 18px);
+    padding: 20px 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.bar {
+    flex: 1 1 0;
+    min-width: 10px;
+    height: var(--h);
+    border-radius: 7px 7px 0 0;
+}
+
+.select {
+    width: min(520px, 100%);
+    height: 42px;
+    border-radius: 999px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 130% 0;
+    }
+
+    100% {
+        background-position: -130% 0;
+    }
+}
+
+@media (max-width: 720px) {
+    .tableRow {
+        grid-template-columns: 1fr 90px;
+    }
+
+    .tableRow .line:last-child {
+        display: none;
+    }
+
+    .chart {
+        gap: 6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .line,
+    .pill,
+    .button,
+    .select,
+    .bar {
+        animation-duration: 2.8s;
+    }
+}

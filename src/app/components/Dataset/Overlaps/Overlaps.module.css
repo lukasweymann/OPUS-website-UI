@@ -1,10 +1,7 @@
 .wrap {
-    margin: 22px 0;
-    border-radius: var(--radius-lg);
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    box-shadow: var(--shadow-sm);
-    padding: clamp(14px, 2.2vw, 18px);
+    margin: 18px 0 0;
+    padding: 16px 0 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
     width: 100%;
     min-width: 0;
     min-height: 310px;
@@ -18,8 +15,10 @@
 
 .h2 {
     margin: 0;
-    font-size: 1.05rem;
-    letter-spacing: 0.01em;
+    font-size: clamp(1.12rem, 0.45vw + 1rem, 1.26rem);
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 1.25;
 }
 
 .p {
@@ -33,6 +32,10 @@
     height: clamp(260px, 42vh, 360px);
     margin-top: 10px;
     padding-bottom: 20px;
+}
+
+.clickableChart :global(.recharts-surface) {
+    cursor: pointer;
 }
 
 .tip {
@@ -73,8 +76,4 @@
 
 .tipVal {
     font-weight: 700;
-}
-
-:global(.recharts-tooltip-wrapper) {
-    z-index: 50;
 }

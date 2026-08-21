@@ -29,6 +29,30 @@ const SITE_HEADER = `
       <a class="api-docs-link api-docs-secondary" href="/synthetic">Synthetic</a>
       <a class="api-docs-link api-docs-primary" href="/mt?source=eng&target=fra&score=spbleu&benchmark=all&model=all">Dashboard</a>
     </nav>
+    <button class="api-docs-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="api-docs-mobile-menu">
+      <span class="api-docs-burger-line"></span>
+      <span class="api-docs-burger-line"></span>
+      <span class="api-docs-burger-line"></span>
+    </button>
+    <nav class="api-docs-mobile-menu" id="api-docs-mobile-menu" aria-label="Mobile navigation">
+      <button class="api-docs-theme api-docs-mobile-theme" type="button" aria-label="Toggle theme" title="Toggle theme">◐</button>
+      <div class="api-docs-mobile-group">
+        <button class="api-docs-mobile-api" type="button" aria-expanded="false" aria-controls="api-docs-mobile-api-menu">
+          <span>{ } API</span>
+          <span class="api-docs-mobile-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="api-docs-mobile-api-menu" id="api-docs-mobile-api-menu">
+          <a href="/opusapi">OPUS API</a>
+          <a href="/mt-api">MT API</a>
+          <a href="/synthetic-api">Synthetic API</a>
+        </div>
+      </div>
+      <a class="api-docs-mobile-link" href="/contact">Contribute</a>
+      <a class="api-docs-mobile-link" href="/publications">Publications</a>
+      <a class="api-docs-mobile-link" href="/corpora">Corpora</a>
+      <a class="api-docs-mobile-link" href="/synthetic">Synthetic</a>
+      <a class="api-docs-mobile-link api-docs-mobile-primary" href="/mt?source=eng&target=fra&score=spbleu&benchmark=all&model=all">Dashboard</a>
+    </nav>
   </header>
 `;
 
@@ -69,10 +93,13 @@ const SITE_FOOTER = `
   </footer>
   <script>
     (function () {
-      var button = document.querySelector(".api-docs-theme");
-      if (!button) return;
+      var themeButtons = Array.prototype.slice.call(document.querySelectorAll(".api-docs-theme"));
+      var burger = document.querySelector(".api-docs-burger");
+      var menu = document.querySelector(".api-docs-mobile-menu");
+      var apiButton = document.querySelector(".api-docs-mobile-api");
+      var apiMenu = document.querySelector(".api-docs-mobile-api-menu");
 
-      button.addEventListener("click", function () {
+      function toggleTheme() {
         var current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
         var next = current === "dark" ? "light" : "dark";
         document.documentElement.dataset.theme = next;
@@ -80,7 +107,34 @@ const SITE_FOOTER = `
         try {
           localStorage.setItem("theme", next);
         } catch (e) {}
+      }
+
+      themeButtons.forEach(function (button) {
+        button.addEventListener("click", toggleTheme);
       });
+
+      if (burger && menu) {
+        burger.addEventListener("click", function () {
+          var open = burger.getAttribute("aria-expanded") === "true";
+          burger.setAttribute("aria-expanded", String(!open));
+          burger.setAttribute("aria-label", open ? "Open menu" : "Close menu");
+          burger.classList.toggle("api-docs-burger-open", !open);
+          menu.classList.toggle("api-docs-mobile-menu-open", !open);
+
+          if (open && apiButton && apiMenu) {
+            apiButton.setAttribute("aria-expanded", "false");
+            apiMenu.classList.remove("api-docs-mobile-api-menu-open");
+          }
+        });
+      }
+
+      if (apiButton && apiMenu) {
+        apiButton.addEventListener("click", function () {
+          var open = apiButton.getAttribute("aria-expanded") === "true";
+          apiButton.setAttribute("aria-expanded", String(!open));
+          apiMenu.classList.toggle("api-docs-mobile-api-menu-open", !open);
+        });
+      }
     })();
   </script>
 `;
@@ -234,7 +288,7 @@ const SITE_STYLES = `
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 24px;
+      gap: clamp(12px, 1.6vw, 22px);
       flex-wrap: wrap;
     }
 
@@ -279,6 +333,131 @@ const SITE_STYLES = `
       background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 92%, #000), var(--accent));
       border-color: color-mix(in srgb, var(--accent) 55%, rgba(148, 163, 184, 0.35));
       box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22), 0 0 24px rgba(142, 117, 255, 0.18);
+    }
+
+    .api-docs-burger {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .api-docs-burger-line {
+      display: block;
+      width: 18px;
+      height: 2px;
+      border-radius: var(--radius-pill);
+      background: currentColor;
+      transform-origin: center;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .api-docs-burger-open .api-docs-burger-line:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .api-docs-burger-open .api-docs-burger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .api-docs-burger-open .api-docs-burger-line:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .api-docs-mobile-menu {
+      display: none;
+    }
+
+    .api-docs-mobile-link,
+    .api-docs-mobile-api {
+      min-height: 42px;
+      padding: 12px 0;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      background: transparent;
+      color: var(--text-main);
+      font: inherit;
+      font-size: 0.95rem;
+      line-height: 1.35;
+      text-decoration: none;
+    }
+
+    .api-docs-mobile-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .api-docs-mobile-link:hover,
+    .api-docs-mobile-api:hover {
+      color: var(--link-hover);
+      text-decoration: none;
+    }
+
+    .api-docs-mobile-primary {
+      justify-content: center;
+      margin-top: 10px;
+      padding: 0.62rem 0.9rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(148, 163, 184, 0.35));
+      color: #ffffff;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 92%, #000), var(--accent));
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22), 0 0 24px rgba(142, 117, 255, 0.18);
+    }
+
+    .api-docs-mobile-group {
+      display: grid;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .api-docs-mobile-api {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .api-docs-mobile-chevron {
+      transition: transform 160ms ease;
+    }
+
+    .api-docs-mobile-api[aria-expanded="true"] .api-docs-mobile-chevron {
+      transform: rotate(180deg);
+    }
+
+    .api-docs-mobile-api-menu {
+      display: none;
+    }
+
+    .api-docs-mobile-api-menu-open {
+      display: grid;
+      gap: 0;
+      padding: 0 0 8px 10px;
+      border-left: 1px solid var(--border);
+    }
+
+    .api-docs-mobile-api-menu a {
+      display: flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 10px;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .api-docs-mobile-api-menu a:hover {
+      color: var(--link-hover);
+      text-decoration: none;
     }
 
     .api-docs-main {
@@ -420,40 +599,145 @@ const SITE_STYLES = `
       border: 0;
     }
 
-    .api-docs-opusapi .api-docs-main .grid {
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .grid {
       grid-template-columns: minmax(0, 1fr);
       gap: clamp(24px, 4vw, 40px);
     }
 
-    .api-docs-opusapi .api-docs-main .param-list {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 0.85rem;
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .docs {
+      width: 100%;
+      max-width: none;
+      color: var(--text-main);
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .badge {
+      display: inline-flex;
+      justify-self: start;
+      width: max-content;
+      max-width: 100%;
+      background: color-mix(in srgb, var(--info-bg) 72%, transparent);
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .subtitle {
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param-list {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      column-gap: clamp(28px, 4vw, 48px);
+      row-gap: 0;
       margin-bottom: 0;
     }
 
-    .api-docs-opusapi .api-docs-main .param {
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param {
       min-height: 100%;
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.45rem;
-      padding: 0.85rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-muted);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-content: start;
+      gap: 0.24rem;
+      padding: 0.78rem 0;
+      border: 0;
+      border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+      border-radius: 0;
+      background: transparent;
     }
 
-    .api-docs-opusapi .api-docs-main .param-desc {
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param:last-child {
+      border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param-desc {
       margin: 0;
     }
 
-    .api-docs-opusapi .api-docs-main .examples {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 0.9rem;
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param-name {
+      display: inline-flex;
+      justify-self: start;
+      width: max-content;
+      padding: 0;
+      color: var(--accent);
+      background: transparent;
+      border: 0;
+      font-weight: 650;
     }
 
-    .api-docs-opusapi .api-docs-main .example-block:first-child {
-      grid-column: 1 / -1;
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .examples {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .example-block:first-child {
+      grid-column: auto;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .example-block {
+      padding: 1rem 0;
+      border: 0;
+      border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .example-block:last-child {
+      border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .code {
+      display: block;
+      width: 100%;
+      padding: 0.52rem 0.62rem;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .code-action {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 2.35rem;
+      gap: 0.55rem;
+      align-items: start;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .example-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.35rem;
+      height: 2.35rem;
+      border-radius: 8px;
+      border: 1px solid color-mix(in srgb, var(--accent) 48%, var(--border));
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .example-link:hover,
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .example-link:focus-visible {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }
+
+    :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .pill {
+      display: inline-flex;
+      width: max-content;
+      max-width: 100%;
+    }
+
+    @media (max-width: 880px) {
+      :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .grid,
+      :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param-list,
+      :is(.api-docs-opusapi, .api-docs-mtapi, .api-docs-syntheticapi) .api-docs-main .param {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .api-docs-footer {
@@ -566,24 +850,39 @@ const SITE_STYLES = `
 
     @media (max-width: 760px) {
       .api-docs-nav {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items: center;
       }
 
       .api-docs-actions {
-        justify-content: flex-start;
-        gap: 8px;
+        display: none;
       }
 
-      .api-docs-link {
-        font-size: 0.82rem;
-        padding-inline: 0.68rem;
+      .api-docs-burger {
+        display: inline-flex;
+      }
+
+      .api-docs-mobile-menu-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 65px;
+        left: 0;
+        width: 100%;
+        max-height: calc(100dvh - 65px);
+        overflow-y: auto;
+        padding: 18px clamp(16px, 8vw, 60px) 24px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), var(--shadow-sm);
+        z-index: 1500;
       }
     }
 `;
 
 function pageClassFor(page) {
   if (page === "opusapi") return "api-docs-opusapi";
+  if (page === "mt-api") return "api-docs-mtapi";
+  if (page === "synthetic-api") return "api-docs-syntheticapi";
   return "";
 }
 

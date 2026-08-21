@@ -20,11 +20,17 @@ async function fetchIfOk(url) {
 }
 
 function parseLangpair(langpair) {
-  const raw = String(langpair);
-  const parts = raw.includes("%26") ? raw.split("%26") : raw.split("&");
+  let raw = String(langpair);
+  try {
+    raw = decodeURIComponent(raw);
+  } catch {
+    // Keep the original value if it is not a valid encoded component.
+  }
+
+  const parts = raw.includes("&") ? raw.split("&") : raw.split("-");
   if (parts.length !== 2) return null;
 
-  const [src, trg] = parts.map((p) => p.replaceAll("-", "_"));
+  const [src, trg] = parts.map((p) => p.trim().replaceAll("-", "_"));
   if (!src || !trg) return null;
 
   return { src, trg };
@@ -77,14 +83,26 @@ export default async function SamplePage({
 
   if (!html) {
     return (
-      <SampleNotFound corpus={corpus} version={version} langpair={langpair} />
+      <SampleNotFound
+        corpus={corpus}
+        version={version}
+        langpair={langpair}
+        mode={mode}
+      />
     );
   }
 
   const { sampleData, secondModality } = safeParseSample(html);
 
   if (!sampleData?.length) {
-    return <SampleNotFound corpus={corpus} mode={mode} />;
+    return (
+      <SampleNotFound
+        corpus={corpus}
+        version={version}
+        langpair={langpair}
+        mode={mode}
+      />
+    );
   }
 
   return (

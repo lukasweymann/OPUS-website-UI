@@ -1,0 +1,281 @@
+.wrap {
+    display: grid;
+    gap: 18px;
+    padding: 12px 0 4px;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.head {
+    display: grid;
+    gap: 6px;
+    max-width: 760px;
+}
+
+.head h2,
+.single h3,
+.downloadGrid h4 {
+    margin: 0;
+    color: var(--text-main);
+    letter-spacing: 0;
+}
+
+.head h2 {
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    line-height: 1.2;
+}
+
+.head p,
+.note {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+.eyebrow {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.single {
+    display: grid;
+    gap: 18px;
+}
+
+.singleHead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding-top: 14px;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.single h3 {
+    margin-top: 4px;
+    font-size: clamp(1.25rem, 2vw, 1.55rem);
+    line-height: 1.25;
+}
+
+.version {
+    display: inline-flex;
+    margin: 4px 0 0;
+    color: var(--link);
+    font-size: 0.9rem;
+    font-style: italic;
+    font-weight: 700;
+}
+
+.sampleLink,
+.iconLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.sampleLink {
+    flex: 0 0 auto;
+    gap: 7px;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    color: var(--link);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    font-weight: 700;
+}
+
+.sampleLink:hover,
+.iconLink:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.stats div {
+    display: grid;
+    gap: 4px;
+    padding: 12px 14px 12px 0;
+}
+
+.stats div+div {
+    padding-left: 14px;
+    border-left: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.stats dt {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.stats dd {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.08rem;
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+.downloadGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 42px);
+}
+
+.downloadGrid section {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.downloadGrid h4 {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.dropdown {
+    display: inline-flex;
+    max-width: 100%;
+}
+
+.monoList {
+    display: grid;
+    gap: 10px;
+}
+
+.monoGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.langCode {
+    justify-self: start;
+    color: var(--accent);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    font-weight: 800;
+    min-width: 2.4rem;
+}
+
+.empty {
+    color: var(--text-muted);
+}
+
+.tableWrap {
+    width: 100%;
+    overflow-x: auto;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.table {
+    width: 100%;
+    min-width: 920px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 12px 12px 12px 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    color: var(--text-main);
+    text-align: left;
+    vertical-align: top;
+}
+
+.table thead th {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.table tbody th {
+    font-weight: 700;
+}
+
+.pairTitle {
+    display: block;
+}
+
+.num {
+    text-align: right !important;
+    white-space: nowrap;
+}
+
+.num span {
+    display: block;
+}
+
+.iconLink {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-pill);
+    color: var(--link);
+}
+
+.note {
+    padding-top: 2px;
+    font-size: 0.9rem;
+}
+
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 760px) {
+    .singleHead {
+        display: grid;
+    }
+
+    .sampleLink {
+        justify-self: start;
+    }
+
+    .stats,
+    .downloadGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .stats div,
+    .stats div+div {
+        padding: 12px 0;
+        border-left: 0;
+    }
+
+    .stats div+div {
+        border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    }
+}

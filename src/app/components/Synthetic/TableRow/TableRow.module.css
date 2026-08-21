@@ -52,6 +52,13 @@
     color: var(--link-hover);
 }
 
+.sampleLink[data-loading="true"] {
+    border-color: color-mix(in oklab, var(--accent) 36%, var(--border));
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+    color: var(--accent);
+    cursor: progress;
+}
+
 .sampleLink:focus-visible {
     outline: none;
     box-shadow: var(--ring);

@@ -29,25 +29,34 @@
 .grid {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    gap: 20px;
+    gap: 28px;
 }
 
 @media (max-width: 980px) {
     .grid {
         grid-template-columns: 1fr;
     }
+
+    .card + .card {
+        padding-left: 0;
+        padding-top: 24px;
+        border-left: 0;
+        border-top: 2px solid color-mix(in oklab, var(--accent) 34%, var(--border));
+    }
 }
 
-/* card system consistent with your HTML */
+/* Sections */
 .card {
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface-strong);
-    box-shadow: var(--shadow-sm);
+    min-width: 0;
+}
+
+.card + .card {
+    padding-left: 30px;
+    border-left: 2px solid color-mix(in oklab, var(--accent) 34%, var(--border));
 }
 
 .cardPad {
-    padding: 1.1rem 1.25rem;
+    padding: 0;
 }
 
 .cardHead {
@@ -55,7 +64,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
 }
 
 .h2 {
@@ -90,11 +101,15 @@
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 8px;
+    gap: 0;
 }
 
 .row {
     margin: 0;
+}
+
+.row:last-child .item {
+    border-bottom: 0;
 }
 
 .item {
@@ -103,10 +118,8 @@
     justify-content: space-between;
     gap: 10px;
 
-    padding: 0.65rem 0.75rem;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: rgba(15, 23, 42, 0.02);
+    padding: 0.78rem 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 66%, transparent);
 
     text-decoration: none;
     color: var(--text-main);
@@ -114,8 +127,8 @@
 
 
 .item:hover {
-    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
-    background: rgba(37, 99, 235, 0.05);
+    color: var(--link);
+    border-bottom-color: color-mix(in srgb, var(--link) 32%, var(--border));
 }
 
 .name {
@@ -137,8 +150,14 @@
 /* Tools list */
 .tools {
     margin: 10px 0 0;
-    padding-left: 1.1rem;
+    padding: 10px 0 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    list-style: none;
     color: var(--text-muted);
+}
+
+.tools li {
+    padding: 0.32rem 0;
 }
 
 .ext {

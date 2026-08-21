@@ -8,11 +8,16 @@
 }
 
 .card {
-    border: 1px solid color-mix(in oklab, var(--text-main) 12%, transparent);
-    background: var(--surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    padding: clamp(14px, 2vw, 18px);
+    border: 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0 0 clamp(14px, 2vw, 18px);
+}
+
+.section {
+    padding: 4px 0;
 }
 
 .cardHead {
@@ -62,10 +67,8 @@
 }
 
 .meta {
-    border: 1px solid color-mix(in oklab, var(--text-main) 10%, transparent);
-    background: color-mix(in oklab, var(--surface) 85%, transparent);
-    border-radius: 12px;
-    padding: 10px 12px;
+    padding: 10px 0 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
 }
 
 .metaKey {

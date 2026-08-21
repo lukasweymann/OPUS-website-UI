@@ -124,6 +124,15 @@ function parseSafeNodes(html) {
     stack[stack.length - 1].children.push(decodeHtmlEntities(text));
   }
 
+  function closeOpenTag(tag) {
+    for (let i = stack.length - 1; i > 0; i -= 1) {
+      if (stack[i].tag === tag) {
+        stack.length = i;
+        return;
+      }
+    }
+  }
+
   while ((match = tagRe.exec(source))) {
     appendText(source.slice(index, match.index));
     index = tagRe.lastIndex;
@@ -141,16 +150,13 @@ function parseSafeNodes(html) {
     if (!ALLOWED_TAGS.has(tag)) continue;
 
     if (isClosing) {
-      for (let i = stack.length - 1; i > 0; i -= 1) {
-        if (stack[i].tag === tag) {
-          stack.length = i;
-          break;
-        }
-      }
+      closeOpenTag(tag);
       continue;
     }
 
     const rawAttrs = tagMatch[2] ?? "";
+    if (tag === "a") closeOpenTag("a");
+
     const node = { tag, props: propsForTag(tag, rawAttrs), children: [] };
     stack[stack.length - 1].children.push(node);
 

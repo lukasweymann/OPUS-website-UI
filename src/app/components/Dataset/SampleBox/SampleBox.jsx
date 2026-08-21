@@ -9,13 +9,20 @@ import {
 import s from "./SampleBox.module.css";
 
 function splitPair(pair = "") {
-  const decoded = decodeURIComponent(String(pair));
+  let decoded = String(pair);
+  try {
+    decoded = decodeURIComponent(decoded);
+  } catch {
+    // Keep the original value if it is not a valid encoded component.
+  }
 
-  const parts = decoded.includes("%26")
-    ? decoded.split("%26")
-    : decoded.includes("&")
-      ? decoded.split("&")
-      : decoded.split("%2526"); // defensive
+  const parts = decoded.includes("&")
+    ? decoded.split("&")
+    : decoded.includes("%26")
+      ? decoded.split("%26")
+      : decoded.includes("%2526")
+        ? decoded.split("%2526")
+        : decoded.split("-");
 
   const [a = "", b = ""] = parts;
   return [a, b];

@@ -13,12 +13,14 @@
 }
 
 .card {
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--table-border);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
-    padding: 14px;
-    margin-bottom: 14px;
+    padding: 14px 0;
+    margin-bottom: 10px;
+    min-width: 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--table-border) 70%, transparent);
+}
+
+.card:last-child {
+    border-bottom: 0;
 }
 
 .h1 {
@@ -56,6 +58,7 @@
 .titles {
     display: grid;
     gap: 6px;
+    min-width: 0;
 }
 
 .k,
@@ -169,10 +172,8 @@
 .pick {
     display: grid;
     gap: 6px;
-    padding: 10px 12px;
-    border-radius: var(--radius-lg);
-    background: var(--table-main);
-    border: 1px solid var(--table-border);
+    padding: 8px 0 0;
+    border-top: 1px solid color-mix(in oklab, var(--table-border) 65%, transparent);
 }
 
 .pickTxt {
@@ -209,6 +210,15 @@
     margin: 0;
     color: var(--text-muted);
     line-height: 1.4;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.modelName {
+    display: inline;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .close {
@@ -229,6 +239,7 @@
     grid-template-columns: 2fr 3fr;
     gap: 12px;
     min-width: 0;
+    overflow: hidden;
 }
 
 @media (max-width: 940px) {

@@ -8,11 +8,8 @@
 }
 
 .head {
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
-    padding: 16px 18px;
+    padding: 8px 0 14px;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
 }
 
 .top {
@@ -26,7 +23,7 @@
 .h1 {
     margin: 0;
     font-size: clamp(1.35rem, 2.2vw, 1.7rem);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
 }
 
 .meta {
@@ -83,12 +80,9 @@
 }
 
 .ctrl {
-    margin-top: 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
-    padding: 10px 12px;
+    margin-top: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
 
     display: flex;
     justify-content: space-between;
@@ -111,7 +105,7 @@
 
 .tglOn {
     border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
-    box-shadow: var(--shadow-sm);
+    background: color-mix(in oklab, var(--accent) 12%, var(--surface));
 }
 
 .pager {
@@ -127,7 +121,7 @@
 }
 
 .list {
-    margin-top: 12px;
+    margin-top: 0;
     display: grid;
-    gap: 10px;
+    gap: 0;
 }

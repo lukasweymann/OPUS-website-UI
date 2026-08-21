@@ -1,11 +1,7 @@
 /* components/LanguageGraphsSynthetic/LanguageGraphsSynthetic.module.css */
 
 .wrap {
-    padding: var(--space-4);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
+    padding: 0;
 }
 
 .head {
@@ -29,6 +25,15 @@
     min-width: 100%;
     height: 300px
         /* pick something reasonable */
+}
+
+.clickableChart :global(.recharts-surface) {
+    cursor: pointer;
+}
+
+.clickableChart :global(.recharts-brush),
+.clickableChart :global(.recharts-brush *) {
+    cursor: default;
 }
 
 /* Tooltip (match your other chart tooltips) */

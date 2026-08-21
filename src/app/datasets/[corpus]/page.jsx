@@ -13,11 +13,16 @@ const LanguageGraphs = dynamic(
 import StatsTable from "@/app/components/Dataset/Stats/Stats";
 import CopyBibtexButton from "./CopyBibtexButton";
 import SafeRichText from "@/app/components/ui/SafeRichText/SafeRichText";
+import SmallCorpusResources, {
+  buildSmallCorpusResources,
+} from "./SmallCorpusResources";
 
 import s from "./page.module.css";
 import { callPythonReadData } from "@/lib/pythonClient";
 
 export const dynamicParams = true;
+
+const SMALL_CORPUS_PAIR_LIMIT = 12;
 
 const SKIP = new Set([
   "komi",
@@ -52,6 +57,88 @@ function buildGraphValues(corpora = [], languages = []) {
   return Array.from(totals.entries())
     .filter(([, sentences]) => sentences > 0)
     .map(([name, sentences]) => ({ name, perc: 0, sentences }));
+}
+
+function countUniquePairs(corpora = []) {
+  const pairs = new Set();
+
+  for (const row of corpora) {
+    if (!row?.source || !row?.target) continue;
+    pairs.add(`${row.source}&${row.target}`);
+  }
+
+  return pairs.size;
+}
+
+const STATS_KEYS = [
+  "number_of_languages",
+  "bitexts",
+  "number_of_files",
+  "total_number_of_tokens",
+  "total_sentence_fragments",
+];
+
+function hasStatValue(value) {
+  return value !== undefined && value !== null && value !== "";
+}
+
+function compactStat(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "";
+  return new Intl.NumberFormat("en", {
+    notation: "compact",
+    maximumFractionDigits: 2,
+  }).format(number);
+}
+
+function withCalculatedStats(info = {}, corpora = [], languages = []) {
+  const sourceInfo = info ?? {};
+  const missingStats = STATS_KEYS.some((key) => !hasStatValue(sourceInfo[key]));
+  if (!missingStats) return sourceInfo;
+
+  const languageSet = new Set(languages.filter(Boolean).map(String));
+  const isKnownLanguage = (code) =>
+    languageSet.size === 0 || languageSet.has(String(code));
+
+  const bitextRows = corpora.filter(
+    (row) =>
+      row?.source &&
+      row?.target &&
+      isKnownLanguage(row.source) &&
+      isKnownLanguage(row.target),
+  );
+  const monoRows = corpora.filter(
+    (row) => row?.source && !row?.target && isKnownLanguage(row.source),
+  );
+  const totalsRows = monoRows.length ? monoRows : bitextRows;
+
+  const languageCount =
+    languageSet.size ||
+    new Set(
+      corpora.flatMap((row) => [row?.source, row?.target].filter(Boolean)),
+    ).size;
+
+  const sum = (rows, key) =>
+    rows.reduce((total, row) => total + Number(row?.[key] || 0), 0);
+
+  const calculated = {
+    number_of_languages: languageCount || "",
+    bitexts: bitextRows.length || "",
+    number_of_files: sum(totalsRows, "documents") || "",
+    total_number_of_tokens: compactStat(
+      monoRows.length
+        ? sum(monoRows, "source_tokens")
+        : sum(bitextRows, "source_tokens") + sum(bitextRows, "target_tokens"),
+    ),
+    total_sentence_fragments: compactStat(sum(totalsRows, "alignment_pairs")),
+  };
+
+  return Object.fromEntries(
+    Object.entries({ ...sourceInfo, ...calculated }).map(([key, value]) => [
+      key,
+      hasStatValue(sourceInfo[key]) ? sourceInfo[key] : value,
+    ]),
+  );
 }
 
 export async function generateStaticParams() {
@@ -96,6 +183,19 @@ export default async function CorpusPage({ params }) {
 
     const version = corpora?.[0]?.version ?? "";
     const graphValues = buildGraphValues(corpora, languages);
+    const infoWithStats = withCalculatedStats(corpusInfo, corpora, languages);
+    const latestPairCount = countUniquePairs(corpora);
+    const shouldUseSmallResources =
+      latestPairCount > 0 && latestPairCount <= SMALL_CORPUS_PAIR_LIMIT;
+    const resourceRows = shouldUseSmallResources
+      ? await callPythonReadData({ corpus, version: "latest" })
+      : null;
+    const smallResources = shouldUseSmallResources
+      ? buildSmallCorpusResources(resourceRows?.corpora ?? [])
+      : [];
+    const showSmallResources =
+      smallResources.length > 0 &&
+      smallResources.length <= SMALL_CORPUS_PAIR_LIMIT;
 
     const bibtexText = corpusInfo?.bibtex
       ? Buffer.from(corpusInfo.bibtex, "base64").toString("utf8")
@@ -179,25 +279,36 @@ export default async function CorpusPage({ params }) {
               </div>
             )}
           </section>
-          {/* 3) STATS TABLE CARD */}
+          {/* 3) STATS TABLE */}
           {!statsEmpty && (
-            <section className={s.card}>
-              <StatsTable info={corpusInfo} />
+            <section className={s.section}>
+              <StatsTable info={infoWithStats} />
             </section>
           )}
 
-          {/* 2) LANGUAGE GRAPHS CARD */}
-          {graphValues.length > 0 && (
-            <section className={s.card}>
-              <LanguageGraphs graphValues={graphValues} />
+          {showSmallResources ? (
+            <section className={s.section}>
+              <SmallCorpusResources resources={smallResources} />
             </section>
-          )}
+          ) : (
+            <>
+              {/* 2) LANGUAGE GRAPHS */}
+              {graphValues.length > 0 && (
+                <section className={s.section}>
+                  <LanguageGraphs graphValues={graphValues} />
+                </section>
+              )}
 
-          {/* 4) DOWNLOADS CARD */}
-          {languages.length > 0 && (
-            <section id="download" className={s.card}>
-              <CorpusPageContainer languageList={languages} version={version} />
-            </section>
+              {/* 4) DOWNLOADS */}
+              {languages.length > 0 && (
+                <section id="download" className={s.section}>
+                  <CorpusPageContainer
+                    languageList={languages}
+                    version={version}
+                  />
+                </section>
+              )}
+            </>
           )}
           <CorpusDisclaimer />
         </main>

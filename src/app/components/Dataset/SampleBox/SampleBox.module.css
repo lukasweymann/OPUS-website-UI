@@ -4,57 +4,14 @@
 .boxRow,
 .boxCol {
     position: relative;
-    border-radius: var(--radius-lg);
-    padding: 14px 16px;
+    padding: 16px 0;
     color: var(--text-main);
-    overflow: hidden;
-
-    /* Fallback (always valid) */
-    background: var(--surface);
-
-    /* “Pop” surface — subtle tint + highlight */
-    background-image:
-        radial-gradient(120% 160% at 10% 10%,
-            rgba(255, 255, 255, 0.085),
-            rgba(255, 255, 255, 0) 55%),
-        linear-gradient(180deg,
-            color-mix(in srgb, var(--surface-strong) 88%, var(--accent-soft) 12%),
-            var(--surface));
-
-    border: 1px solid var(--table-border);
-
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.03),
-        var(--shadow-sm),
-        0 14px 34px -22px rgba(2, 6, 23, 0.28);
-
-    transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+    border-bottom: 1px solid color-mix(in srgb, var(--table-border) 92%, var(--text-muted) 8%);
 }
 
-/* Accent stripe */
-.boxRow::before,
-.boxCol::before {
-    content: "";
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    bottom: 10px;
-    width: 3px;
-    border-radius: var(--radius-pill);
-    background: linear-gradient(180deg,
-            color-mix(in srgb, var(--accent) 85%, rgba(255, 255, 255, 0.734) 15%),
-            color-mix(in srgb, var(--accent) 55%, transparent));
-    opacity: 0.95;
-}
-
-.boxRow:hover,
-.boxCol:hover {
-    transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--accent) 35%, var(--table-border));
-    box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent),
-        var(--shadow-sm),
-        0 18px 46px -28px rgba(2, 6, 23, 0.34);
+.boxRow:last-child,
+.boxCol:last-child {
+    border-bottom: 0;
 }
 
 /* Layout */
@@ -82,16 +39,16 @@
     display: inline-flex;
     align-items: center;
     width: fit-content;
-    padding: 6px 10px;
+    padding: 6px 11px;
     border-radius: var(--radius-pill);
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     font-size: 12px;
 
-    background: color-mix(in srgb, var(--surface-strong) 75%, var(--accent-soft) 25%);
-    border: 1px solid var(--border);
-    color: var(--text-main);
+    background: color-mix(in srgb, var(--accent-soft) 68%, var(--surface) 32%);
+    border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--border));
+    color: color-mix(in srgb, var(--accent) 72%, var(--text-main));
 }
 
 /* Sentence list */
@@ -115,11 +72,8 @@
     gap: 10px;
     align-items: start;
 
-    padding: 10px 10px;
-    border-radius: var(--radius-md);
-
-    background: color-mix(in srgb, var(--surface-strong) 78%, transparent);
-    border: 1px solid color-mix(in srgb, var(--table-border) 55%, transparent);
+    padding: 8px 0;
+    border-top: 1px solid color-mix(in srgb, var(--table-border) 62%, transparent);
 }
 
 /* Text */

@@ -28,6 +28,15 @@ const nfCompact = new Intl.NumberFormat("en", { notation: "compact" });
 
 const asString = (v) => (Array.isArray(v) ? v[0] : v || "");
 
+function isBrushEvent(event) {
+  return Boolean(event?.target?.closest?.(".recharts-brush"));
+}
+
+function payloadFromLabel(rows, label, dataKey) {
+  if (label == null) return null;
+  return rows.find((row) => String(row?.[dataKey]) === String(label)) ?? null;
+}
+
 function PairTooltip({ active, payload, label }) {
   if (!active || !payload?.length || !label) return null;
 
@@ -88,6 +97,8 @@ export default function LanguageGraphsSynthetic({ graphValues }) {
 
   const len = rows.length;
   const showBrush = len > 1;
+  const activePairRef = useRef(null);
+  const directBarClickRef = useRef(0);
 
   const lastGoodRef = useRef({
     startIndex: 0,
@@ -133,10 +144,38 @@ export default function LanguageGraphsSynthetic({ graphValues }) {
     [router, pathname, sp],
   );
 
-  const onBarClick = useCallback(
-    (node) => {
-      const p = node?.activePayload?.[0]?.payload;
+  const onChartClick = useCallback(
+    (chartState, event) => {
+      if (isBrushEvent(event)) return;
+      if (Date.now() - directBarClickRef.current < 100) return;
+
+      const p =
+        payloadFromLabel(rows, chartState?.activeLabel, "pairLabel") ??
+        activePairRef.current;
       const pair = p?.lang_pair;
+      if (!pair) return;
+      setPair(String(pair));
+    },
+    [rows, setPair],
+  );
+
+  const onChartMouseMove = useCallback(
+    (chartState) => {
+      activePairRef.current = chartState?.isTooltipActive
+        ? payloadFromLabel(rows, chartState.activeLabel, "pairLabel")
+        : null;
+    },
+    [rows],
+  );
+
+  const onChartMouseLeave = useCallback(() => {
+    activePairRef.current = null;
+  }, []);
+
+  const onBarDirectClick = useCallback(
+    (bar) => {
+      directBarClickRef.current = Date.now();
+      const pair = bar?.payload?.lang_pair;
       if (!pair) return;
       setPair(String(pair));
     },
@@ -174,12 +213,14 @@ export default function LanguageGraphsSynthetic({ graphValues }) {
         <p className={s.p}>Click a bar to select a pair below.</p>
       </header>
 
-      <div className={s.chart}>
+      <div className={`${s.chart} ${s.clickableChart}`}>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={rows}
             margin={{ top: 8, right: 10, left: 0, bottom: 8 }}
-            onClick={onBarClick}
+            onClick={onChartClick}
+            onMouseMove={onChartMouseMove}
+            onMouseLeave={onChartMouseLeave}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="pairLabel" fontSize={12} tickMargin={8} />
@@ -209,7 +250,13 @@ export default function LanguageGraphsSynthetic({ graphValues }) {
               />
             )}
 
-            <Bar dataKey="alignments" fill="#2CB9B1" />
+            <Bar
+              dataKey="alignments"
+              fill="#2CB9B1"
+              activeBar={{ fill: "#86E3DA" }}
+              cursor="pointer"
+              onClick={onBarDirectClick}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

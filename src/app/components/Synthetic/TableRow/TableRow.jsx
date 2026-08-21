@@ -1,8 +1,8 @@
 // components/SyntheticTable/SyntheticTableRow.jsx
 import Link from "next/link";
 import SyntheticDropdown from "../Dropdown/Dropdown";
+import SampleLink from "./SampleLink";
 import s from "./TableRow.module.css";
-import { Eye } from "lucide-react";
 
 const nfFull = new Intl.NumberFormat("en-US");
 const nfCompact = new Intl.NumberFormat("en", { notation: "compact" });
@@ -28,11 +28,15 @@ export default function SyntheticTableRow({ data }) {
   const a = safeNum(alignments);
   const st = safeNum(src_tokens);
   const tt = safeNum(tgt_tokens);
+  const samplePair = lang_pair || [src_lang, tgt_lang].filter(Boolean).join("-");
 
   // keep query param raw; Next will encode correctly in the URL
   const href = `/synthetic/${encodeURIComponent(name)}/${encodeURIComponent(
     version,
   )}?pair=${encodeURIComponent(lang_pair)}`;
+  const sampleHref = `/synthetic/${encodeURIComponent(name)}/${encodeURIComponent(
+    version,
+  )}/${encodeURIComponent(samplePair)}/sample`;
 
   const bilingual = downloads?.alignments
     ? [{ ...downloads.alignments, format: "xml" }]
@@ -75,13 +79,10 @@ export default function SyntheticTableRow({ data }) {
         <span className={s.compact}>{nfCompact.format(tt)}</span>
       </td>
       <td>
-        <Link
-          href={`/synthetic/${name}/${version}/${src_lang}&${tgt_lang}/sample`}
-          className={s.sampleLink}
-          aria-label={`View sample for ${name} ${version}`}
-        >
-          <Eye className={s.eye} strokeWidth={1.6} />
-        </Link>
+        <SampleLink
+          href={sampleHref}
+          label={`View sample for ${name} ${version}`}
+        />
       </td>
 
       <td className={s.dd}>

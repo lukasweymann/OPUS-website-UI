@@ -7,11 +7,8 @@
 }
 
 .card {
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--table-border);
-    background: color-mix(in oklab, var(--bg) 92%, white 8%);
-    box-shadow: var(--shadow-sm);
-    padding: clamp(14px, 2.2vw, 22px);
+    padding: 8px 0 14px;
+    border-bottom: 1px solid color-mix(in oklab, var(--table-border) 72%, transparent);
 }
 
 .head {
@@ -24,9 +21,9 @@
 
 .title {
     margin: 0;
-    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
-    line-height: 1.5;
-    letter-spacing: 0.01em;
+    font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+    line-height: 1.35;
+    letter-spacing: 0;
 }
 
 .ver {
@@ -94,7 +91,7 @@
 }
 
 .list {
-    margin-top: 14px;
+    margin-top: 0;
     display: grid;
-    gap: 10px;
+    gap: 0;
 }

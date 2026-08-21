@@ -93,6 +93,12 @@ and Node dependencies:
 $ ./bin/dev-bootstrap.sh
 ```
 
+To refresh the local OPUS dev database during bootstrap:
+
+```shell
+$ ./bin/dev-bootstrap.sh --update-db
+```
+
 After bootstrapping:
 
 ```shell

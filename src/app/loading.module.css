@@ -1,0 +1,71 @@
+.wrap {
+    width: var(--page-container-width);
+    margin: 0 auto;
+    padding: var(--page-shell-padding);
+    display: grid;
+    gap: 14px;
+}
+
+.panel {
+    border: 1px solid color-mix(in oklab, var(--text-main) 12%, transparent);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: clamp(14px, 2vw, 18px);
+    display: grid;
+    gap: 12px;
+}
+
+.line,
+.grid span {
+    display: block;
+    background:
+        linear-gradient(90deg,
+            color-mix(in oklab, var(--text-main) 8%, transparent),
+            color-mix(in oklab, var(--accent) 18%, transparent),
+            color-mix(in oklab, var(--text-main) 8%, transparent));
+    background-size: 220% 100%;
+    animation: shimmer 1.35s ease-in-out infinite;
+}
+
+.line {
+    width: var(--w);
+    max-width: 100%;
+    height: 13px;
+    border-radius: 999px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.grid span {
+    min-height: 96px;
+    border-radius: 12px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 130% 0;
+    }
+
+    100% {
+        background-position: -130% 0;
+    }
+}
+
+@media (max-width: 720px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .line,
+    .grid span {
+        animation-duration: 2.8s;
+    }
+}

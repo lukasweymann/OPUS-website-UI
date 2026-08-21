@@ -215,8 +215,7 @@ async function handler(_req, { params }) {
         };
 
         return json(entireResponse);
-      } catch (error) {
-        console.log(error);
+      } catch {
         return json(404);
       }
     }

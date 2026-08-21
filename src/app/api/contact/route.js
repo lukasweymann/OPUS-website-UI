@@ -47,6 +47,10 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+function withLineBreaks(value) {
+  return escapeHtml(value).replace(/\r\n|\r|\n/g, "<br />");
+}
+
 function validateBody(body) {
   if (!body || typeof body !== "object") {
     return { error: "Invalid JSON body" };
@@ -168,26 +172,70 @@ function getMailConfig() {
 }
 
 function buildMail({ name, email, url, message }, { from, to }) {
-  const escapedMessage = escapeHtml(message).replaceAll("\n", "<br />");
+  const displayUrl = url || "Not provided";
+  const escapedName = escapeHtml(name);
+  const escapedEmail = escapeHtml(email);
+  const escapedUrl = escapeHtml(displayUrl);
+  const escapedMessage = withLineBreaks(message);
 
   return {
     from,
     to,
+    replyTo: email,
     subject: `OPUS website contribution form from ${email}`,
     text: [
       `Name: ${name}`,
       `Email: ${email}`,
-      `URL: ${url}`,
+      `URL: ${displayUrl}`,
       "",
       "Message:",
       message,
     ].join("\n"),
-    html: [
-      `<p>Name: ${escapeHtml(name)}</p>`,
-      `<p>Email: ${escapeHtml(email)}</p>`,
-      `<p>URL: ${escapeHtml(url)}</p>`,
-      `<p>Message: ${escapedMessage}</p>`,
-    ].join(""),
+    html: `<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:#f4f7fb;color:#111827;font-family:Arial,Helvetica,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;background:#f4f7fb;">
+      <tr>
+        <td align="center" style="padding:28px 16px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="width:100%;max-width:640px;border-collapse:collapse;background:#ffffff;border:1px solid #d8e0ec;border-radius:10px;overflow:hidden;">
+            <tr>
+              <td style="padding:22px 24px;background:#111827;color:#ffffff;">
+                <div style="font-size:12px;line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;color:#a7b7d8;font-weight:700;">OPUS contribution form</div>
+                <h1 style="margin:6px 0 0;font-size:22px;line-height:1.25;font-weight:700;">New website contribution</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:22px 24px 8px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:0 0 14px;font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;font-weight:700;width:120px;vertical-align:top;">Name</td>
+                    <td style="padding:0 0 14px;font-size:15px;line-height:1.5;color:#111827;font-weight:700;vertical-align:top;">${escapedName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 0 14px;font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;font-weight:700;width:120px;vertical-align:top;">Email</td>
+                    <td style="padding:0 0 14px;font-size:15px;line-height:1.5;color:#111827;vertical-align:top;"><a href="mailto:${escapedEmail}" style="color:#4f46e5;text-decoration:none;">${escapedEmail}</a></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 0 14px;font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;font-weight:700;width:120px;vertical-align:top;">Dataset URL</td>
+                    <td style="padding:0 0 14px;font-size:15px;line-height:1.5;color:#111827;vertical-align:top;">${url ? `<a href="${escapedUrl}" style="color:#4f46e5;text-decoration:none;">${escapedUrl}</a>` : escapedUrl}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 24px 24px;">
+                <div style="padding:18px 18px 20px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
+                  <div style="margin:0 0 10px;font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;font-weight:700;">Message</div>
+                  <div style="font-size:15px;line-height:1.65;color:#111827;">${escapedMessage}</div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`,
   };
 }
 

@@ -412,7 +412,7 @@ export default function MTDashboardClient({ sourceData, targetData }) {
 
             <Legends data={filteredData} modelType={modelType} />
 
-            <div className={s.mainContainer}>
+            <div className={`${s.mainContainer} ${s.balancedResults}`}>
               <div className={s.graphs}>
                 <ModelGraph
                   dashboardValues={filteredData}

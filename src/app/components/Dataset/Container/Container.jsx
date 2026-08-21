@@ -11,7 +11,7 @@ import LoaderSpinner from "../../ui/LoaderSpinner/LoaderSpinner";
 
 import s from "./Container.module.css";
 
-const DOWNLOADS_LOADER_SIZE = 22;
+const DOWNLOADS_LOADER_SIZE = 26;
 const DATASET_PAIR_PENDING_EVENT = "opus:dataset-pair-pending";
 
 function parsePair(searchParams) {
@@ -275,6 +275,7 @@ export default function CorpusPageContainer({ version = "" }) {
             tableData={visibleTableData}
             langPair={langPair}
             showAllVersionsByDefault
+            softSurface
           />
         </div>
       )}

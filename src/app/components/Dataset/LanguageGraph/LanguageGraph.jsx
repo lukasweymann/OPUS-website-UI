@@ -23,7 +23,7 @@ import s from "./LanguageGraph.module.css";
 
 const nfCompact = new Intl.NumberFormat("en", { notation: "compact" });
 const DEFAULT_BRUSH_END = 10;
-const GRAPH_LOADER_SIZE = 22;
+const GRAPH_LOADER_SIZE = 26;
 const DATASET_PAIR_PENDING_EVENT = "opus:dataset-pair-pending";
 
 function asString(v) {
