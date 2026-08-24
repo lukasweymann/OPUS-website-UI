@@ -65,6 +65,15 @@ function toDropdownItems(items = []) {
   }));
 }
 
+function compactNumber(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "";
+  return new Intl.NumberFormat("en", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(number);
+}
+
 function chooseStats(rows = []) {
   const preferred =
     rows.find((row) => row.preprocessing === "moses") ||
@@ -77,6 +86,10 @@ function chooseStats(rows = []) {
     sourceTokens: preferred.source_tokens,
     targetTokens: preferred.target_tokens,
   };
+}
+
+function sumRows(rows = [], key) {
+  return rows.reduce((total, row) => total + Number(row?.[key] || 0), 0);
 }
 
 function makePairTitle(source, target) {
@@ -113,7 +126,7 @@ function MonoFormats({ mono = {} }) {
   );
 }
 
-export function buildSmallCorpusResources(rows = []) {
+export function buildCorpusResources(rows = []) {
   const pairGroups = new Map();
   const monoGroups = new Map();
 
@@ -164,6 +177,96 @@ export function buildSmallCorpusResources(rows = []) {
       },
     }))
     .sort((a, b) => a.title.localeCompare(b.title));
+}
+
+export function buildSmallCorpusResources(rows = []) {
+  return buildCorpusResources(rows);
+}
+
+export function buildCorpusMatrix(rows = [], languageCodes = []) {
+  const resources = buildCorpusResources(rows);
+  const languageSet = new Set(languageCodes.filter(Boolean).map(String));
+  const monoGroups = new Map();
+
+  for (const resource of resources) {
+    languageSet.add(resource.source);
+    languageSet.add(resource.target);
+  }
+
+  const monoRows = rows.filter((row) => row?.source && !row?.target);
+  for (const row of monoRows) {
+    languageSet.add(String(row.source));
+    const source = String(row.source);
+    const current = monoGroups.get(source) || [];
+    current.push({
+      format: formatLabel(row),
+      url: String(row.url || ""),
+      size: formatSize(row?.size),
+    });
+    monoGroups.set(source, current);
+  }
+
+  const names = languagePairName(Array.from(languageSet));
+  const labels = new Map(
+    names.map((item) => [item.value, item.label || item.value]),
+  );
+
+  const languages = Array.from(languageSet)
+    .sort((a, b) => a.localeCompare(b))
+    .map((code) => {
+      const monoForLanguage = monoRows.filter((row) => row.source === code);
+      return {
+        code,
+        label: labels.get(code) || code,
+        files: sumRows(monoForLanguage, "documents"),
+        tokens: sumRows(monoForLanguage, "source_tokens"),
+        sentences: sumRows(monoForLanguage, "alignment_pairs"),
+      };
+    });
+
+  const cells = resources.map((resource) => ({
+    key: resource.key,
+    source: resource.source,
+    target: resource.target,
+    title: resource.title,
+    sampleHref: resource.sampleHref,
+    sentences: Number(resource.stats.sentences || 0),
+    sourceTokens: Number(resource.stats.sourceTokens || 0),
+    targetTokens: Number(resource.stats.targetTokens || 0),
+    valueLabel: compactNumber(resource.stats.sentences),
+    bilingual: toDropdownItems(resource.bilingual),
+    bilingualDefault: preferFormat(toDropdownItems(resource.bilingual)),
+    mono: Object.fromEntries(
+      Object.entries(resource.mono).map(([language, items]) => {
+        const dropdownItems = toDropdownItems(items);
+        return [
+          language,
+          {
+            items: dropdownItems,
+            defaultFormat: preferFormat(dropdownItems, ["txt", "xml", "raw"]),
+          },
+        ];
+      }),
+    ),
+  }));
+
+  return {
+    languages,
+    cells,
+    mono: Object.fromEntries(
+      Array.from(monoGroups.entries()).map(([language, items]) => {
+        const dropdownItems = toDropdownItems(items);
+        return [
+          language,
+          {
+            items: dropdownItems,
+            defaultFormat: preferFormat(dropdownItems, ["txt", "xml", "raw"]),
+          },
+        ];
+      }),
+    ),
+    maxSentences: Math.max(...cells.map((cell) => cell.sentences), 0),
+  };
 }
 
 function SinglePairResources({ resource }) {

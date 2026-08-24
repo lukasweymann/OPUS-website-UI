@@ -142,7 +142,7 @@ export default function MiniSelect({
   const activeId = `ms-opt-${id}-${activeIdx}`;
 
   return (
-    <div className={ms.box}>
+    <div className={ms.box} data-open={open ? "true" : undefined}>
       <button
         type="button"
         className={ms.btn}

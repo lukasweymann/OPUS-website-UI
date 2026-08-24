@@ -1,0 +1,360 @@
+.panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--surface) 42%, transparent);
+    color: var(--text-main);
+    box-shadow: var(--shadow-sm);
+}
+
+.toolbar {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(220px, 340px) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px clamp(14px, 2vw, 20px);
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.eyebrow {
+    margin: 0 0 4px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.toolbar h3,
+.detail h3,
+.downloads h4 {
+    margin: 0;
+    letter-spacing: 0;
+}
+
+.toolbar h3 {
+    font-size: 1.02rem;
+    line-height: 1.2;
+}
+
+.search {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    color: var(--text-muted);
+}
+
+.search input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text-main);
+    font: inherit;
+    font-size: 0.9rem;
+}
+
+.search input::placeholder {
+    color: var(--text-muted);
+}
+
+.count {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    min-height: 0;
+}
+
+.matrixWrap {
+    min-width: 0;
+    min-height: 360px;
+    max-height: min(68dvh, 720px);
+    overflow: auto;
+    background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        radial-gradient(circle at top left, var(--accent-soft), transparent 58%) border-box;
+}
+
+.matrix {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max-content;
+    min-width: 100%;
+    color: var(--text-main);
+}
+
+.matrix th,
+.matrix td {
+    width: 4.2rem;
+    min-width: 4.2rem;
+    height: 2.35rem;
+    padding: 0;
+    border-right: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.matrixLarge th,
+.matrixLarge td {
+    width: 3.55rem;
+    min-width: 3.55rem;
+    height: 2.15rem;
+}
+
+.matrix th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: var(--surface-strong);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hoverLine {
+    background: color-mix(in srgb, #34d399 16%, transparent);
+}
+
+.matrix th.hoverHead {
+    background: color-mix(in srgb, #34d399 18%, var(--surface-strong));
+    color: #86efac;
+    box-shadow:
+        inset 0 -2px 0 color-mix(in srgb, #34d399 86%, transparent),
+        inset 0 0 0 1px color-mix(in srgb, #34d399 32%, transparent);
+}
+
+.matrix tbody th,
+.corner {
+    left: 0;
+    z-index: 4;
+    width: 4.4rem;
+    min-width: 4.4rem;
+    padding: 0 9px;
+    text-align: left;
+}
+
+.matrix tbody th {
+    top: auto;
+}
+
+.corner {
+    z-index: 5;
+}
+
+.cell {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--text-main);
+    font: inherit;
+    font-size: 0.86rem;
+    line-height: 1;
+    font-weight: 800;
+    cursor: default;
+}
+
+.matrixLarge .cell {
+    font-size: 0.78rem;
+}
+
+.matrix td.hoverLine .cell {
+    box-shadow: inset 0 0 0 999px color-mix(in srgb, #34d399 13%, transparent);
+}
+
+button.cell {
+    background: color-mix(in srgb, var(--accent) var(--tone, 0%), transparent);
+    cursor: pointer;
+}
+
+button.cell:hover {
+    outline: 2px solid color-mix(in srgb, var(--accent) 48%, transparent);
+    outline-offset: -2px;
+}
+
+.activeCell {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: -2px;
+}
+
+.monoCell {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent-soft) 68%, transparent) !important;
+    font-size: 0.88rem;
+}
+
+.matrixLarge .monoCell {
+    font-size: 0.8rem;
+}
+
+.emptyCell {
+    background: color-mix(in oklab, var(--surface) 60%, transparent);
+}
+
+.detail {
+    min-width: 0;
+    max-height: min(68dvh, 720px);
+    overflow: auto;
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    padding: 18px clamp(16px, 2vw, 22px);
+    border-left: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    background: color-mix(in srgb, var(--surface) 56%, transparent);
+}
+
+.detail h3 {
+    font-size: 1.08rem;
+    line-height: 1.3;
+}
+
+.detailStats {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.detailStats div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+}
+
+.detailStats div+div {
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+}
+
+.detailStats dt {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.detailStats dd {
+    margin: 0;
+    font-weight: 800;
+}
+
+.detailActions {
+    display: flex;
+}
+
+.sample {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 0 11px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    color: var(--link);
+    background: var(--bg);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 750;
+}
+
+.sample:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+    border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.downloads {
+    display: grid;
+    gap: 9px;
+}
+
+.downloads h4 {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.monoDownloads {
+    display: grid;
+    gap: 10px;
+}
+
+.monoDownload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.monoDownload>span {
+    min-width: 2.4rem;
+    color: var(--accent);
+    font-size: 0.84rem;
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+@media (max-width: 980px) {
+    .toolbar,
+    .body {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .count {
+        white-space: normal;
+    }
+
+    .detail {
+        border-left: 0;
+        border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+        max-height: none;
+    }
+}
+
+@media (max-width: 620px) {
+    .panel {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+    }
+
+    .matrixWrap {
+        min-height: 320px;
+        max-height: 66dvh;
+    }
+
+    .matrix th,
+    .matrix td {
+        width: 3.7rem;
+        min-width: 3.7rem;
+    }
+}

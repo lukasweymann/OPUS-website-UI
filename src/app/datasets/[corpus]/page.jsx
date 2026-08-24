@@ -5,15 +5,12 @@ import { Suspense } from "react";
 
 import CorpusPageContainer from "@/app/components/Dataset/Container/Container";
 import CorpusDisclaimer from "@/app/components/Dataset/Disclaimer/Disclaimer";
-import dynamic from "next/dynamic";
-const LanguageGraphs = dynamic(
-  () => import("@/app/components/Dataset/LanguageGraph/LanguageGraph"),
-);
-
 import StatsTable from "@/app/components/Dataset/Stats/Stats";
 import CopyBibtexButton from "./CopyBibtexButton";
 import SafeRichText from "@/app/components/ui/SafeRichText/SafeRichText";
-import SmallCorpusResources, {
+import CorpusExplorerTabs from "./CorpusExplorerTabs";
+import {
+  buildCorpusMatrix,
   buildSmallCorpusResources,
 } from "./SmallCorpusResources";
 
@@ -23,6 +20,9 @@ import { callPythonReadData } from "@/lib/pythonClient";
 export const dynamicParams = true;
 
 const SMALL_CORPUS_PAIR_LIMIT = 12;
+const MATRIX_PAIR_MIN = 4;
+const MATRIX_LANGUAGE_LIMIT = 250;
+const MATRIX_PAIR_LIMIT = 7500;
 
 const SKIP = new Set([
   "komi",
@@ -187,7 +187,11 @@ export default async function CorpusPage({ params }) {
     const latestPairCount = countUniquePairs(corpora);
     const shouldUseSmallResources =
       latestPairCount > 0 && latestPairCount <= SMALL_CORPUS_PAIR_LIMIT;
-    const resourceRows = shouldUseSmallResources
+    const shouldPrepareMatrix =
+      latestPairCount >= MATRIX_PAIR_MIN &&
+      latestPairCount <= MATRIX_PAIR_LIMIT &&
+      languages.length <= MATRIX_LANGUAGE_LIMIT;
+    const resourceRows = shouldUseSmallResources || shouldPrepareMatrix
       ? await callPythonReadData({ corpus, version: "latest" })
       : null;
     const smallResources = shouldUseSmallResources
@@ -196,6 +200,12 @@ export default async function CorpusPage({ params }) {
     const showSmallResources =
       smallResources.length > 0 &&
       smallResources.length <= SMALL_CORPUS_PAIR_LIMIT;
+    const matrix = shouldPrepareMatrix
+      ? buildCorpusMatrix(resourceRows?.corpora ?? [], languages)
+      : null;
+    const showMatrix = Boolean(
+      matrix?.languages?.length && matrix?.cells?.length,
+    );
 
     const bibtexText = corpusInfo?.bibtex
       ? Buffer.from(corpusInfo.bibtex, "base64").toString("utf8")
@@ -287,15 +297,23 @@ export default async function CorpusPage({ params }) {
           )}
 
           {showSmallResources ? (
-            <section className={s.section}>
-              <SmallCorpusResources resources={smallResources} />
+            <section id="download" className={s.section}>
+              <CorpusExplorerTabs
+                corpus={corpusInfo.name || corpus}
+                matrix={matrix}
+                resources={smallResources}
+              />
             </section>
           ) : (
             <>
               {/* 2) LANGUAGE GRAPHS */}
-              {graphValues.length > 0 && (
+              {(graphValues.length > 0 || showMatrix) && (
                 <section className={s.section}>
-                  <LanguageGraphs graphValues={graphValues} />
+                  <CorpusExplorerTabs
+                    corpus={corpusInfo.name || corpus}
+                    graphValues={graphValues}
+                    matrix={matrix}
+                  />
                 </section>
               )}
 
