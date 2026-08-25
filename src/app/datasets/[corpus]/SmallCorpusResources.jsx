@@ -185,18 +185,30 @@ export function buildSmallCorpusResources(rows = []) {
 
 export function buildCorpusMatrix(rows = [], languageCodes = []) {
   const resources = buildCorpusResources(rows);
-  const languageSet = new Set(languageCodes.filter(Boolean).map(String));
+  const allowedLanguages = new Set(languageCodes.filter(Boolean).map(String));
+  const hasLanguageFilter = allowedLanguages.size > 0;
+  const matrixResources = resources.filter(
+    (resource) =>
+      !hasLanguageFilter ||
+      (allowedLanguages.has(resource.source) &&
+        allowedLanguages.has(resource.target)),
+  );
+  const languageSet = new Set(
+    hasLanguageFilter
+      ? allowedLanguages
+      : matrixResources.flatMap((resource) => [
+          resource.source,
+          resource.target,
+        ]),
+  );
   const monoGroups = new Map();
-
-  for (const resource of resources) {
-    languageSet.add(resource.source);
-    languageSet.add(resource.target);
-  }
 
   const monoRows = rows.filter((row) => row?.source && !row?.target);
   for (const row of monoRows) {
-    languageSet.add(String(row.source));
     const source = String(row.source);
+    if (hasLanguageFilter && !languageSet.has(source)) continue;
+    if (!hasLanguageFilter) languageSet.add(source);
+
     const current = monoGroups.get(source) || [];
     current.push({
       format: formatLabel(row),
@@ -224,7 +236,7 @@ export function buildCorpusMatrix(rows = [], languageCodes = []) {
       };
     });
 
-  const cells = resources.map((resource) => ({
+  const cells = matrixResources.map((resource) => ({
     key: resource.key,
     source: resource.source,
     target: resource.target,

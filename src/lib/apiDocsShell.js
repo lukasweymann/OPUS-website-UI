@@ -22,7 +22,33 @@ const SITE_HEADER = `
       <img class="api-docs-logo" src="/logos/opus_medium-white.png" alt="OPUS logo" data-hide-on-theme="light" />
     </a>
     <nav class="api-docs-actions" aria-label="Primary navigation">
-      <button class="api-docs-theme" type="button" aria-label="Toggle theme" title="Toggle theme">◐</button>
+      <button class="api-docs-theme" type="button" aria-label="Toggle theme" aria-pressed="false" title="Light mode">☀️</button>
+      <div class="api-docs-api-group">
+        <button class="api-docs-api-button api-docs-secondary" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="api-docs-api-menu">
+          <svg class="api-docs-api-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"></path>
+            <path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"></path>
+          </svg>
+          <span>API</span>
+          <svg class="api-docs-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </button>
+        <div class="api-docs-api-menu" id="api-docs-api-menu" role="menu">
+          <a href="/opusapi" role="menuitem" data-api-page="opusapi">
+            <span class="api-docs-api-title">OPUS API</span>
+            <span class="api-docs-api-desc">Corpus and language queries</span>
+          </a>
+          <a href="/mt-api" role="menuitem" data-api-page="mt-api">
+            <span class="api-docs-api-title">MT API</span>
+            <span class="api-docs-api-desc">Evaluation scores and models</span>
+          </a>
+          <a href="/synthetic-api" role="menuitem" data-api-page="synthetic-api">
+            <span class="api-docs-api-title">Synthetic API</span>
+            <span class="api-docs-api-desc">Synthetic collections and pairs</span>
+          </a>
+        </div>
+      </div>
       <a class="api-docs-link" href="/contact">Contribute</a>
       <a class="api-docs-link" href="/publications">Publications</a>
       <a class="api-docs-link api-docs-secondary" href="/corpora">Corpora</a>
@@ -35,16 +61,24 @@ const SITE_HEADER = `
       <span class="api-docs-burger-line"></span>
     </button>
     <nav class="api-docs-mobile-menu" id="api-docs-mobile-menu" aria-label="Mobile navigation">
-      <button class="api-docs-theme api-docs-mobile-theme" type="button" aria-label="Toggle theme" title="Toggle theme">◐</button>
+      <button class="api-docs-theme api-docs-mobile-theme" type="button" aria-label="Toggle theme" aria-pressed="false" title="Light mode">☀️</button>
       <div class="api-docs-mobile-group">
         <button class="api-docs-mobile-api" type="button" aria-expanded="false" aria-controls="api-docs-mobile-api-menu">
-          <span>{ } API</span>
-          <span class="api-docs-mobile-chevron" aria-hidden="true">⌄</span>
+          <span class="api-docs-mobile-api-label">
+            <svg class="api-docs-api-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"></path>
+              <path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"></path>
+            </svg>
+            API
+          </span>
+          <svg class="api-docs-mobile-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
         </button>
         <div class="api-docs-mobile-api-menu" id="api-docs-mobile-api-menu">
-          <a href="/opusapi">OPUS API</a>
-          <a href="/mt-api">MT API</a>
-          <a href="/synthetic-api">Synthetic API</a>
+          <a href="/opusapi" data-api-page="opusapi">OPUS API</a>
+          <a href="/mt-api" data-api-page="mt-api">MT API</a>
+          <a href="/synthetic-api" data-api-page="synthetic-api">Synthetic API</a>
         </div>
       </div>
       <a class="api-docs-mobile-link" href="/contact">Contribute</a>
@@ -96,8 +130,20 @@ const SITE_FOOTER = `
       var themeButtons = Array.prototype.slice.call(document.querySelectorAll(".api-docs-theme"));
       var burger = document.querySelector(".api-docs-burger");
       var menu = document.querySelector(".api-docs-mobile-menu");
+      var desktopApiGroup = document.querySelector(".api-docs-api-group");
+      var desktopApiButton = document.querySelector(".api-docs-api-button");
+      var desktopApiMenu = document.querySelector(".api-docs-api-menu");
       var apiButton = document.querySelector(".api-docs-mobile-api");
       var apiMenu = document.querySelector(".api-docs-mobile-api-menu");
+
+      function updateThemeButtons(theme) {
+        var isDark = theme === "dark";
+        themeButtons.forEach(function (button) {
+          button.textContent = isDark ? "🌙" : "☀️";
+          button.setAttribute("aria-pressed", String(isDark));
+          button.setAttribute("title", isDark ? "Light mode" : "Dark mode");
+        });
+      }
 
       function toggleTheme() {
         var current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
@@ -107,11 +153,41 @@ const SITE_FOOTER = `
         try {
           localStorage.setItem("theme", next);
         } catch (e) {}
+        updateThemeButtons(next);
       }
+
+      updateThemeButtons(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
 
       themeButtons.forEach(function (button) {
         button.addEventListener("click", toggleTheme);
       });
+
+      function closeDesktopApi() {
+        if (!desktopApiButton || !desktopApiMenu) return;
+        desktopApiButton.setAttribute("aria-expanded", "false");
+        desktopApiButton.classList.remove("api-docs-api-button-open");
+        desktopApiMenu.classList.remove("api-docs-api-menu-open");
+      }
+
+      if (desktopApiButton && desktopApiMenu) {
+        desktopApiButton.addEventListener("click", function () {
+          var open = desktopApiButton.getAttribute("aria-expanded") === "true";
+          desktopApiButton.setAttribute("aria-expanded", String(!open));
+          desktopApiButton.classList.toggle("api-docs-api-button-open", !open);
+          desktopApiMenu.classList.toggle("api-docs-api-menu-open", !open);
+        });
+
+        desktopApiMenu.addEventListener("click", closeDesktopApi);
+
+        document.addEventListener("pointerdown", function (event) {
+          if (!desktopApiGroup || desktopApiGroup.contains(event.target)) return;
+          closeDesktopApi();
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") closeDesktopApi();
+        });
+      }
 
       if (burger && menu) {
         burger.addEventListener("click", function () {
@@ -133,6 +209,11 @@ const SITE_FOOTER = `
           var open = apiButton.getAttribute("aria-expanded") === "true";
           apiButton.setAttribute("aria-expanded", String(!open));
           apiMenu.classList.toggle("api-docs-mobile-api-menu-open", !open);
+        });
+
+        apiMenu.addEventListener("click", function () {
+          apiButton.setAttribute("aria-expanded", "false");
+          apiMenu.classList.remove("api-docs-mobile-api-menu-open");
         });
       }
     })();
@@ -263,7 +344,6 @@ const SITE_STYLES = `
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
       padding: 12px clamp(16px, 6vw, 60px);
       background: var(--surface-strong);
       color: var(--text-main);
@@ -275,7 +355,6 @@ const SITE_STYLES = `
       display: flex;
       align-items: center;
       text-decoration: none;
-      flex: 0 0 auto;
     }
 
     .api-docs-logo {
@@ -287,56 +366,277 @@ const SITE_STYLES = `
     .api-docs-actions {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
       gap: clamp(12px, 1.6vw, 22px);
-      flex-wrap: wrap;
     }
 
-    .api-docs-link,
-    .api-docs-theme {
+    .api-docs-link {
+      text-decoration: none;
+      color: inherit;
+      font-size: 0.9rem;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .api-docs-link:hover {
+      color: var(--link-hover);
+      text-decoration: none;
+    }
+
+    .api-docs-api-button,
+    .api-docs-secondary,
+    .api-docs-primary {
       position: relative;
+      overflow: hidden;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.45rem;
-      min-height: 32px;
       padding: 0.52rem 0.9rem;
       border-radius: var(--radius-pill);
-      font: inherit;
+      font-family: var(--font-sans);
       font-size: 0.9rem;
       line-height: 1;
       font-weight: 600;
+      letter-spacing: 0.01em;
       text-decoration: none;
       white-space: nowrap;
+      user-select: none;
       border: 1px solid transparent;
       color: var(--text-main);
       background: transparent;
       box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
       cursor: pointer;
+      transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease,
+        filter 160ms ease;
+    }
+
+    .api-docs-api-button::before,
+    .api-docs-secondary::before,
+    .api-docs-primary::before,
+    .api-docs-mobile-primary::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at top left,
+        rgba(255, 255, 255, 0.14),
+        transparent 55%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+    }
+
+    .api-docs-api-button:hover::before,
+    .api-docs-secondary:hover::before,
+    .api-docs-primary:hover::before,
+    .api-docs-mobile-primary:hover::before {
+      opacity: 1;
+    }
+
+    .api-docs-api-button:active,
+    .api-docs-secondary:active,
+    .api-docs-primary:active,
+    .api-docs-mobile-primary:active {
+      transform: translateY(1px);
+    }
+
+    .api-docs-api-button:focus-visible,
+    .api-docs-secondary:focus-visible,
+    .api-docs-primary:focus-visible,
+    .api-docs-mobile-primary:focus-visible {
+      outline: none;
+      box-shadow: var(--ring), var(--shadow-sm), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
     }
 
     .api-docs-theme {
+      display: inline-grid;
+      place-items: center;
       width: 36px;
+      height: 36px;
       padding: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
       border-color: var(--border);
-      background: var(--surface);
+      background: var(--surface-strong);
+      color: var(--text-main);
+      font: inherit;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .api-docs-theme:hover {
+      text-decoration: none;
+      border-color: color-mix(in srgb, var(--link) 28%, var(--border));
+      background: rgba(37, 99, 235, 0.05);
+    }
+
+    .api-docs-theme:focus-visible {
+      outline: none;
+      box-shadow: var(--ring), var(--shadow-sm);
     }
 
     .api-docs-secondary {
       border-color: var(--border);
-      background: linear-gradient(135deg, var(--surface-strong), var(--surface));
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--surface-strong) 88%, transparent),
+        color-mix(in srgb, var(--surface) 92%, transparent));
       backdrop-filter: blur(10px) saturate(1.15);
+    }
+
+    .api-docs-secondary:hover {
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent-soft) 55%, var(--surface-strong)),
+        color-mix(in srgb, var(--surface) 92%, transparent));
+    }
+
+    .api-docs-api-group {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .api-docs-api-button {
+      cursor: pointer;
+    }
+
+    .api-docs-api-icon {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .api-docs-chevron {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+    }
+
+    .api-docs-mobile-chevron {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .api-docs-chevron,
+    .api-docs-mobile-chevron {
+      transition: transform 160ms ease;
+    }
+
+    .api-docs-api-button-open .api-docs-chevron,
+    .api-docs-mobile-api[aria-expanded="true"] .api-docs-mobile-chevron {
+      transform: rotate(180deg);
+    }
+
+    .api-docs-api-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(280px, calc(100vw - 32px));
+      display: grid;
+      gap: 4px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--surface-strong) 94%, transparent);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.18), var(--shadow-sm);
+      backdrop-filter: blur(14px) saturate(1.15);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .api-docs-api-menu-open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .api-docs-api-menu a {
+      display: grid;
+      gap: 3px;
+      padding: 10px 11px;
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    .api-docs-api-menu a:hover {
+      color: var(--text-main);
+      text-decoration: none;
+      background: color-mix(in srgb, var(--accent-soft) 58%, transparent);
+    }
+
+    .api-docs-api-title {
+      font-size: 0.9rem;
+      line-height: 1.25;
+      font-weight: 750;
+    }
+
+    .api-docs-api-desc {
+      font-size: 0.76rem;
+      line-height: 1.35;
+      color: var(--text-muted);
+    }
+
+    .api-docs-opusapi .api-docs-api-button,
+    .api-docs-mtapi .api-docs-api-button,
+    .api-docs-syntheticapi .api-docs-api-button {
+      border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent-soft) 65%, var(--surface-strong)),
+        color-mix(in srgb, var(--surface) 90%, transparent));
+      color: var(--text-main);
+    }
+
+    .api-docs-opusapi [data-api-page="opusapi"],
+    .api-docs-mtapi [data-api-page="mt-api"],
+    .api-docs-syntheticapi [data-api-page="synthetic-api"] {
+      color: var(--link-hover);
+      background: color-mix(in srgb, var(--accent-soft) 58%, transparent);
     }
 
     .api-docs-primary {
       color: #ffffff;
       background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 92%, #000), var(--accent));
       border-color: color-mix(in srgb, var(--accent) 55%, rgba(148, 163, 184, 0.35));
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22), 0 0 24px rgba(142, 117, 255, 0.18);
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.22),
+        0 0 0 1px rgba(15, 23, 42, 0.65),
+        0 0 24px rgba(142, 117, 255, 0.18);
+    }
+
+    .api-docs-primary:hover {
+      color: #ffffff;
+      filter: brightness(1.05);
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.26),
+        0 0 0 1px rgba(15, 23, 42, 0.75),
+        0 0 30px rgba(142, 117, 255, 0.24);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .api-docs-api-button,
+      .api-docs-api-button::before,
+      .api-docs-secondary,
+      .api-docs-secondary::before,
+      .api-docs-primary,
+      .api-docs-primary::before,
+      .api-docs-mobile-primary,
+      .api-docs-mobile-primary::before {
+        transition: none;
+      }
     }
 
     .api-docs-burger {
       display: none;
+      margin-left: 12px;
       width: 42px;
       height: 42px;
       border: 1px solid var(--border);
@@ -349,6 +649,16 @@ const SITE_STYLES = `
       justify-content: center;
       flex-direction: column;
       gap: 5px;
+      transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+    }
+
+    .api-docs-burger:hover {
+      border-color: color-mix(in oklab, var(--accent) 32%, var(--border));
+      background: color-mix(in oklab, var(--surface-strong) 88%, var(--accent-soft));
+    }
+
+    .api-docs-burger:active {
+      transform: translateY(1px);
     }
 
     .api-docs-burger-line {
@@ -404,14 +714,37 @@ const SITE_STYLES = `
     }
 
     .api-docs-mobile-primary {
+      position: relative;
+      overflow: hidden;
       justify-content: center;
       margin-top: 10px;
-      padding: 0.62rem 0.9rem;
+      padding: 0.52rem 0.9rem;
       border-radius: var(--radius-pill);
       border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(148, 163, 184, 0.35));
       color: #ffffff;
       background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 92%, #000), var(--accent));
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22), 0 0 24px rgba(142, 117, 255, 0.18);
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.22),
+        0 0 0 1px rgba(15, 23, 42, 0.65),
+        0 0 24px rgba(142, 117, 255, 0.18);
+      font-weight: 600;
+      line-height: 1;
+      transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease,
+        filter 160ms ease;
+    }
+
+    .api-docs-mobile-primary:hover {
+      color: #ffffff;
+      filter: brightness(1.05);
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.26),
+        0 0 0 1px rgba(15, 23, 42, 0.75),
+        0 0 30px rgba(142, 117, 255, 0.24);
     }
 
     .api-docs-mobile-group {
@@ -427,12 +760,11 @@ const SITE_STYLES = `
       cursor: pointer;
     }
 
-    .api-docs-mobile-chevron {
-      transition: transform 160ms ease;
-    }
-
-    .api-docs-mobile-api[aria-expanded="true"] .api-docs-mobile-chevron {
-      transform: rotate(180deg);
+    .api-docs-mobile-api-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
     }
 
     .api-docs-mobile-api-menu {
@@ -848,7 +1180,7 @@ const SITE_STYLES = `
       box-shadow: var(--shadow-sm);
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 1024px) {
       .api-docs-nav {
         align-items: center;
       }
@@ -875,6 +1207,16 @@ const SITE_STYLES = `
         border-bottom: 1px solid var(--border);
         box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), var(--shadow-sm);
         z-index: 1500;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .api-docs-nav {
+        padding-inline: 12px;
+      }
+
+      .api-docs-mobile-menu-open {
+        padding-inline: 16px;
       }
     }
 `;

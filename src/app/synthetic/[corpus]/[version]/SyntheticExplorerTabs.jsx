@@ -14,7 +14,7 @@ export default function SyntheticExplorerTabs({
   const tabsId = useId();
   const hasGraph = Array.isArray(graphValues) && graphValues.length > 0;
   const hasMatrix = Array.isArray(matrixRows) && matrixRows.length > 0;
-  const [active, setActive] = useState("graph");
+  const [active, setActive] = useState(hasMatrix ? "matrix" : "graph");
   const showTabs = hasGraph && hasMatrix;
   const orderedTabs = ["graph", "matrix"];
 

@@ -38,6 +38,40 @@ function escapeSelectorValue(value) {
   return String(value).replace(/["\\]/g, "\\$&");
 }
 
+function DownloadHelp() {
+  return (
+    <span className={s.helpWrap}>
+      <button
+        type="button"
+        className={s.help}
+        aria-label="Download format help"
+      >
+        ?
+      </button>
+      <span className={s.tip} role="tooltip">
+        TMX contains unique translation units. Moses contains all non-empty
+        alignment units. XML contains the OPUS XML package.{" "}
+        <a
+          href="https://opus.nlpl.eu/legacy/trac/wiki/DataFormats.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          More information
+        </a>
+      </span>
+    </span>
+  );
+}
+
+function DownloadTitle({ children }) {
+  return (
+    <h4 className={s.downloadTitle}>
+      <span>{children}</span>
+      <DownloadHelp />
+    </h4>
+  );
+}
+
 export default function CorpusMatrix({ corpus, matrix }) {
   const [query, setQuery] = useState("");
   const [selectedKey, setSelectedKey] = useState(matrix?.cells?.[0]?.key ?? "");
@@ -133,6 +167,9 @@ export default function CorpusMatrix({ corpus, matrix }) {
         <div>
           <p className={s.eyebrow}>Language matrix</p>
           <h3>{corpus}</h3>
+          <p className={s.hint}>
+            Click a bilingual cell or a language diagonal to show downloads.
+          </p>
         </div>
         <label className={s.search}>
           <Search size={15} aria-hidden="true" />
@@ -263,11 +300,14 @@ export default function CorpusMatrix({ corpus, matrix }) {
                 </div>
               </dl>
               <section className={s.downloads}>
-                <h4>Downloads</h4>
-                <TableDropdown
-                  data={selectedMonoDownloads.items}
-                  defaultFormat={selectedMonoDownloads.defaultFormat}
-                />
+                <DownloadTitle>Downloads</DownloadTitle>
+                <div className={s.downloadRow}>
+                  <span>{selectedMono}</span>
+                  <TableDropdown
+                    data={selectedMonoDownloads.items}
+                    defaultFormat={selectedMonoDownloads.defaultFormat}
+                  />
+                </div>
               </section>
             </>
           ) : selected ? (
@@ -295,18 +335,23 @@ export default function CorpusMatrix({ corpus, matrix }) {
                 </Link>
               </div>
               <section className={s.downloads}>
-                <h4>Bilingual downloads</h4>
-                <TableDropdown
-                  data={selected.bilingual}
-                  defaultFormat={selected.bilingualDefault}
-                />
+                <DownloadTitle>Bilingual downloads</DownloadTitle>
+                <div className={s.downloadRow}>
+                  <span>
+                    {selected.source}-{selected.target}
+                  </span>
+                  <TableDropdown
+                    data={selected.bilingual}
+                    defaultFormat={selected.bilingualDefault}
+                  />
+                </div>
               </section>
               <section className={s.downloads}>
-                <h4>Monolingual downloads</h4>
+                <DownloadTitle>Monolingual downloads</DownloadTitle>
                 <div className={s.monoDownloads}>
                   {Object.entries(selected.mono).map(([language, downloads]) =>
                     downloads.items?.length ? (
-                      <div key={language} className={s.monoDownload}>
+                      <div key={language} className={s.downloadRow}>
                         <span>{language}</span>
                         <TableDropdown
                           data={downloads.items}

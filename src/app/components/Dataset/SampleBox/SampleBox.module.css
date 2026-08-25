@@ -30,7 +30,9 @@
 /* Side */
 .side {
     display: grid;
-    gap: 10px;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
     min-width: 0;
 }
 
@@ -38,13 +40,16 @@
 .lang {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     width: fit-content;
-    padding: 6px 11px;
+    min-width: 2.35rem;
+    padding: 3px 7px;
     border-radius: var(--radius-pill);
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.15;
 
     background: color-mix(in srgb, var(--accent-soft) 68%, var(--surface) 32%);
     border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--border));
@@ -54,7 +59,8 @@
 /* Sentence list */
 .lines {
     display: grid;
-    gap: 8px;
+    gap: 6px;
+    min-width: 0;
 }
 
 /* Divider */
@@ -72,8 +78,13 @@
     gap: 10px;
     align-items: start;
 
-    padding: 8px 0;
+    padding: 6px 0;
     border-top: 1px solid color-mix(in srgb, var(--table-border) 62%, transparent);
+}
+
+.line:first-child {
+    padding-top: 0;
+    border-top: 0;
 }
 
 /* Text */
@@ -122,5 +133,11 @@
 
     .div {
         display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .side {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

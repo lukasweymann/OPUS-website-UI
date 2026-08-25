@@ -147,6 +147,40 @@ function makeLookup(cells = []) {
   return lookup;
 }
 
+function DownloadHelp() {
+  return (
+    <span className={s.helpWrap}>
+      <button
+        type="button"
+        className={s.help}
+        aria-label="Download format help"
+      >
+        ?
+      </button>
+      <span className={s.tip} role="tooltip">
+        XML contains alignment files. Raw files contain one untokenized language
+        side; tok files contain the tokenized side.{" "}
+        <a
+          href="https://opus.nlpl.eu/legacy/trac/wiki/DataFormats.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          More information
+        </a>
+      </span>
+    </span>
+  );
+}
+
+function DownloadTitle({ children }) {
+  return (
+    <h4 className={s.downloadTitle}>
+      <span>{children}</span>
+      <DownloadHelp />
+    </h4>
+  );
+}
+
 export default function SyntheticMatrix({ rows = [] }) {
   const [query, setQuery] = useState("");
   const [selectedKey, setSelectedKey] = useState("");
@@ -235,6 +269,9 @@ export default function SyntheticMatrix({ rows = [] }) {
         <div>
           <p className={s.eyebrow}>Language matrix</p>
           <h3>Synthetic pairs</h3>
+          <p className={s.hint}>
+            Click a bilingual cell or a language diagonal to show downloads.
+          </p>
         </div>
         <label className={s.search}>
           <Search size={15} aria-hidden="true" />
@@ -341,8 +378,11 @@ export default function SyntheticMatrix({ rows = [] }) {
               <p className={s.eyebrow}>Monolingual</p>
               <h3>{selectedMono}</h3>
               <section className={s.downloads}>
-                <h4>Downloads</h4>
-                <SyntheticDropdown data={selectedMonoDownloads} />
+                <DownloadTitle>Downloads</DownloadTitle>
+                <div className={s.downloadRow}>
+                  <span>{selectedMono}</span>
+                  <SyntheticDropdown data={selectedMonoDownloads} />
+                </div>
               </section>
             </>
           ) : selected ? (
@@ -370,15 +410,20 @@ export default function SyntheticMatrix({ rows = [] }) {
                 </Link>
               </div>
               <section className={s.downloads}>
-                <h4>Bilingual downloads</h4>
-                <SyntheticDropdown data={selected.bilingual} />
+                <DownloadTitle>Bilingual downloads</DownloadTitle>
+                <div className={s.downloadRow}>
+                  <span>
+                    {selected.source}-{selected.target}
+                  </span>
+                  <SyntheticDropdown data={selected.bilingual} />
+                </div>
               </section>
               <section className={s.downloads}>
-                <h4>Monolingual downloads</h4>
+                <DownloadTitle>Monolingual downloads</DownloadTitle>
                 <div className={s.monoDownloads}>
                   {Object.entries(selected.mono).map(([language, downloads]) =>
                     downloads.length ? (
-                      <div key={language} className={s.monoDownload}>
+                      <div key={language} className={s.downloadRow}>
                         <span>{language}</span>
                         <SyntheticDropdown data={downloads} />
                       </div>

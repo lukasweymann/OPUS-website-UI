@@ -18,7 +18,7 @@ export default function CorpusExplorerTabs({
   const hasResources = Array.isArray(resources) && resources.length > 0;
   const hasMatrix = Boolean(matrix?.languages?.length && matrix?.cells?.length);
   const primary = hasResources ? "resources" : "graph";
-  const [active, setActive] = useState(primary);
+  const [active, setActive] = useState(hasMatrix ? "matrix" : primary);
   const showTabs = hasMatrix && (hasGraph || hasResources);
 
   if (!showTabs) {
