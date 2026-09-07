@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Eye, Search } from "lucide-react";
 
 import SyntheticDropdown from "@/app/components/Synthetic/Dropdown/Dropdown";
@@ -47,6 +48,18 @@ function addDownload(items, item, format) {
   });
 }
 
+function monoFormat(format, language) {
+  const labels = {
+    raw: "xml-raw",
+    xml: "xml-tok",
+    txt: "txt-raw",
+    tok: "txt-tok",
+    freq: "freq",
+  };
+
+  return `${labels[format] || format} ${language}`;
+}
+
 function monoDownloadsFor(row, side) {
   const language = side === "source" ? row?.src_lang : row?.tgt_lang;
   const downloads = row?.downloads || {};
@@ -55,14 +68,14 @@ function monoDownloadsFor(row, side) {
   addDownload(
     items,
     side === "source" ? downloads.source_language : downloads.target_language,
-    `raw ${language}`,
+    monoFormat("raw", language),
   );
   addDownload(
     items,
     side === "source"
       ? downloads.tokenized_source_language
       : downloads.tokenized_target_language,
-    `tok ${language}`,
+    monoFormat("tok", language),
   );
 
   return items;
@@ -93,7 +106,7 @@ function makeMatrix(rows = []) {
     languages.add(target);
 
     const bilingual = [];
-    addDownload(bilingual, row?.downloads?.alignments, "xml");
+    addDownload(bilingual, row?.downloads?.alignments, "XML");
 
     cells.push({
       key: pair,
@@ -147,36 +160,111 @@ function makeLookup(cells = []) {
   return lookup;
 }
 
-function DownloadHelp() {
+const DOWNLOAD_HELP = {
+  bilingual:
+    "Download formats: moses = aligned plain text files; TMX = translation memories; XML = sentence alignments in XCES Align format.",
+  monolingual:
+    "Download formats: xml-raw = Basic XML-encoded corpus files; xml-tok = Tokenized XML-encoded corpus files; txt-raw = raw plain text files; txt-tok = tokenized plain text files.",
+};
+
+function DownloadHelp({ type = "bilingual" }) {
+  const [open, setOpen] = useState(false);
+  const [tipStyle, setTipStyle] = useState(null);
+  const buttonRef = useRef(null);
+  const closeTimerRef = useRef(null);
+
+  function showTip() {
+    window.clearTimeout(closeTimerRef.current);
+    setOpen(true);
+  }
+
+  function hideTip() {
+    window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = window.setTimeout(() => {
+      setOpen(false);
+      setTipStyle(null);
+    }, 120);
+  }
+
+  useLayoutEffect(() => {
+    if (!open) return;
+
+    function updatePosition() {
+      const rect = buttonRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const viewportPad = 8;
+      const gap = 8;
+      const width = Math.min(360, window.innerWidth - viewportPad * 2);
+      const left = Math.min(
+        Math.max(viewportPad, rect.left + rect.width / 2 - width / 2),
+        window.innerWidth - width - viewportPad,
+      );
+      const estimatedHeight = 126;
+      const top =
+        rect.top > estimatedHeight + gap + viewportPad
+          ? rect.top - estimatedHeight - gap
+          : rect.bottom + gap;
+
+      setTipStyle({
+        position: "fixed",
+        top: `${top}px`,
+        bottom: "auto",
+        left: `${left}px`,
+        width: `${width}px`,
+      });
+    }
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open]);
+
+  const tooltip = (
+    <span
+      className={`${s.tip} ${s.tipPortal}`}
+      role="tooltip"
+      style={tipStyle || undefined}
+      onPointerEnter={showTip}
+      onPointerLeave={hideTip}
+      onFocus={showTip}
+      onBlur={hideTip}
+    >
+      {DOWNLOAD_HELP[type]}{" "}
+      <a href="/download-formats">More information</a>
+    </span>
+  );
+
   return (
-    <span className={s.helpWrap}>
+    <span
+      className={s.helpWrap}
+      onPointerEnter={showTip}
+      onPointerLeave={hideTip}
+      onFocus={showTip}
+      onBlur={hideTip}
+    >
       <button
+        ref={buttonRef}
         type="button"
         className={s.help}
         aria-label="Download format help"
       >
         ?
       </button>
-      <span className={s.tip} role="tooltip">
-        XML contains alignment files. Raw files contain one untokenized language
-        side; tok files contain the tokenized side.{" "}
-        <a
-          href="https://opus.nlpl.eu/legacy/trac/wiki/DataFormats.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          More information
-        </a>
-      </span>
+      {open && tipStyle && createPortal(tooltip, document.body)}
     </span>
   );
 }
 
-function DownloadTitle({ children }) {
+function DownloadTitle({ children, type = "bilingual" }) {
   return (
     <h4 className={s.downloadTitle}>
       <span>{children}</span>
-      <DownloadHelp />
+      <DownloadHelp type={type} />
     </h4>
   );
 }
@@ -262,6 +350,7 @@ export default function SyntheticMatrix({ rows = [] }) {
   }
 
   const selectedMonoDownloads = selectedMono ? mono[selectedMono] : null;
+  const matrixHeight = `${(filteredLanguages.length + 1) * (isLargeMatrix ? 2.15 : 2.35)}rem`;
 
   return (
     <div className={s.panel}>
@@ -288,7 +377,7 @@ export default function SyntheticMatrix({ rows = [] }) {
         </p>
       </div>
 
-      <div className={s.body}>
+      <div className={s.body} style={{ "--matrix-height": matrixHeight }}>
         <div className={s.matrixWrap}>
           <table
             ref={tableRef}
@@ -378,10 +467,10 @@ export default function SyntheticMatrix({ rows = [] }) {
               <p className={s.eyebrow}>Monolingual</p>
               <h3>{selectedMono}</h3>
               <section className={s.downloads}>
-                <DownloadTitle>Downloads</DownloadTitle>
+                <DownloadTitle type="monolingual">Downloads</DownloadTitle>
                 <div className={s.downloadRow}>
                   <span>{selectedMono}</span>
-                  <SyntheticDropdown data={selectedMonoDownloads} />
+                  <SyntheticDropdown data={selectedMonoDownloads} portalMenu />
                 </div>
               </section>
             </>
@@ -410,22 +499,26 @@ export default function SyntheticMatrix({ rows = [] }) {
                 </Link>
               </div>
               <section className={s.downloads}>
-                <DownloadTitle>Bilingual downloads</DownloadTitle>
+                <DownloadTitle type="bilingual">
+                  Bilingual downloads
+                </DownloadTitle>
                 <div className={s.downloadRow}>
                   <span>
                     {selected.source}-{selected.target}
                   </span>
-                  <SyntheticDropdown data={selected.bilingual} />
+                  <SyntheticDropdown data={selected.bilingual} portalMenu />
                 </div>
               </section>
               <section className={s.downloads}>
-                <DownloadTitle>Monolingual downloads</DownloadTitle>
+                <DownloadTitle type="monolingual">
+                  Monolingual downloads
+                </DownloadTitle>
                 <div className={s.monoDownloads}>
                   {Object.entries(selected.mono).map(([language, downloads]) =>
                     downloads.length ? (
                       <div key={language} className={s.downloadRow}>
                         <span>{language}</span>
-                        <SyntheticDropdown data={downloads} />
+                        <SyntheticDropdown data={downloads} portalMenu />
                       </div>
                     ) : null,
                   )}

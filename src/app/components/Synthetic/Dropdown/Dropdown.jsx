@@ -4,6 +4,7 @@
 import { useMemo, useState } from "react";
 import { Download, Link as LinkIcon } from "lucide-react";
 import MiniSelect from "@/app/components/Search/MiniSelect/MiniSelect";
+import TableDropdown from "@/app/components/CorporaSearchTable/TableDropdown/TableDropdown";
 import s from "./Dropdown.module.css";
 
 function safeText(v) {
@@ -54,7 +55,7 @@ function IconCopyButton({ text = "", label = "Copy URL" }) {
   );
 }
 
-export default function SyntheticDropdown({ data = [] }) {
+export default function SyntheticDropdown({ data = [], portalMenu = false }) {
   // Normalize and ignore invalid rows (null url etc)
   const items = useMemo(() => {
     const arr = Array.isArray(data) ? data : [];
@@ -81,6 +82,10 @@ export default function SyntheticDropdown({ data = [] }) {
   );
 
   const disabled = options.length === 0;
+
+  if (portalMenu) {
+    return <TableDropdown data={items} portalMenu />;
+  }
 
   return (
     <div className={s.wrap}>

@@ -31,36 +31,69 @@ function formatLabel(row) {
   return preprocessing;
 }
 
-function sortFormats(items = []) {
-  const order = new Map([
+const BILINGUAL_FORMAT_LABELS = new Map([
+  ["moses", "moses"],
+  ["tmx", "TMX"],
+  ["xml", "XML"],
+]);
+
+const MONOLINGUAL_FORMAT_LABELS = new Map([
+  ["raw", "xml-raw"],
+  ["xml", "xml-tok"],
+  ["txt", "txt-raw"],
+  ["tok", "txt-tok"],
+  ["freq", "freq"],
+]);
+
+function displayFormat(format = "", kind = "bilingual") {
+  const parts = String(format).trim().split(/\s+/).filter(Boolean);
+  const base = parts[0] || "";
+  const rest = parts.slice(1);
+  const labels =
+    kind === "monolingual" ? MONOLINGUAL_FORMAT_LABELS : BILINGUAL_FORMAT_LABELS;
+  const label = labels.get(base.toLowerCase()) || base;
+
+  return [label, ...rest].filter(Boolean).join(" ");
+}
+
+function sortFormats(items = [], kind = "bilingual") {
+  const bilingualOrder = new Map([
     ["moses", 0],
     ["tmx", 1],
     ["xml", 2],
-    ["txt", 3],
-    ["tok", 4],
-    ["raw", 5],
-    ["freq", 6],
   ]);
+  const monolingualOrder = new Map([
+    ["raw", 0],
+    ["xml", 1],
+    ["txt", 2],
+    ["tok", 3],
+    ["freq", 4],
+  ]);
+  const order = kind === "monolingual" ? monolingualOrder : bilingualOrder;
 
   return [...items].sort((a, b) => {
-    const aBase = String(a.format).split(" ")[0];
-    const bBase = String(b.format).split(" ")[0];
+    const aBase = String(a.format).split(" ")[0].toLowerCase();
+    const bBase = String(b.format).split(" ")[0].toLowerCase();
     return (order.get(aBase) ?? 99) - (order.get(bBase) ?? 99);
   });
 }
 
 function preferFormat(items = [], preferences = ["moses", "xml"]) {
   for (const preference of preferences) {
-    const hit = items.find((item) => item.format.split(" ")[0] === preference);
+    const hit = items.find(
+      (item) => item.format.split(" ")[0].toLowerCase() === preference,
+    );
     if (hit) return [hit];
   }
 
   return items[0] ? [items[0]] : [];
 }
 
-function toDropdownItems(items = []) {
-  return sortFormats(items).map((item) => ({
-    format: item.size ? `${item.format} ${item.size}` : item.format,
+function toDropdownItems(items = [], kind = "bilingual") {
+  return sortFormats(items, kind).map((item) => ({
+    format: item.size
+      ? `${displayFormat(item.format, kind)} ${item.size}`
+      : displayFormat(item.format, kind),
     url: item.url,
   }));
 }
@@ -97,10 +130,10 @@ function makePairTitle(source, target) {
   return `${names?.[0]?.label || source} - ${names?.[1]?.label || target}`;
 }
 
-function FormatDropdown({ items = [], preferences }) {
+function FormatDropdown({ items = [], preferences, kind = "bilingual" }) {
   if (!items.length) return <span className={s.empty}>Unavailable</span>;
 
-  const dropdownItems = toDropdownItems(items);
+  const dropdownItems = toDropdownItems(items, kind);
   const defaultFormat = preferFormat(dropdownItems, preferences);
 
   return (
@@ -119,7 +152,11 @@ function MonoFormats({ mono = {} }) {
       {entries.map(([language, items]) => (
         <div key={language} className={s.monoGroup}>
           <span className={s.langCode}>{language}</span>
-          <FormatDropdown items={items} preferences={["txt", "xml", "raw"]} />
+          <FormatDropdown
+            items={items}
+            kind="monolingual"
+            preferences={["xml-raw", "xml-tok", "txt-raw"]}
+          />
         </div>
       ))}
     </div>
@@ -246,16 +283,22 @@ export function buildCorpusMatrix(rows = [], languageCodes = []) {
     sourceTokens: Number(resource.stats.sourceTokens || 0),
     targetTokens: Number(resource.stats.targetTokens || 0),
     valueLabel: compactNumber(resource.stats.sentences),
-    bilingual: toDropdownItems(resource.bilingual),
-    bilingualDefault: preferFormat(toDropdownItems(resource.bilingual)),
+    bilingual: toDropdownItems(resource.bilingual, "bilingual"),
+    bilingualDefault: preferFormat(
+      toDropdownItems(resource.bilingual, "bilingual"),
+    ),
     mono: Object.fromEntries(
       Object.entries(resource.mono).map(([language, items]) => {
-        const dropdownItems = toDropdownItems(items);
+        const dropdownItems = toDropdownItems(items, "monolingual");
         return [
           language,
           {
             items: dropdownItems,
-            defaultFormat: preferFormat(dropdownItems, ["txt", "xml", "raw"]),
+            defaultFormat: preferFormat(dropdownItems, [
+              "xml-raw",
+              "xml-tok",
+              "txt-raw",
+            ]),
           },
         ];
       }),
@@ -267,12 +310,16 @@ export function buildCorpusMatrix(rows = [], languageCodes = []) {
     cells,
     mono: Object.fromEntries(
       Array.from(monoGroups.entries()).map(([language, items]) => {
-        const dropdownItems = toDropdownItems(items);
+        const dropdownItems = toDropdownItems(items, "monolingual");
         return [
           language,
           {
             items: dropdownItems,
-            defaultFormat: preferFormat(dropdownItems, ["txt", "xml", "raw"]),
+            defaultFormat: preferFormat(dropdownItems, [
+              "xml-raw",
+              "xml-tok",
+              "txt-raw",
+            ]),
           },
         ];
       }),

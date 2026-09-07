@@ -36,31 +36,32 @@ export async function GET(req) {
             {
                 label: "Top COMET scores for English-German",
                 pills: ["catalog", "score_type", "langpair", "limit"],
-                query: "catalog=External&score_type=comet&langpair=en-de&limit=10",
+                query: "catalog=External&score_type=comet&langpair=eng-deu&limit=10",
                 aria: "Open top COMET scores example",
             },
             {
                 label: "BLEU scores for a specific testset",
-                pills: ["score_type", "testset"],
-                query: "score_type=bleu&testset=WMT21",
+                pills: ["score_type", "testset", "limit"],
+                query: "score_type=bleu&testset=newstest2021&limit=10",
                 aria: "Open BLEU scores for a testset example",
             },
             {
                 label: "Evaluation scores for one language pair",
                 pills: ["langpair", "limit"],
-                query: "langpair=fi-sv&limit=25",
+                query: "langpair=fin-swe&limit=25",
                 aria: "Open language pair scores example",
             },
             {
                 label: "Constrain by catalog, metric and testset",
                 pills: ["catalog", "score_type", "testset", "limit"],
-                query: "catalog=OPUS&score_type=chrf&testset=WMT23&limit=50",
+                query: "catalog=OPUS&score_type=chrf&testset=flores200-devtest&limit=50",
                 aria: "Open constrained scores example",
             },
         ];
         const exampleHtml = examples
             .map((example) => {
-                const href = `${base}?${example.query}`;
+                const displayHref = `${base}?${example.query}`;
+                const testHref = `/mt-api?${example.query}`;
                 const pills = example.pills
                     .map((pill) => `<span class="pill">${escapeHtml(pill)}</span>`)
                     .join("");
@@ -69,8 +70,8 @@ export async function GET(req) {
                 <div class="example-label">${escapeHtml(example.label)}</div>
                 <div class="pill-row">${pills}</div>
                 <div class="code-action">
-                  <div class="code">${escapeHtml(href)}</div>
-                  <a class="example-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(example.aria)}">↗</a>
+                  <div class="code">${escapeHtml(displayHref)}</div>
+                  <a class="example-link" href="${escapeHtml(testHref)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(example.aria)}">↗</a>
                 </div>
               </div>`;
             })
@@ -337,11 +338,11 @@ export async function GET(req) {
               </div>
               <div class="param">
                 <span class="param-name">langpair</span>
-                <p class="param-desc">Optional language pair code, e.g. <b>en-de</b>, <b>fi-sv</b>.</p>
+                <p class="param-desc">Optional language pair code, e.g. <b>eng-deu</b>, <b>fin-swe</b>.</p>
               </div>
               <div class="param">
                 <span class="param-name">testset</span>
-                <p class="param-desc">Optional testset identifier, e.g. <b>WMT21</b>, <b>Flores</b>.</p>
+                <p class="param-desc">Optional testset identifier, e.g. <b>newstest2021</b>, <b>flores200-devtest</b>.</p>
               </div>
               <div class="param">
                 <span class="param-name">model</span>

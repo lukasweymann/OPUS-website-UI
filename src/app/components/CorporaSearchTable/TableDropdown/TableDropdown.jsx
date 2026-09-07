@@ -1,6 +1,14 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import { Download, Link as LinkIcon, Check } from "lucide-react";
 import { toast } from "../../ui/Toast/toast";
 import s from "./TableDropdown.module.css";
@@ -9,7 +17,11 @@ function optKey(o) {
   return `${o?.format ?? "fmt"}::${o?.url ?? ""}`;
 }
 
-export default function TableDropdown({ data = [], defaultFormat = [] }) {
+export default function TableDropdown({
+  data = [],
+  defaultFormat = [],
+  portalMenu = false,
+}) {
   const uid = useId();
   const btnRef = useRef(null);
   const menuRef = useRef(null);
@@ -25,6 +37,7 @@ export default function TableDropdown({ data = [], defaultFormat = [] }) {
   const [open, setOpen] = useState(false);
   const [selUrl, setSelUrl] = useState(initialUrl);
   const [active, setActive] = useState(0);
+  const [menuStyle, setMenuStyle] = useState(null);
 
   const selected = useMemo(
     () => options.find((o) => o?.url === selUrl) ?? options[0] ?? null,
@@ -44,6 +57,10 @@ export default function TableDropdown({ data = [], defaultFormat = [] }) {
 
   // Close on outside click
   useEffect(() => {
+    if (!open) setMenuStyle(null);
+  }, [open]);
+
+  useEffect(() => {
     function onDown(e) {
       if (!open) return;
       const t = e.target;
@@ -54,6 +71,64 @@ export default function TableDropdown({ data = [], defaultFormat = [] }) {
     window.addEventListener("pointerdown", onDown);
     return () => window.removeEventListener("pointerdown", onDown);
   }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open || !portalMenu) return;
+
+    function updatePosition() {
+      const rect = btnRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const gap = 8;
+      const viewportPad = 8;
+      const estimatedHeight = Math.min(
+        260,
+        Math.max(42, options.length * 31 + 8),
+      );
+      const availableBelow = window.innerHeight - rect.bottom - viewportPad;
+      const availableAbove = rect.top - viewportPad;
+      const opensUp =
+        availableBelow < estimatedHeight && availableAbove > availableBelow;
+      const maxHeight = Math.max(
+        42,
+        Math.min(
+          estimatedHeight,
+          opensUp ? availableAbove - gap : availableBelow - gap,
+        ),
+      );
+      const width = Math.min(
+        Math.max(rect.width, 156),
+        window.innerWidth - viewportPad * 2,
+      );
+      const left = Math.min(
+        Math.max(viewportPad, rect.left),
+        window.innerWidth - width - viewportPad,
+      );
+      const top = opensUp
+        ? Math.max(viewportPad, rect.top - maxHeight - gap)
+        : Math.min(
+            rect.bottom + gap,
+            window.innerHeight - maxHeight - viewportPad,
+          );
+
+      setMenuStyle({
+        position: "fixed",
+        top: `${top}px`,
+        left: `${left}px`,
+        minWidth: `${width}px`,
+        maxWidth: `calc(100vw - ${viewportPad * 2}px)`,
+        maxHeight: `${maxHeight}px`,
+      });
+    }
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open, options.length, portalMenu]);
 
   // When opening, set active to selected
   useEffect(() => {
@@ -140,8 +215,45 @@ export default function TableDropdown({ data = [], defaultFormat = [] }) {
 
   if (!options.length) return <span className={s.empty}>—</span>;
 
+  const menu = (
+    <div
+      ref={menuRef}
+      id={`menu-${uid}`}
+      role="listbox"
+      aria-label="Formats"
+      className={`${s.menu} ${portalMenu ? s.portalMenu : ""}`}
+      style={portalMenu && menuStyle ? menuStyle : undefined}
+      tabIndex={-1}
+      onKeyDown={onMenuKeyDown}
+    >
+      {options.map((o, idx) => {
+        const isSel = o?.url === selected?.url;
+        const isActive = idx === active;
+
+        return (
+          <button
+            key={optKey(o)}
+            type="button"
+            role="option"
+            aria-selected={isSel}
+            className={`${s.opt} ${isActive ? s.optActive : ""}`}
+            onMouseEnter={() => setActive(idx)}
+            onClick={() => choose(idx)}
+          >
+            <span className={s.optText}>{o?.format ?? "—"}</span>
+            {isSel && <Check className={s.check} strokeWidth={2} />}
+          </button>
+        );
+      })}
+    </div>
+  );
+
   return (
-    <div className={s.wrap}>
+    <div
+      className={s.wrap}
+      data-open={open ? "true" : undefined}
+      data-portal={portalMenu ? "true" : undefined}
+    >
       <button
         ref={btnRef}
         type="button"
@@ -183,37 +295,8 @@ export default function TableDropdown({ data = [], defaultFormat = [] }) {
         ) : null}
       </div>
 
-      {open && (
-        <div
-          ref={menuRef}
-          id={`menu-${uid}`}
-          role="listbox"
-          aria-label="Formats"
-          className={s.menu}
-          tabIndex={-1}
-          onKeyDown={onMenuKeyDown}
-        >
-          {options.map((o, idx) => {
-            const isSel = o?.url === selected?.url;
-            const isActive = idx === active;
-
-            return (
-              <button
-                key={optKey(o)}
-                type="button"
-                role="option"
-                aria-selected={isSel}
-                className={`${s.opt} ${isActive ? s.optActive : ""}`}
-                onMouseEnter={() => setActive(idx)}
-                onClick={() => choose(idx)}
-              >
-                <span className={s.optText}>{o?.format ?? "—"}</span>
-                {isSel && <Check className={s.check} strokeWidth={2} />}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {open &&
+        (portalMenu ? menuStyle && createPortal(menu, document.body) : menu)}
     </div>
   );
 }

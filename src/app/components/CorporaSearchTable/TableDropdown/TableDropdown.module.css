@@ -5,6 +5,16 @@
     position: relative;
 }
 
+.wrap[data-open="true"] {
+    z-index: 90;
+}
+
+.wrap[data-portal="true"] {
+    width: 100%;
+    max-width: 100%;
+    gap: 6px;
+}
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -27,6 +37,13 @@
     transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
+.wrap[data-portal="true"] .btn {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 6px;
+    padding: 0 8px;
+}
+
 .btn:hover {
     border-color: color-mix(in srgb, var(--link) 28%, var(--border));
     background: rgba(37, 99, 235, 0.05);
@@ -44,6 +61,10 @@
     white-space: nowrap;
 }
 
+.wrap[data-portal="true"] .btnText {
+    max-width: 100%;
+}
+
 .caret {
     opacity: 0.85;
     font-size: 0.85rem;
@@ -53,6 +74,10 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+}
+
+.wrap[data-portal="true"] .actions {
+    flex: 0 0 auto;
 }
 
 .iconBtn {
@@ -99,6 +124,10 @@
     background: var(--surface-strong);
     box-shadow: var(--shadow-sm);
     padding: 2px 3px;
+}
+
+.portalMenu {
+    z-index: 3000;
 }
 
 .opt {
