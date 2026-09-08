@@ -195,13 +195,16 @@ export default async function CorpusPage({ params }) {
       ? await callPythonReadData({ corpus, version: "latest" })
       : null;
     const smallResources = shouldUseSmallResources
-      ? buildSmallCorpusResources(resourceRows?.corpora ?? [])
+      ? buildSmallCorpusResources(resourceRows?.corpora ?? [], corpora)
       : [];
     const showSmallResources =
       smallResources.length > 0 &&
       smallResources.length <= SMALL_CORPUS_PAIR_LIMIT;
     const matrix = shouldPrepareMatrix
-      ? buildCorpusMatrix(resourceRows?.corpora ?? [], languages)
+      ? buildCorpusMatrix(resourceRows?.corpora ?? [], languages, {
+          statsRows: corpora,
+          summary: infoWithStats,
+        })
       : null;
     const showMatrix = Boolean(
       matrix?.languages?.length && matrix?.cells?.length,

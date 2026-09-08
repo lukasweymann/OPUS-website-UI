@@ -40,10 +40,23 @@ function escapeSelectorValue(value) {
 }
 
 const DOWNLOAD_HELP = {
-  bilingual:
-    "Download formats: moses = aligned plain text files; TMX = translation memories; XML = sentence alignments in XCES Align format.",
-  monolingual:
-    "Download formats: xml-raw = Basic XML-encoded corpus files; xml-tok = Tokenized XML-encoded corpus files; txt-raw = raw plain text files; txt-tok = tokenized plain text files.",
+  bilingual: {
+    title: "Download formats",
+    items: [
+      ["moses", "aligned plain text files"],
+      ["TMX", "translation memories"],
+      ["XML", "sentence alignments in XCES Align format"],
+    ],
+  },
+  monolingual: {
+    title: "Download formats",
+    items: [
+      ["xml-raw", "Basic XML-encoded corpus files"],
+      ["xml-tok", "Tokenized XML-encoded corpus files"],
+      ["txt-raw", "raw plain text files"],
+      ["txt-tok", "tokenized plain text files"],
+    ],
+  },
 };
 
 function DownloadHelp({ type = "bilingual" }) {
@@ -79,7 +92,8 @@ function DownloadHelp({ type = "bilingual" }) {
         Math.max(viewportPad, rect.left + rect.width / 2 - width / 2),
         window.innerWidth - width - viewportPad,
       );
-      const estimatedHeight = 126;
+      const help = DOWNLOAD_HELP[type] || DOWNLOAD_HELP.bilingual;
+      const estimatedHeight = 86 + help.items.length * 34;
       const top =
         rect.top > estimatedHeight + gap + viewportPad
           ? rect.top - estimatedHeight - gap
@@ -101,10 +115,11 @@ function DownloadHelp({ type = "bilingual" }) {
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
     };
-  }, [open]);
+  }, [open, type]);
 
+  const help = DOWNLOAD_HELP[type] || DOWNLOAD_HELP.bilingual;
   const tooltip = (
-    <span
+    <div
       className={`${s.tip} ${s.tipPortal}`}
       role="tooltip"
       style={tipStyle || undefined}
@@ -113,9 +128,17 @@ function DownloadHelp({ type = "bilingual" }) {
       onFocus={showTip}
       onBlur={hideTip}
     >
-      {DOWNLOAD_HELP[type]}{" "}
+      <p className={s.tipTitle}>{help.title}</p>
+      <ul className={s.tipList}>
+        {help.items.map(([name, description]) => (
+          <li key={name}>
+            <strong>{name}</strong>
+            <span>{description}</span>
+          </li>
+        ))}
+      </ul>
       <a href="/download-formats">More information</a>
-    </span>
+    </div>
   );
 
   return (
@@ -159,6 +182,7 @@ export default function CorpusMatrix({ corpus, matrix }) {
   const languages = Array.isArray(matrix?.languages) ? matrix.languages : [];
   const cells = Array.isArray(matrix?.cells) ? matrix.cells : [];
   const mono = matrix?.mono || {};
+  const summary = matrix?.summary || {};
   const maxSentences = Number(matrix?.maxSentences || 0);
   const isLargeMatrix = languages.length > 40;
 
@@ -237,6 +261,12 @@ export default function CorpusMatrix({ corpus, matrix }) {
 
   const selectedMonoDownloads = selectedMono ? mono[selectedMono] : null;
   const matrixHeight = `${(filteredLanguages.length + 1) * (isLargeMatrix ? 2.15 : 2.35)}rem`;
+  const languageCount = summary.languages || languages.length;
+  const bitextCount = summary.bitexts || cells.length;
+  const hasFilter = query.trim().length > 0;
+  const countLabel = hasFilter
+    ? `${filteredLanguages.length} shown, ${languageCount} languages, ${bitextCount} bitexts`
+    : `${languageCount} languages, ${bitextCount} bitexts`;
 
   return (
     <div className={s.panel}>
@@ -258,9 +288,7 @@ export default function CorpusMatrix({ corpus, matrix }) {
             aria-label="Filter languages"
           />
         </label>
-        <p className={s.count}>
-          {filteredLanguages.length} languages, {cells.length} pairs
-        </p>
+        <p className={s.count}>{countLabel}</p>
       </div>
 
       <div className={s.body} style={{ "--matrix-height": matrixHeight }}>

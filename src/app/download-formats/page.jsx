@@ -170,6 +170,8 @@ Corpus/xml/en-fr.xml.gz`}</CodeBlock>
             downloads contain two files whose lines are aligned with each
             other; empty alignments are excluded.
           </p>
+          <CodeBlock>{`Corpus.en-fr.en
+Corpus.en-fr.fr`}</CodeBlock>
           <div className={s.twoCol}>
             <div>
               <h3>txt-raw</h3>
@@ -180,8 +182,6 @@ Corpus/xml/en-fr.xml.gz`}</CodeBlock>
               <p>Tokenized plain text for a single language.</p>
             </div>
           </div>
-          <CodeBlock>{`Corpus.en-fr.en
-Corpus.en-fr.fr`}</CodeBlock>
         </section>
 
         <section className={s.section} aria-labelledby="tmx-title">

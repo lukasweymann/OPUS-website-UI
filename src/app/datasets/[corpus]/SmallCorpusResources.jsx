@@ -107,22 +107,77 @@ function compactNumber(value) {
   }).format(number);
 }
 
-function chooseStats(rows = []) {
+function statNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
+}
+
+function statsFromRow(row = {}) {
+  return {
+    sentences: statNumber(row.alignment_pairs),
+    sourceTokens: statNumber(row.source_tokens),
+    targetTokens: statNumber(row.target_tokens),
+  };
+}
+
+function hasUsableStats(stats = {}) {
+  return (
+    statNumber(stats.sentences) > 0 ||
+    statNumber(stats.sourceTokens) > 0 ||
+    statNumber(stats.targetTokens) > 0
+  );
+}
+
+function chooseStats(rows = [], authoritativeStats = null) {
+  if (hasUsableStats(authoritativeStats)) return authoritativeStats;
+
   const preferred =
-    rows.find((row) => row.preprocessing === "moses") ||
-    rows.find((row) => row.preprocessing === "xml") ||
+    rows.find(
+      (row) => row.preprocessing === "xml" && hasUsableStats(statsFromRow(row)),
+    ) ||
+    rows.find(
+      (row) =>
+        row.preprocessing === "moses" && hasUsableStats(statsFromRow(row)),
+    ) ||
+    rows.find((row) => hasUsableStats(statsFromRow(row))) ||
     rows[0] ||
     {};
 
-  return {
-    sentences: preferred.alignment_pairs,
-    sourceTokens: preferred.source_tokens,
-    targetTokens: preferred.target_tokens,
-  };
+  return statsFromRow(preferred);
 }
 
 function sumRows(rows = [], key) {
   return rows.reduce((total, row) => total + Number(row?.[key] || 0), 0);
+}
+
+function pairKey(source, target, version = "") {
+  return `${source}&${target}&${version}`;
+}
+
+function buildPairStatsLookup(rows = []) {
+  const lookup = new Map();
+
+  for (const row of rows) {
+    const source = String(row?.source || "");
+    const target = String(row?.target || "");
+    const version = String(row?.version || "");
+    if (!source || !target) continue;
+
+    const stats = statsFromRow(row);
+    if (!hasUsableStats(stats)) continue;
+
+    lookup.set(pairKey(source, target, version), stats);
+    lookup.set(pairKey(source, target), stats);
+  }
+
+  return lookup;
+}
+
+function getPairStats(lookup, source, target, version) {
+  return (
+    lookup.get(pairKey(source, target, version)) ||
+    lookup.get(pairKey(source, target))
+  );
 }
 
 function makePairTitle(source, target) {
@@ -163,9 +218,10 @@ function MonoFormats({ mono = {} }) {
   );
 }
 
-export function buildCorpusResources(rows = []) {
+export function buildCorpusResources(rows = [], statsRows = []) {
   const pairGroups = new Map();
   const monoGroups = new Map();
+  const pairStats = buildPairStatsLookup(statsRows);
 
   for (const row of rows) {
     const source = String(row?.source || "");
@@ -207,7 +263,10 @@ export function buildCorpusResources(rows = []) {
       ...pair,
       title: makePairTitle(pair.source, pair.target),
       sampleHref: `/datasets/${pair.corpus}/${pair.version}/${pair.source}&${pair.target}/sample`,
-      stats: chooseStats(pair.statsRows),
+      stats: chooseStats(
+        pair.statsRows,
+        getPairStats(pairStats, pair.source, pair.target, pair.version),
+      ),
       mono: {
         [pair.source]: monoGroups.get(pair.source) || [],
         [pair.target]: monoGroups.get(pair.target) || [],
@@ -216,12 +275,14 @@ export function buildCorpusResources(rows = []) {
     .sort((a, b) => a.title.localeCompare(b.title));
 }
 
-export function buildSmallCorpusResources(rows = []) {
-  return buildCorpusResources(rows);
+export function buildSmallCorpusResources(rows = [], statsRows = []) {
+  return buildCorpusResources(rows, statsRows);
 }
 
-export function buildCorpusMatrix(rows = [], languageCodes = []) {
-  const resources = buildCorpusResources(rows);
+export function buildCorpusMatrix(rows = [], languageCodes = [], options = {}) {
+  const statsRows = Array.isArray(options?.statsRows) ? options.statsRows : [];
+  const summary = options?.summary || {};
+  const resources = buildCorpusResources(rows, statsRows);
   const allowedLanguages = new Set(languageCodes.filter(Boolean).map(String));
   const hasLanguageFilter = allowedLanguages.size > 0;
   const matrixResources = resources.filter(
@@ -241,6 +302,8 @@ export function buildCorpusMatrix(rows = [], languageCodes = []) {
   const monoGroups = new Map();
 
   const monoRows = rows.filter((row) => row?.source && !row?.target);
+  const monoStatsRows = statsRows.filter((row) => row?.source && !row?.target);
+  const trustedMonoRows = monoStatsRows.length ? monoStatsRows : monoRows;
   for (const row of monoRows) {
     const source = String(row.source);
     if (hasLanguageFilter && !languageSet.has(source)) continue;
@@ -263,7 +326,9 @@ export function buildCorpusMatrix(rows = [], languageCodes = []) {
   const languages = Array.from(languageSet)
     .sort((a, b) => a.localeCompare(b))
     .map((code) => {
-      const monoForLanguage = monoRows.filter((row) => row.source === code);
+      const monoForLanguage = trustedMonoRows.filter(
+        (row) => row.source === code,
+      );
       return {
         code,
         label: labels.get(code) || code,
@@ -308,6 +373,10 @@ export function buildCorpusMatrix(rows = [], languageCodes = []) {
   return {
     languages,
     cells,
+    summary: {
+      languages: summary.number_of_languages || languages.length,
+      bitexts: summary.bitexts || cells.length,
+    },
     mono: Object.fromEntries(
       Array.from(monoGroups.entries()).map(([language, items]) => {
         const dropdownItems = toDropdownItems(items, "monolingual");

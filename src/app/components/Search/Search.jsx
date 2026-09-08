@@ -11,6 +11,8 @@ import { codeToLangTransformer, removeLanguage } from "../../../../hooks/hooks";
 import MiniSelect from "./MiniSelect/MiniSelect";
 import s from "./Search.module.css";
 
+const DATASET_PAIR_PENDING_EVENT = "opus:dataset-pair-pending";
+
 function normalizePair(a = "", b = "") {
   const src = String(a).replaceAll("=", "").trim();
   const trg = String(b).replaceAll("=", "").trim();
@@ -118,7 +120,13 @@ export default function Search({ mode, languageList, navbar, className = "" }) {
   function go() {
     if (!src || !trg) return;
     if (mode === "corpusPage") {
-      router.push(`/datasets/${corpus}?pair=${src}&${trg}`);
+      const pair = `${src}&${trg}`;
+      window.dispatchEvent(
+        new CustomEvent(DATASET_PAIR_PENDING_EVENT, {
+          detail: { corpus, pair },
+        }),
+      );
+      router.push(`/datasets/${corpus}?pair=${pair}`, { scroll: false });
     } else {
       router.push(`/corpora-search/${src}&${trg}`);
     }

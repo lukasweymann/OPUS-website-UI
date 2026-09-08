@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { load as yamlLoad } from "js-yaml";
+import { ArrowRight, FileArchive } from "lucide-react";
 
 import Banner from "./components/Banner/Banner";
 import Partners from "./components/Partners/Partners";
@@ -176,6 +177,15 @@ export default async function Home() {
                 <span>{biggestDatasetsPercentage.toFixed(2)}%</span> of the
                 entire <span>OPUS</span> collection
               </p>
+
+              <Link href="/download-formats" className={s.formatLink}>
+                <FileArchive size={17} strokeWidth={1.8} aria-hidden="true" />
+                <span>
+                  Download formats
+                  <small>XML, Moses, TMX, plain text, and frequency files</small>
+                </span>
+                <ArrowRight size={16} strokeWidth={1.8} aria-hidden="true" />
+              </Link>
             </div>
           </div>
           <SizesTable corpora={biggestDatasets} />

@@ -1,6 +1,8 @@
 .box {
     position: relative;
     z-index: 1;
+    width: 100%;
+    min-width: 0;
 }
 
 .box[data-open="true"] {
@@ -10,6 +12,7 @@
 /* Trigger button */
 .btn {
     width: 100%;
+    min-width: 0;
     height: 36px;
     padding: 0 10px;
 
@@ -36,6 +39,15 @@
 
     box-shadow: var(--shadow-sm);
     transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.label {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .btn:hover {
@@ -121,6 +133,7 @@
     font: inherit;
     font-size: 0.9rem;
     line-height: 1.2;
+    overflow-wrap: anywhere;
 
     transition: background-color 0.12s ease, color 0.12s ease;
 }

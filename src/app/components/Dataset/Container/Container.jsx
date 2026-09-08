@@ -11,7 +11,7 @@ import LoaderSpinner from "../../ui/LoaderSpinner/LoaderSpinner";
 
 import s from "./Container.module.css";
 
-const DOWNLOADS_LOADER_SIZE = 26;
+const DOWNLOADS_LOADER_SIZE = 42;
 const DATASET_PAIR_PENDING_EVENT = "opus:dataset-pair-pending";
 
 function parsePair(searchParams) {
@@ -250,12 +250,6 @@ export default function CorpusPageContainer({ version = "" }) {
       <div className={s.search}>
         <SearchWithSuspense mode="corpusPage" />
       </div>
-      {hasActivePair && loading && (
-        <p className={s.loadingMsg}>
-          <LoaderSpinner size={DOWNLOADS_LOADER_SIZE} decorative />
-          <span>Loading results…</span>
-        </p>
-      )}
       {tableError && (
         <p className={s.msgErr}>{err.table || "Could not load results."}</p>
       )}
@@ -263,6 +257,14 @@ export default function CorpusPageContainer({ version = "" }) {
         <p className={s.msg}>
           We’re sorry. No results were found for your search.
         </p>
+      )}
+      {hasActivePair && loading && (
+        <div className={s.loadingArea} role="status">
+          <p className={s.loadingMsg}>
+            <LoaderSpinner size={DOWNLOADS_LOADER_SIZE} decorative />
+            <span>Loading results…</span>
+          </p>
+        </div>
       )}
       {hasPair && hasRows && langPair && (
         <div className={s.res}>
@@ -276,15 +278,18 @@ export default function CorpusPageContainer({ version = "" }) {
             langPair={langPair}
             showAllVersionsByDefault
             softSurface
+            showTotals={false}
           />
         </div>
       )}
-      <p className={s.note}>
-        <span>A note on formats:</span> TMX files contain only unique
-        translation units. Moses downloads include all non-empty alignment units
-        including duplicates. Token counts for each language also include
-        duplicate sentences and documents.
-      </p>
+      {hasPair && hasRows && (
+        <p className={s.note}>
+          <span>A note on formats:</span> TMX files contain only unique
+          translation units. Moses downloads include all non-empty alignment
+          units including duplicates. Token counts for each language also
+          include duplicate sentences and documents.
+        </p>
+      )}
       {overlapMatchesPair && overlapData?.values && langPair && (
         <div className={s.graph}>
           <Overlaps values={overlapData.values} result={langPair} />

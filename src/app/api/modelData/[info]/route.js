@@ -8,6 +8,10 @@ function json(data, status = 200) {
   return NextResponse.json(data, { status });
 }
 
+function methodNotAllowed() {
+  return json({ error: "Method not allowed" }, 405);
+}
+
 function decodeParam(value = "") {
   try {
     return decodeURIComponent(value);
@@ -125,7 +129,7 @@ async function handler(_req, { params }) {
 }
 
 export const GET = handler;
-export const POST = handler;
-export const PUT = handler;
-export const PATCH = handler;
-export const DELETE = handler;
+export const POST = methodNotAllowed;
+export const PUT = methodNotAllowed;
+export const PATCH = methodNotAllowed;
+export const DELETE = methodNotAllowed;

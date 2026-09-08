@@ -1,10 +1,18 @@
 "use client";
 import { Suspense } from "react";
 
-import { useEffect, useMemo, useState, useCallback } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, Search, Share2, SquareX } from "lucide-react";
+import { Copy, Eye, Search, Share2, SquareX } from "lucide-react";
 import { toast } from "@/app/components/ui/Toast/toast";
 
 import dynamic from "next/dynamic";
@@ -22,6 +30,10 @@ import { codeToLangTransformer } from "../../../../hooks/hooks";
 import s from "./page.module.css";
 
 const METRICS = ["bleu", "spbleu", "chrf", "chrf++", "comet"];
+const METRIC_OPTIONS = METRICS.map((metric) => ({
+  label: metric.toUpperCase(),
+  value: metric,
+}));
 
 function qsGet(sp, k, fallback = "") {
   const v = sp.get(k);
@@ -35,6 +47,74 @@ function encModelPath(m = "") {
 function CompareModelsFallback() {
   // Keep it simple (or show skeleton UI)
   return <div style={{ padding: 16 }}>Loading filters…</div>;
+}
+
+function ModelNameTooltip({ value, children }) {
+  const [open, setOpen] = useState(false);
+  const [tipStyle, setTipStyle] = useState(null);
+  const anchorRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!open || !value) return;
+
+    function updatePosition() {
+      const rect = anchorRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const viewportPad = 10;
+      const gap = 8;
+      const width = Math.min(720, window.innerWidth - viewportPad * 2);
+      const left = Math.min(
+        Math.max(viewportPad, rect.left + rect.width / 2 - width / 2),
+        window.innerWidth - width - viewportPad,
+      );
+      const showAbove = rect.top > 112;
+      const top = showAbove
+        ? rect.top - gap
+        : Math.min(rect.bottom + gap, window.innerHeight - viewportPad);
+
+      setTipStyle({
+        position: "fixed",
+        top: `${top}px`,
+        left: `${left}px`,
+        width: `${width}px`,
+        transform: showAbove ? "translateY(-100%)" : "none",
+      });
+    }
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open, value]);
+
+  const tooltip =
+    open && value && tipStyle
+      ? createPortal(
+          <div className={s.modelTip} role="tooltip" style={tipStyle}>
+            <span>Selected model</span>
+            <code>{value}</code>
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <div
+      ref={anchorRef}
+      className={s.modelTipAnchor}
+      onPointerEnter={() => setOpen(Boolean(value))}
+      onPointerLeave={() => setOpen(false)}
+      onFocus={() => setOpen(Boolean(value))}
+      onBlur={() => setOpen(false)}
+    >
+      {children}
+      {tooltip}
+    </div>
+  );
 }
 
 function buildUrl({ src, trg, score, m1, m2 }) {
@@ -180,13 +260,19 @@ export default function CompareModelsClient({
   }, [src, trg, score, m1, m2]);
 
   // filter model options to avoid re-selecting already chosen ones
-  const modelOpts = useMemo(() => {
+  const modelOneOpts = useMemo(() => {
     if (!Array.isArray(models)) return [];
-    const banned = new Set([m1, m2].filter(Boolean));
     return models
-      .filter((x) => x?.model && !banned.has(x.model))
+      .filter((x) => x?.model && x.model !== m2)
       .map((x) => ({ label: x.model, value: x.model }));
-  }, [models, m1, m2]);
+  }, [models, m2]);
+
+  const modelTwoOpts = useMemo(() => {
+    if (!Array.isArray(models)) return [];
+    return models
+      .filter((x) => x?.model && x.model !== m1)
+      .map((x) => ({ label: x.model, value: x.model }));
+  }, [models, m1]);
 
   const goToPair = useCallback(
     (next) => {
@@ -212,12 +298,6 @@ export default function CompareModelsClient({
     goToPair({ src, trg, score, m1: "", m2: "" });
   };
 
-  function pickModel(model) {
-    if (!model) return;
-    if (!m1) return setM1(model);
-    if (!m2 && model !== m1) return setM2(model);
-  }
-
   // once both set locally, persist into URL (required, like dashboard)
   useEffect(() => {
     if (!src || !trg || !score) return;
@@ -239,6 +319,90 @@ export default function CompareModelsClient({
     }
   }
 
+  async function copyModelName(model) {
+    try {
+      await navigator.clipboard.writeText(model);
+      toast.success("Model name copied");
+    } catch {
+      toast.error("Could not copy model name");
+    }
+  }
+
+  function syncModelUrl(nextM1, nextM2) {
+    if (!src || !trg || !score) return;
+    router.replace(
+      buildUrl({ src, trg, score, m1: nextM1, m2: nextM2 }),
+      { scroll: false },
+    );
+  }
+
+  function chooseModelOne(model) {
+    setTable(null);
+    setAvg1("");
+    setAvg2("");
+    setAvgDiff("");
+    setM1(model);
+    syncModelUrl(model, m2);
+  }
+
+  function chooseModelTwo(model) {
+    setTable(null);
+    setAvg1("");
+    setAvg2("");
+    setAvgDiff("");
+    setM2(model);
+    syncModelUrl(m1, model);
+  }
+
+  function clearSelection() {
+    setM1("");
+    setM2("");
+    setTable(null);
+    setAvg1("");
+    setAvg2("");
+    setAvgDiff("");
+    goToPair({ src, trg, score, m1: "", m2: "" });
+  }
+
+  function ModelControl({ label, tone, value, options, onChange, onClear }) {
+    return (
+      <div className={s.groupWide}>
+        <div className={s.modelLabelRow}>
+          <label className={s.lbl}>{label}</label>
+          {value && (
+            <div className={s.modelActions}>
+              <button
+                type="button"
+                onClick={() => copyModelName(value)}
+                title={`Copy ${label.toLowerCase()} name`}
+                aria-label={`Copy ${label.toLowerCase()} name`}
+              >
+                <Copy size={14} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={onClear}
+                title={`Clear ${label.toLowerCase()}`}
+                aria-label={`Clear ${label.toLowerCase()}`}
+              >
+                <SquareX size={14} aria-hidden="true" />
+              </button>
+            </div>
+          )}
+        </div>
+        <ModelNameTooltip value={value}>
+          <MiniSelect
+            options={options}
+            value={value}
+            onChange={onChange}
+            placeholder={`Pick ${label.toLowerCase()}…`}
+            labelClassName={s[`${tone}Value`]}
+          />
+        </ModelNameTooltip>
+      </div>
+    );
+  }
+
   return (
     <Suspense fallback={<CompareModelsFallback />}>
       <main className={s.page}>
@@ -258,35 +422,8 @@ export default function CompareModelsClient({
           </section>
         )}
 
-        <section className={s.card}>
-          <header className={s.top}>
-            <div className={s.metrics}>
-              <span className={s.k}>Metric</span>
-              <div className={s.chips}>
-                {METRICS.map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    className={`${s.chip} ${score === m ? s.chipOn : ""}`}
-                    onClick={() => applyMetric(m)}
-                  >
-                    {m.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className={s.share}
-              onClick={copyShare}
-              aria-label="Copy share URL"
-            >
-              <Share2 size={18} />
-            </button>
-          </header>
-
-          <div className={s.row}>
+        <section className={`${s.card} ${s.controlPanel}`}>
+          <div className={s.commandRow}>
             <div className={s.group}>
               <label className={s.lbl}>Source language</label>
               <div className={s.sel}>
@@ -320,6 +457,18 @@ export default function CompareModelsClient({
               </div>
             </div>
 
+            <div className={`${s.group} ${s.metricGroup}`}>
+              <label className={s.lbl}>Metric</label>
+              <div className={s.metricSelect}>
+                <MiniSelect
+                  options={METRIC_OPTIONS}
+                  value={score}
+                  onChange={applyMetric}
+                  placeholder="Metric"
+                />
+              </div>
+            </div>
+
             <button
               type="button"
               className={s.go}
@@ -328,6 +477,65 @@ export default function CompareModelsClient({
             >
               <Search size={18} />
             </button>
+
+            <button
+              type="button"
+              className={s.share}
+              onClick={copyShare}
+              aria-label="Copy share URL"
+            >
+              <Share2 size={18} />
+            </button>
+          </div>
+
+          <div className={s.modelBlock}>
+            <header className={s.sectionHead}>
+              <h1 className={s.h1}>Models to compare</h1>
+              {(m1 || m2) && (
+                <button
+                  type="button"
+                  className={s.clearSelection}
+                  onClick={clearSelection}
+                >
+                  Clear selection <SquareX size={17} aria-hidden="true" />
+                </button>
+              )}
+            </header>
+
+            {models === null && (
+              <DashboardLoader message={"Searching for models..."} />
+            )}
+
+            {models === "notfound" && (
+              <div className={s.msg}>
+                <div className={s.divider} />
+                <h2 className={s.h2}>
+                  We&apos;re sorry, no models found for this language pair.
+                </h2>
+                <div className={s.divider} />
+              </div>
+            )}
+
+            {Array.isArray(models) && (
+              <div className={`${s.row} ${s.modelPickerRow}`}>
+                <ModelControl
+                  label="Model 1"
+                  tone="m1"
+                  value={m1}
+                  options={modelOneOpts}
+                  onChange={chooseModelOne}
+                  onClear={() => chooseModelOne("")}
+                />
+                <ModelControl
+                  label="Model 2"
+                  tone="m2"
+                  value={m2}
+                  options={modelTwoOpts}
+                  onChange={chooseModelTwo}
+                  onClear={() => chooseModelTwo("")}
+                />
+              </div>
+            )}
           </div>
         </section>
 
@@ -344,89 +552,6 @@ export default function CompareModelsClient({
           </section>
         )}
 
-        <section className={s.card}>
-          <h1 className={s.h1}>Select two models to compare</h1>
-
-          {models === null && (
-            <DashboardLoader message={"Searching for models..."} />
-          )}
-
-          {models === "notfound" && (
-            <div className={s.msg}>
-              <div className={s.divider} />
-              <h2 className={s.h2}>
-                We&apos;re sorry, no models found for this language pair.
-              </h2>
-              <div className={s.divider} />
-            </div>
-          )}
-
-          {Array.isArray(models) && (
-            <>
-              <div className={s.row}>
-                <div className={s.groupWide}>
-                  <label className={s.lbl}>Model 1</label>
-                  <MiniSelect
-                    options={modelOpts}
-                    value={m1}
-                    onChange={(v) => pickModel(v)}
-                    placeholder="Pick first model…"
-                    disabled={Boolean(m1)}
-                  />
-                  {m1 && (
-                    <button
-                      type="button"
-                      className={s.clear}
-                      onClick={() => setM1("")}
-                      aria-label="Clear model 1"
-                    >
-                      <SquareX size={18} />
-                    </button>
-                  )}
-                </div>
-
-                <div className={s.groupWide}>
-                  <label className={s.lbl}>Model 2</label>
-                  <MiniSelect
-                    options={modelOpts}
-                    value={m2}
-                    onChange={(v) => pickModel(v)}
-                    placeholder="Pick second model…"
-                    disabled={Boolean(m2)}
-                  />
-                  {m2 && (
-                    <button
-                      type="button"
-                      className={s.clear}
-                      onClick={() => setM2("")}
-                      aria-label="Clear model 2"
-                    >
-                      <SquareX size={18} />
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {(m1 || m2) && (
-                <div className={s.picks}>
-                  {m1 && (
-                    <div className={s.pick}>
-                      <span className={s.m1}>Model 1</span>
-                      <span className={s.pickTxt}>{m1}</span>
-                    </div>
-                  )}
-                  {m2 && (
-                    <div className={s.pick}>
-                      <span className={s.m2}>Model 2</span>
-                      <span className={s.pickTxt}>{m2}</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </>
-          )}
-        </section>
-
         {table === "loading" && (
           <DashboardLoader message={"Retrieving scores..."} />
         )}
@@ -435,23 +560,17 @@ export default function CompareModelsClient({
           <>
             <section className={s.card}>
               <header className={s.head2}>
-                <div className={s.titles}>
-                  <p className={s.t}>
-                    Model 1:{" "}
-                    <span className={`${s.m1} ${s.modelName}`}>{m1}</span>
-                  </p>
-                  <p className={s.t}>
-                    Model 2:{" "}
-                    <span className={`${s.m2} ${s.modelName}`}>{m2}</span>
-                  </p>
+                <div>
+                  <p className={s.k}>Comparison</p>
+                  <h2 className={s.h2}>Scores by benchmark</h2>
                 </div>
 
                 <button
                   type="button"
                   className={s.close}
-                  onClick={() => goToPair({ src, trg, score, m1: "", m2: "" })}
+                  onClick={clearSelection}
                 >
-                  Close selection <SquareX size={18} />
+                  Clear selection <SquareX size={18} />
                 </button>
               </header>
 

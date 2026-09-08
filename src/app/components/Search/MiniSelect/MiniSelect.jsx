@@ -10,6 +10,7 @@ export default function MiniSelect({
   onChange,
   placeholder = "Select…",
   disabled = false,
+  labelClassName = "",
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
@@ -155,7 +156,11 @@ export default function MiniSelect({
         autoComplete="off"
         ref={btnRef}
       >
-        {selectedLabel || placeholder}
+        <span
+          className={`${ms.label} ${selectedLabel ? labelClassName : ""}`}
+        >
+          {selectedLabel || placeholder}
+        </span>
         <span className={ms.caret} aria-hidden>
           ▾
         </span>

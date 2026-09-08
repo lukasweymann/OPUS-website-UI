@@ -60,6 +60,15 @@
     line-height: 1.25;
 }
 
+.loadingArea {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    min-height: clamp(150px, 22vw, 220px);
+    display: grid;
+    place-items: center;
+}
+
 .note {
     margin-top: 14px;
     line-height: 1.55;
@@ -80,11 +89,12 @@
 }
 
 .loadingMsg {
-    margin-top: 14px;
+    margin: 0;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
+    gap: 12px;
+    font-size: 1.04rem;
+    font-weight: 850;
     color: var(--text-main);
 }
 

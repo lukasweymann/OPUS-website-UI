@@ -161,10 +161,23 @@ function makeLookup(cells = []) {
 }
 
 const DOWNLOAD_HELP = {
-  bilingual:
-    "Download formats: moses = aligned plain text files; TMX = translation memories; XML = sentence alignments in XCES Align format.",
-  monolingual:
-    "Download formats: xml-raw = Basic XML-encoded corpus files; xml-tok = Tokenized XML-encoded corpus files; txt-raw = raw plain text files; txt-tok = tokenized plain text files.",
+  bilingual: {
+    title: "Download formats",
+    items: [
+      ["moses", "aligned plain text files"],
+      ["TMX", "translation memories"],
+      ["XML", "sentence alignments in XCES Align format"],
+    ],
+  },
+  monolingual: {
+    title: "Download formats",
+    items: [
+      ["xml-raw", "Basic XML-encoded corpus files"],
+      ["xml-tok", "Tokenized XML-encoded corpus files"],
+      ["txt-raw", "raw plain text files"],
+      ["txt-tok", "tokenized plain text files"],
+    ],
+  },
 };
 
 function DownloadHelp({ type = "bilingual" }) {
@@ -200,7 +213,8 @@ function DownloadHelp({ type = "bilingual" }) {
         Math.max(viewportPad, rect.left + rect.width / 2 - width / 2),
         window.innerWidth - width - viewportPad,
       );
-      const estimatedHeight = 126;
+      const help = DOWNLOAD_HELP[type] || DOWNLOAD_HELP.bilingual;
+      const estimatedHeight = 86 + help.items.length * 34;
       const top =
         rect.top > estimatedHeight + gap + viewportPad
           ? rect.top - estimatedHeight - gap
@@ -222,10 +236,11 @@ function DownloadHelp({ type = "bilingual" }) {
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
     };
-  }, [open]);
+  }, [open, type]);
 
+  const help = DOWNLOAD_HELP[type] || DOWNLOAD_HELP.bilingual;
   const tooltip = (
-    <span
+    <div
       className={`${s.tip} ${s.tipPortal}`}
       role="tooltip"
       style={tipStyle || undefined}
@@ -234,9 +249,17 @@ function DownloadHelp({ type = "bilingual" }) {
       onFocus={showTip}
       onBlur={hideTip}
     >
-      {DOWNLOAD_HELP[type]}{" "}
+      <p className={s.tipTitle}>{help.title}</p>
+      <ul className={s.tipList}>
+        {help.items.map(([name, description]) => (
+          <li key={name}>
+            <strong>{name}</strong>
+            <span>{description}</span>
+          </li>
+        ))}
+      </ul>
       <a href="/download-formats">More information</a>
-    </span>
+    </div>
   );
 
   return (

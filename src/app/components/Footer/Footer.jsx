@@ -139,7 +139,7 @@ export default function Footer() {
         <aside className={s.meta}>
           <a
             className={s.legacy}
-            href="https://opus.nlpl.eu/legacy"
+            href="https://opus.nlpl.eu/legacy/"
             target="_blank"
             rel="noreferrer"
           >

@@ -121,7 +121,7 @@ const SITE_FOOTER = `
         </section>
       </div>
       <aside class="api-docs-footer-meta">
-        <a href="https://opus.nlpl.eu/legacy" target="_blank" rel="noreferrer">Opus Legacy</a>
+        <a href="https://opus.nlpl.eu/legacy/" target="_blank" rel="noreferrer">Opus Legacy</a>
       </aside>
     </div>
   </footer>
