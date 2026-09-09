@@ -105,7 +105,8 @@
 }
 
 .cta,
-.legacy {
+.legacy,
+.github {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -137,8 +138,14 @@
     border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
 }
 
+.github {
+    color: color-mix(in srgb, var(--text-main) 86%, var(--link));
+    background: color-mix(in srgb, var(--surface-strong) 92%, var(--link));
+}
+
 .cta:hover,
-.legacy:hover {
+.legacy:hover,
+.github:hover {
     color: var(--link-hover);
     border-color: color-mix(in srgb, var(--link) 28%, var(--border));
 }

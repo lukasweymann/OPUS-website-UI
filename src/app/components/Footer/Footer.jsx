@@ -27,11 +27,11 @@ export default function Footer() {
               </a>
               <a
                 className={s.link}
-                href="https://github.com/Helsinki-NLP/Opus-MT"
+                href="https://github.com/Helsinki-NLP/OpusDistillery"
                 target="_blank"
                 rel="noreferrer"
               >
-                Opus-MT
+                OPUS Distillery
               </a>
             </nav>
           </section>
@@ -77,7 +77,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
               >
-                OpusTranslate
+                OpusTranslate MobileApp
               </a>
               <a
                 className={s.link}
@@ -85,11 +85,11 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
               >
-                OPUS-MT-app
+                OpusTranslate DesktopApp
               </a>
               <a
                 className={s.link}
-                href="https://github.com/Helsinki-NLP/OPUS-CAT"
+                href="https://helsinki-nlp.github.io/OPUS-CAT/"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -110,6 +110,14 @@ export default function Footer() {
             rel="noreferrer"
           >
             Opus Legacy
+          </a>
+          <a
+            className={s.github}
+            href="https://github.com/Helsinki-NLP/OPUS"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
           </a>
         </aside>
       </div>
