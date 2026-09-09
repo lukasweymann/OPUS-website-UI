@@ -99,9 +99,9 @@
 }
 
 .formatLink small {
-    color: var(--text-muted);
-    font-size: 0.78rem;
-    line-height: 1.4;
+    color: color-mix(in srgb, var(--text-main) 58%, var(--text-muted));
+    font-size: var(--text-small);
+    line-height: 1.45;
     font-weight: 500;
 }
 
@@ -109,8 +109,8 @@
     margin-top: 10px;
     text-transform: none;
     letter-spacing: normal;
-    font-size: 0.95rem;
-    color: var(--text-muted);
+    font-size: 0.98rem;
+    color: color-mix(in srgb, var(--text-main) 62%, var(--text-muted));
 }
 
 .note span {

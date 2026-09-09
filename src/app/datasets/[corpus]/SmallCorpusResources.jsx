@@ -113,14 +113,18 @@ function statNumber(value) {
 }
 
 function statsFromRow(row = {}) {
+  const safeRow = row || {};
+
   return {
-    sentences: statNumber(row.alignment_pairs),
-    sourceTokens: statNumber(row.source_tokens),
-    targetTokens: statNumber(row.target_tokens),
+    sentences: statNumber(safeRow.alignment_pairs),
+    sourceTokens: statNumber(safeRow.source_tokens),
+    targetTokens: statNumber(safeRow.target_tokens),
   };
 }
 
 function hasUsableStats(stats = {}) {
+  if (!stats) return false;
+
   return (
     statNumber(stats.sentences) > 0 ||
     statNumber(stats.sourceTokens) > 0 ||

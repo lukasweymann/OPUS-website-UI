@@ -192,7 +192,7 @@ export default async function Home() {
         </section>
 
         <section className={s.partners}>
-          <h2>Our contributors</h2>
+          <h2>Funding and Support</h2>
           <Partners />
         </section>
       </div>

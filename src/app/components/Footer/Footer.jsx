@@ -1,4 +1,3 @@
-import Link from "next/link";
 import s from "./Footer.module.css";
 
 export default function Footer() {
@@ -7,46 +6,20 @@ export default function Footer() {
       <div className={s.inner}>
         <div className={s.cols}>
           <section className={s.col}>
-            <Link href="/OPUS-Tools" className={s.headLink}>
-              <h3 className={s.h3}>Tools & Info</h3>
-            </Link>
+            <h3 className={s.h3}>Tools</h3>
 
-            <nav className={s.nav} aria-label="Tools and info">
+            <nav className={s.nav} aria-label="Tools">
               <a
                 className={s.link}
-                href="https://opus.nlpl.eu/opusapi/"
+                href="https://pypi.org/project/opustools/"
                 target="_blank"
                 rel="noreferrer"
               >
-                Opus API
+                Opus Tools
               </a>
               <a
                 className={s.link}
-                href="https://github.com/hplt-project/OpusTrainer"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className={s.mono}>Opus</span> Trainer
-              </a>
-              <a
-                className={s.link}
-                href="https://github.com/hplt-project/OpusCleaner"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className={s.mono}>Opus</span> Cleaner
-              </a>
-              <a
-                className={s.link}
-                href="https://opus.nlpl.eu/legacy/lex.php"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className={s.mono}>Opus</span> Wordalign
-              </a>
-              <a
-                className={s.link}
-                href="https://github.com/Helsinki-NLP/OpusFilter"
+                href="https://pypi.org/project/opusfilter/"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -54,28 +27,19 @@ export default function Footer() {
               </a>
               <a
                 className={s.link}
-                href="https://github.com/Helsinki-NLP/OPUS-translator"
+                href="https://github.com/Helsinki-NLP/Opus-MT"
                 target="_blank"
                 rel="noreferrer"
               >
-                Opus Translator
+                Opus-MT
               </a>
-
-              <div className={s.social}>
-                <a
-                  className={`${s.link} ${s.pill}`}
-                  href="https://github.com/Helsinki-NLP/OPUS"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GitHub
-                </a>
-              </div>
             </nav>
           </section>
 
           <section className={s.col}>
-            <nav className={s.nav} aria-label="More tools">
+            <h3 className={s.h3}>Query</h3>
+
+            <nav className={s.nav} aria-label="Query tools">
               <a
                 className={s.link}
                 href="https://opus.nlpl.eu/bin/opuscqp.pl"
@@ -86,57 +50,59 @@ export default function Footer() {
               </a>
               <a
                 className={s.link}
-                href="https://github.com/Helsinki-NLP/OpusTools"
+                href="https://opus.nlpl.eu/legacy/lex.php"
                 target="_blank"
                 rel="noreferrer"
               >
-                Opus Tools (Python Package)
+                Opus Wordalign
               </a>
               <a
                 className={s.link}
-                href="https://github.com/Helsinki-NLP/OpusTools-perl"
+                href="https://opus.nlpl.eu/explore/"
                 target="_blank"
                 rel="noreferrer"
               >
-                Opus Tools (Perl Package)
+                Opus Explorer
               </a>
-              <a
-                className={s.link}
-                href="https://github.com/thammegowda/mtdata"
-                target="_blank"
-                rel="noreferrer"
-              >
-                MT-Data
-              </a>
-              <a
-                className={s.link}
-                href="https://github.com/robertostling/eflomal"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Eflomal Word Aligner
-              </a>
+            </nav>
+          </section>
 
-              <Link href="/contact" className={s.cta}>
-                Contribute to OPUS
-              </Link>
+          <section className={s.col}>
+            <h3 className={s.h3}>Translation</h3>
 
-              <p className={s.note}>
-                Icons by{" "}
-                <a
-                  className={s.link}
-                  href="https://lucide.dev/license"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Lucide
-                </a>
-              </p>
+            <nav className={s.nav} aria-label="Translation tools">
+              <a
+                className={s.link}
+                href="https://github.com/Helsinki-NLP/OpusTranslate"
+                target="_blank"
+                rel="noreferrer"
+              >
+                OpusTranslate
+              </a>
+              <a
+                className={s.link}
+                href="https://github.com/Helsinki-NLP/OPUS-MT-app"
+                target="_blank"
+                rel="noreferrer"
+              >
+                OPUS-MT-app
+              </a>
+              <a
+                className={s.link}
+                href="https://github.com/Helsinki-NLP/OPUS-CAT"
+                target="_blank"
+                rel="noreferrer"
+              >
+                OPUS-CAT
+              </a>
             </nav>
           </section>
         </div>
 
         <aside className={s.meta}>
+          <a className={s.cta} href="/contact">
+            Contribute to OPUS
+          </a>
           <a
             className={s.legacy}
             href="https://opus.nlpl.eu/legacy/"
