@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Eye, Search } from "lucide-react";
+import { Eye } from "lucide-react";
 
 import TableDropdown from "@/app/components/CorporaSearchTable/TableDropdown/TableDropdown";
 import s from "./CorpusMatrix.module.css";
@@ -172,7 +172,6 @@ function DownloadTitle({ children, type = "bilingual" }) {
 }
 
 export default function CorpusMatrix({ corpus, matrix }) {
-  const [query, setQuery] = useState("");
   const [selectedKey, setSelectedKey] = useState(matrix?.cells?.[0]?.key ?? "");
   const [selectedMono, setSelectedMono] = useState("");
   const tableRef = useRef(null);
@@ -191,17 +190,6 @@ export default function CorpusMatrix({ corpus, matrix }) {
     () => cells.find((cell) => cell.key === selectedKey) || cells[0] || null,
     [cells, selectedKey],
   );
-
-  const filteredLanguages = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return languages;
-
-    return languages.filter(
-      (language) =>
-        language.code.toLowerCase().includes(needle) ||
-        language.label.toLowerCase().includes(needle),
-    );
-  }, [languages, query]);
 
   if (!languages.length || !cells.length) return null;
 
@@ -260,13 +248,9 @@ export default function CorpusMatrix({ corpus, matrix }) {
   }
 
   const selectedMonoDownloads = selectedMono ? mono[selectedMono] : null;
-  const matrixHeight = `${(filteredLanguages.length + 1) * (isLargeMatrix ? 2.15 : 2.35)}rem`;
+  const matrixHeight = `${(languages.length + 1) * (isLargeMatrix ? 2.15 : 2.35)}rem`;
   const languageCount = summary.languages || languages.length;
   const bitextCount = summary.bitexts || cells.length;
-  const hasFilter = query.trim().length > 0;
-  const countLabel = hasFilter
-    ? `${filteredLanguages.length} shown, ${languageCount} languages, ${bitextCount} bitexts`
-    : `${languageCount} languages, ${bitextCount} bitexts`;
 
   return (
     <div className={s.panel}>
@@ -278,17 +262,9 @@ export default function CorpusMatrix({ corpus, matrix }) {
             Click a bilingual cell or a language diagonal to show downloads.
           </p>
         </div>
-        <label className={s.search}>
-          <Search size={15} aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter languages..."
-            aria-label="Filter languages"
-          />
-        </label>
-        <p className={s.count}>{countLabel}</p>
+        <p className={s.count}>
+          {languageCount} languages, {bitextCount} bitexts
+        </p>
       </div>
 
       <div className={s.body} style={{ "--matrix-height": matrixHeight }}>
@@ -308,7 +284,7 @@ export default function CorpusMatrix({ corpus, matrix }) {
             <thead>
               <tr>
                 <th className={s.corner}>lang</th>
-                {filteredLanguages.map((language) => (
+                {languages.map((language) => (
                   <th
                     key={language.code}
                     title={language.label}
@@ -320,12 +296,12 @@ export default function CorpusMatrix({ corpus, matrix }) {
               </tr>
             </thead>
             <tbody>
-              {filteredLanguages.map((row) => (
+              {languages.map((row) => (
                 <tr key={row.code}>
                   <th title={row.label} data-row-code={row.code}>
                     {row.code}
                   </th>
-                  {filteredLanguages.map((column) => {
+                  {languages.map((column) => {
                     const isMono = row.code === column.code;
                     const cell = lookup.get(`${row.code}::${column.code}`);
                     const hasMono = Boolean(mono[row.code]?.items?.length);

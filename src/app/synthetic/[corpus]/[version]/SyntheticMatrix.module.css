@@ -12,7 +12,7 @@
 
 .toolbar {
     display: grid;
-    grid-template-columns: minmax(180px, 1fr) minmax(220px, 340px) auto;
+    grid-template-columns: minmax(180px, 1fr) auto;
     align-items: center;
     gap: 14px;
     padding: 12px clamp(14px, 2vw, 20px);
@@ -46,34 +46,6 @@
     color: var(--text-muted);
     font-size: 0.86rem;
     line-height: 1.45;
-}
-
-.search {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    min-height: 34px;
-    padding: 0 11px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    background: var(--bg);
-    color: var(--text-muted);
-}
-
-.search input {
-    width: 100%;
-    min-width: 0;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: var(--text-main);
-    font: inherit;
-    font-size: 0.9rem;
-}
-
-.search input::placeholder {
-    color: var(--text-muted);
 }
 
 .count {

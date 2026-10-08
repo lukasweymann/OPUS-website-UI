@@ -155,15 +155,6 @@ export default function Navbar() {
       {/* Desktop navigation */}
       <div className={styles.actions} ref={groupsRef}>
         <ThemeToggle />
-        <Link
-          href="/contact"
-          className={`${styles.contributeLink} ${
-            isActiveHref("/contact") ? styles.contributeLinkActive : ""
-          }`}
-          aria-current={isActiveHref("/contact") ? "page" : undefined}
-        >
-          Contribute
-        </Link>
         {DESKTOP_NAV_GROUPS.map(({ key, label, Icon, links }) => {
           const isExplore = key === "explore";
           return (
@@ -252,16 +243,6 @@ export default function Navbar() {
         className={`${styles.menu} ${isOpen ? styles.menuOpen : ""}`}
       >
         <ThemeToggle />
-        <Link
-          href="/contact"
-          className={`${styles.mobileContribute} ${
-            isActiveHref("/contact") ? styles.mobileContributeActive : ""
-          }`}
-          aria-current={isActiveHref("/contact") ? "page" : undefined}
-          onClick={closeMenu}
-        >
-          Contribute
-        </Link>
         {NAV_GROUPS.map(({ key, label, Icon, links }) => (
           <div className={styles.mobileGroup} key={key}>
             <button

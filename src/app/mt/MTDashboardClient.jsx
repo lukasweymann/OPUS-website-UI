@@ -106,9 +106,9 @@ export default function MTDashboardClient({ sourceData, targetData }) {
     modelParam,
     signal,
   ) {
-    const url = `/api/dashboardStats/${originParam}&${targetParam}&${scoreParam}&${benchmarkParam}&${encodeURIComponent(
-      modelParam,
-    )}`;
+    // Keep encoded slashes inside the model path segment through the proxy.
+    const encodedModel = encodeURIComponent(encodeURIComponent(modelParam));
+    const url = `/api/dashboardStats/${originParam}&${targetParam}&${scoreParam}&${benchmarkParam}&${encodedModel}`;
 
     try {
       const res = await fetch(url, { cache: "no-store", signal });

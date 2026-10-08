@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Eye, Search } from "lucide-react";
+import { Eye } from "lucide-react";
 
 import SyntheticDropdown from "@/app/components/Synthetic/Dropdown/Dropdown";
 import s from "./SyntheticMatrix.module.css";
@@ -293,7 +293,6 @@ function DownloadTitle({ children, type = "bilingual" }) {
 }
 
 export default function SyntheticMatrix({ rows = [] }) {
-  const [query, setQuery] = useState("");
   const [selectedKey, setSelectedKey] = useState("");
   const [selectedMono, setSelectedMono] = useState("");
   const tableRef = useRef(null);
@@ -309,12 +308,6 @@ export default function SyntheticMatrix({ rows = [] }) {
     () => cells.find((cell) => cell.key === selectedKey) || cells[0] || null,
     [cells, selectedKey],
   );
-
-  const filteredLanguages = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return languages;
-    return languages.filter((code) => code.toLowerCase().includes(needle));
-  }, [languages, query]);
 
   if (!languages.length || !cells.length) return null;
 
@@ -373,7 +366,7 @@ export default function SyntheticMatrix({ rows = [] }) {
   }
 
   const selectedMonoDownloads = selectedMono ? mono[selectedMono] : null;
-  const matrixHeight = `${(filteredLanguages.length + 1) * (isLargeMatrix ? 2.15 : 2.35)}rem`;
+  const matrixHeight = `${(languages.length + 1) * (isLargeMatrix ? 2.15 : 2.35)}rem`;
 
   return (
     <div className={s.panel}>
@@ -385,18 +378,8 @@ export default function SyntheticMatrix({ rows = [] }) {
             Click a bilingual cell or a language diagonal to show downloads.
           </p>
         </div>
-        <label className={s.search}>
-          <Search size={15} aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter languages..."
-            aria-label="Filter languages"
-          />
-        </label>
         <p className={s.count}>
-          {filteredLanguages.length} languages, {cells.length} pairs
+          {languages.length} languages, {cells.length} pairs
         </p>
       </div>
 
@@ -417,7 +400,7 @@ export default function SyntheticMatrix({ rows = [] }) {
             <thead>
               <tr>
                 <th className={s.corner}>lang</th>
-                {filteredLanguages.map((language) => (
+                {languages.map((language) => (
                   <th key={language} title={language} data-col-code={language}>
                     {language}
                   </th>
@@ -425,12 +408,12 @@ export default function SyntheticMatrix({ rows = [] }) {
               </tr>
             </thead>
             <tbody>
-              {filteredLanguages.map((row) => (
+              {languages.map((row) => (
                 <tr key={row}>
                   <th title={row} data-row-code={row}>
                     {row}
                   </th>
-                  {filteredLanguages.map((column) => {
+                  {languages.map((column) => {
                     const isMono = row === column;
                     const cell = lookup.get(`${row}::${column}`);
                     const hasMono = Boolean(mono[row]?.length);

@@ -8,9 +8,7 @@
 
     color: var(--text-main);
     background: radial-gradient(circle at top left, var(--bg-grad-a), var(--bg));
-    border: 1px solid var(--border);
-    border-left: 0;
-    border-right: 0;
+    border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
 }
 
