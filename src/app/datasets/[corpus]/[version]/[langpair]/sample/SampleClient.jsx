@@ -70,7 +70,7 @@ export default function SampleClient({
   const backHref =
     mode === "synth"
       ? `/synthetic/${corpus}/${version}`
-      : `/datasets/${corpus}?pair=${String(langpair).replaceAll("-", "_")}`;
+      : `/datasets/${encodeURIComponent(corpus)}/${encodeURIComponent(version)}?pair=${String(langpair).replaceAll("-", "_")}`;
 
   return (
     <main className={s.wrap}>

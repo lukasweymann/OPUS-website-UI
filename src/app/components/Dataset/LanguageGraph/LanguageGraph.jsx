@@ -156,7 +156,7 @@ function LangTooltip({ active, payload, label }) {
   );
 }
 
-export default function LanguageGraphs({ graphValues = [] }) {
+export default function LanguageGraphs({ graphValues = [], version = "latest", pagePath }) {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -292,7 +292,7 @@ export default function LanguageGraphs({ graphValues = [] }) {
           corpus,
         )}&source=${encodeURIComponent(
           source,
-        )}&preprocessing=xml&version=latest`;
+        )}&preprocessing=xml&version=${encodeURIComponent(version)}`;
 
         const res = await fetch(url, { method: "GET" });
         if (!res.ok) throw new Error(`opusapi failed: ${res.status}`);
@@ -308,7 +308,7 @@ export default function LanguageGraphs({ graphValues = [] }) {
         setStatus("error");
       }
     },
-    [corpus],
+    [corpus, version],
   );
 
   const onLangBarClick = useCallback(
@@ -388,9 +388,9 @@ export default function LanguageGraphs({ graphValues = [] }) {
           detail: { corpus, pair },
         }),
       );
-      router.push(`/datasets/${corpus}?pair=${pair}`, { scroll: false });
+      router.push(`${pagePath}?pair=${pair}`, { scroll: false });
     },
-    [router, corpus, searchKey],
+    [router, corpus, pagePath, searchKey],
   );
 
   const currentLangLabel =

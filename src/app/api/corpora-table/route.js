@@ -26,11 +26,13 @@ export async function GET(req) {
         const dataset = searchParams.get("dataset");
         const source = searchParams.get("source");
         const target = searchParams.get("target");
+        const version = searchParams.get("version");
 
         const corporaResponse = await callPythonReadData({
             corpus: dataset,
             source: source,
             target: target,
+            ...(version ? { version } : {}),
         });
 
         const items = Array.isArray(corporaResponse?.corpora)
@@ -85,6 +87,7 @@ export async function GET(req) {
             result.push({
                 corpus: rep.corpus,
                 version: rep.version,
+                latest: rep.latest,
                 src: rep.source,
                 trg: rep.target,
                 defaultFormat,
@@ -98,11 +101,8 @@ export async function GET(req) {
             });
         }
 
-        // 3) Keep the same downstream behavior: prefer "moses"; fallback to "xml"
-        const mosesRows = result.filter((el) => el.format === "moses");
-        const cleanTableData = mosesRows.length
-            ? mosesRows
-            : result.filter((el) => el.format === "xml");
+        // Each release with a bilingual download gets its own result row.
+        const cleanTableData = result.filter((el) => el.bilingualFormats.length > 0);
 
         return NextResponse.json(cleanTableData, { status: 200 });
     } catch (err) {

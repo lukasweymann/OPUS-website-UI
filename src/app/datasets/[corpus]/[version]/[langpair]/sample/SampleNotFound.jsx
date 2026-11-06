@@ -21,7 +21,7 @@ export default function SampleNotFound({ corpus, langpair, version, mode }) {
   const backHref =
     mode === "synth"
       ? `/synthetic/${encodeURIComponent(corpus)}/${version}`
-      : `/datasets/${encodeURIComponent(corpus)}`;
+      : `/datasets/${encodeURIComponent(corpus)}/${encodeURIComponent(version)}`;
 
   const languagePairFormatted = languagePairName(splitLangpair(langpair));
 

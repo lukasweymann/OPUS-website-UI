@@ -120,9 +120,9 @@ corpus_manifest() {
   run_dbtools /bin/bash -lc '
     set -euo pipefail
     export OPUSAPI_DB="/data/opus/$1"
-    json=$(/opt/pyenv/bin/python python_tools/readdata.py "{\"corpora\":\"True\"}")
-    count=$(printf "%s" "$json" | jq -r ".corpora | length")
-    hash=$(printf "%s" "$json" | jq -r ".corpora[]?" | sort | sha256sum | awk "{print \$1}")
+    json=$(/opt/pyenv/bin/python python_tools/readdata.py "{\"versions\":\"True\"}")
+    count=$(printf "%s" "$json" | jq -r ".versions | length")
+    hash=$(printf "%s" "$json" | jq -r ".versions[]? | [.corpus, .version, .latest] | @tsv" | sort | sha256sum | awk "{print \$1}")
     printf "%s %s\n" "$count" "$hash"
   ' _ "$db_name"
 }
@@ -134,11 +134,11 @@ validate_candidate_db() {
   local count hash
   read -r count hash < <(corpus_manifest "opusdata.candidate.db")
   if [ -z "$count" ] || [ "$count" = "0" ]; then
-    log "Candidate DB validation failed: corpus list is empty."
+    log "Candidate DB validation failed: corpus release list is empty."
     return 1
   fi
 
-  log "Candidate DB contains $count corpora; hash=$hash"
+  log "Candidate DB contains $count corpus releases; hash=$hash"
 }
 
 current_manifest_or_empty() {
@@ -233,7 +233,7 @@ main() {
 
   local old_count old_hash new_count new_hash
   read -r old_count old_hash < <(current_manifest_or_empty)
-  log "Current host DB corpus count=$old_count; hash=$old_hash"
+  log "Current host DB corpus release count=$old_count; hash=$old_hash"
 
   prepare_candidate_db
   update_candidate_db
@@ -241,13 +241,13 @@ main() {
   read -r new_count new_hash < <(corpus_manifest "opusdata.candidate.db")
 
   if [ "$old_hash" = "$new_hash" ]; then
-    log "No corpus list changes detected; skipping app rebuild/redeploy."
+    log "No corpus release changes detected; skipping app rebuild/redeploy."
     rm -f "$CANDIDATE_DB"
     log "OPUS DB auto-refresh finished without deployment."
     exit 0
   fi
 
-  log "Corpus list changed: old_count=$old_count new_count=$new_count"
+  log "Corpus release list changed: old_count=$old_count new_count=$new_count"
   save_previous_state
   swap_candidate_db
 

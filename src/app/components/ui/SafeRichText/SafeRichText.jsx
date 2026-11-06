@@ -10,6 +10,7 @@ const ALLOWED_TAGS = new Set([
   "li",
   "ol",
   "p",
+  "pre",
   "span",
   "strong",
   "sub",
@@ -121,7 +122,12 @@ function parseSafeNodes(html) {
 
   function appendText(text) {
     if (!text) return;
-    stack[stack.length - 1].children.push(decodeHtmlEntities(text));
+    const parent = stack[stack.length - 1];
+    // HTML parsing discards one newline immediately after an opening <pre>.
+    const normalized = parent.tag === "pre" && parent.children.length === 0
+      ? text.replace(/^\r?\n/, "")
+      : text;
+    if (normalized) parent.children.push(decodeHtmlEntities(normalized));
   }
 
   function closeOpenTag(tag) {

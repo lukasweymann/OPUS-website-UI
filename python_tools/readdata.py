@@ -24,6 +24,21 @@ def main() -> None:
 
     dbo = DbOperations(db_file=db_path)
 
+    if params.get("versions") == "True":
+        corpus = params.get("corpus")
+        where = " WHERE corpus = ?" if corpus else ""
+        _, rows = dbo.run_query(
+            "SELECT corpus, version, MAX(latest = 'True') AS is_latest "
+            "FROM opusfile" + where + " GROUP BY corpus, version "
+            "ORDER BY corpus, is_latest DESC, version DESC",
+            [corpus] if corpus else [],
+        )
+        print(json.dumps({"versions": [
+            {"corpus": row["corpus"], "version": row["version"],
+             "latest": bool(row["is_latest"])} for row in rows
+        ]}))
+        return
+
     parameters = dbo.clean_up_parameters(params)
 
     if len(parameters) == 0:

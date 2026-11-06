@@ -132,11 +132,37 @@
     word-break: break-word;
 }
 
-.actions {
-    margin-top: var(--space-4);
+.citation {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.citationSection {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.citationActions {
     display: flex;
-    gap: var(--space-3);
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-bottom: 1.25rem;
+}
+
+.citation pre,
+pre.citation {
+    margin: 0 0 1.25rem 1.25rem;
+    padding: 0;
+    color: color-mix(in srgb, var(--text-main) 80%, var(--text-muted));
+    font-family: var(--font-mono);
+    font-size: var(--text-code);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.citationWithCopy pre,
+pre.citation {
+    margin-bottom: 0;
 }
 
 .copyBtn {

@@ -36,7 +36,7 @@ function parseRoutePair(langpair = "") {
 }
 
 async function fetchLangs({ corpus, navbar, source, signal }) {
-  const corpusFilter = corpus && !navbar ? `&corpus=${corpus}` : "";
+  const corpusFilter = corpus && !navbar ? `&corpus=${encodeURIComponent(corpus)}` : "";
   const sourceFilter =
     source && corpus && !navbar
       ? `&source=${source.replace("-", "_")}`
@@ -53,7 +53,7 @@ async function fetchLangs({ corpus, navbar, source, signal }) {
   return { clean, mapped: codeToLangTransformer(clean) };
 }
 
-export default function Search({ mode, languageList, navbar, className = "" }) {
+export default function Search({ mode, languageList, navbar, pagePath, className = "" }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -134,7 +134,7 @@ export default function Search({ mode, languageList, navbar, className = "" }) {
           detail: { corpus, pair },
         }),
       );
-      router.push(`/datasets/${corpus}?pair=${pair}`, { scroll: false });
+      router.push(`${pagePath}?pair=${pair}`, { scroll: false });
     } else {
       router.push(`/corpora-search/${src}&${trg}`);
     }

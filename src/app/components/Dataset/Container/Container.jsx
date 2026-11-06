@@ -42,7 +42,7 @@ async function safeJson(res) {
   }
 }
 
-export default function CorpusPageContainer({ version = "" }) {
+export default function CorpusPageContainer({ version = "", pagePath }) {
   const { corpus } = useParams() || {};
   const searchParams = useSearchParams();
 
@@ -138,7 +138,6 @@ export default function CorpusPageContainer({ version = "" }) {
           source: src,
           target: trg,
         });
-
         const res = await fetch(`/api/corpora-table?${params}`, {
           method: "GET",
           signal: acTable.signal,
@@ -217,8 +216,10 @@ export default function CorpusPageContainer({ version = "" }) {
   const hasPair = Boolean(pair);
   const hasActivePair = Boolean(pendingPair || pair);
   const tableMatchesPair = hasPair && tablePair === pair;
-  const overlapMatchesPair = !pendingPair && hasPair && overlapPair === pair;
   const visibleTableData = !pendingPair && tableMatchesPair ? tableData : [];
+  const hasCurrentRelease = visibleTableData.some((row) => row.version === version);
+  const overlapMatchesPair =
+    !pendingPair && hasPair && overlapPair === pair && hasCurrentRelease;
   const loading =
     Boolean(pendingPair) ||
     (hasPair && (status.table === "loading" || !tableMatchesPair));
@@ -248,7 +249,7 @@ export default function CorpusPageContainer({ version = "" }) {
         </p>
       </header>
       <div className={s.search}>
-        <SearchWithSuspense mode="corpusPage" />
+        <SearchWithSuspense mode="corpusPage" pagePath={pagePath} />
       </div>
       {tableError && (
         <p className={s.msgErr}>{err.table || "Could not load results."}</p>

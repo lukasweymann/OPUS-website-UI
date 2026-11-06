@@ -59,6 +59,32 @@
     font-weight: 800;
 }
 
+.latestTag {
+    color: var(--text-muted);
+    font-size: 0.48em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.releases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.releases a {
+    color: var(--link);
+}
+
+.releases a[aria-current="page"] {
+    font-weight: 700;
+    text-decoration: none;
+}
+
 .metaGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -96,9 +122,38 @@
     word-break: break-word;
 }
 
-.content pre {
+.citation {
     white-space: pre-wrap;
-    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+.citationSection {
+    display: grid;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.citationActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.25rem;
+}
+
+.content pre,
+pre.citation {
+    margin: 0 0 1.25rem 1.25rem;
+    padding: 0;
+    color: color-mix(in srgb, var(--text-main) 80%, var(--text-muted));
+    font-family: var(--font-mono);
+    font-size: var(--text-code);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.citationWithCopy pre,
+pre.citation {
+    margin-bottom: 0;
 }
 
 .content a {
@@ -116,10 +171,4 @@
     margin: 8px 0 0;
     font-size: 1.05rem;
     letter-spacing: 0.02em;
-}
-
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
 }

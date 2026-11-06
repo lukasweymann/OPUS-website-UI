@@ -9,6 +9,8 @@ import s from "./CorpusExplorerTabs.module.css";
 
 export default function CorpusExplorerTabs({
   corpus,
+  version,
+  pagePath,
   graphValues = [],
   matrix = null,
   resources = [],
@@ -23,7 +25,7 @@ export default function CorpusExplorerTabs({
 
   if (!showTabs) {
     if (hasResources) return <SmallCorpusResources resources={resources} />;
-    if (hasGraph) return <LanguageGraphs graphValues={graphValues} />;
+    if (hasGraph) return <LanguageGraphs graphValues={graphValues} version={version} pagePath={pagePath} />;
     if (hasMatrix) return <CorpusMatrix corpus={corpus} matrix={matrix} />;
     return null;
   }
@@ -98,7 +100,7 @@ export default function CorpusExplorerTabs({
           hasResources ? (
             <SmallCorpusResources resources={resources} />
           ) : (
-            <LanguageGraphs graphValues={graphValues} />
+            <LanguageGraphs graphValues={graphValues} version={version} pagePath={pagePath} />
           )
         ) : null}
       </div>

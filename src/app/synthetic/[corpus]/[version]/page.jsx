@@ -108,6 +108,9 @@ export default async function SyntheticCorpusPage({ params, searchParams }) {
   const copyright = safeStr(corpusInfo?.copyright);
   const description = safeStr(corpusInfo?.description);
   const cite = safeStr(corpusInfo?.cite);
+  const preEnd = /<\/pre\s*>/i.exec(cite);
+  const citationLead = preEnd ? cite.slice(0, preEnd.index + preEnd[0].length) : cite;
+  const citationTail = preEnd ? cite.slice(preEnd.index + preEnd[0].length) : "";
   const bibtexText = corpusInfo?.bibtex
     ? decodeBibtexBase64(corpusInfo.bibtex)
     : "";
@@ -171,20 +174,32 @@ export default async function SyntheticCorpusPage({ params, searchParams }) {
           </>
         )}
 
-        {(description || cite) && (
+        {(description || cite || bibtexText) && (
           <div className={s.contentBlock}>
             {description && (
               <SafeRichText className={s.content} html={description} />
             )}
-            {cite && (
-              <SafeRichText className={s.content} html={cite} />
+            {(cite || bibtexText) && (
+              <section className={s.citationSection} aria-label="Citation">
+                <h2 className={s.h2}>How to cite</h2>
+                {cite ? (
+                  <SafeRichText
+                    className={`${s.content} ${s.citation} ${preEnd && bibtexText ? s.citationWithCopy : ""}`}
+                    html={citationLead}
+                  />
+                ) : (
+                  <pre className={s.citation}>{bibtexText}</pre>
+                )}
+                {bibtexText && (
+                  <div className={s.citationActions}>
+                    <CopyTextButton text={bibtexText} label="Copy BibTeX" />
+                  </div>
+                )}
+                {citationTail && (
+                  <SafeRichText className={s.content} html={citationTail} />
+                )}
+              </section>
             )}
-          </div>
-        )}
-
-        {bibtexText && (
-          <div className={s.actions}>
-            <CopyTextButton text={bibtexText} label="Copy BibTeX" />
           </div>
         )}
       </section>

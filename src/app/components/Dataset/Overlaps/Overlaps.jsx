@@ -120,8 +120,8 @@ export default function Overlaps({ values, result }) {
 
   const goToCorpus = useCallback(
     (payload) => {
-      if (!payload?.corpus) return;
-      router.push(`/datasets/${encodeURIComponent(payload.corpus)}`);
+      if (!payload?.corpus || !payload?.version) return;
+      router.push(`/datasets/${encodeURIComponent(payload.corpus)}/${encodeURIComponent(payload.version)}`);
     },
     [router],
   );

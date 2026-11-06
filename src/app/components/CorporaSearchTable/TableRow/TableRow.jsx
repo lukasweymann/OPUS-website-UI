@@ -16,6 +16,7 @@ export default function TableRow({ corpusData }) {
     monoFormats,
     corpus,
     version,
+    latest,
     src,
     trg,
     sents,
@@ -29,10 +30,11 @@ export default function TableRow({ corpusData }) {
     <tr className={s.row}>
       <td className={s.name}>
         <Link
-          href={`/datasets/${corpus}?pair=${src}&${trg}`}
+          href={`/datasets/${encodeURIComponent(corpus)}${String(latest) === "True" ? "" : `/${encodeURIComponent(version)}`}?pair=${src}&${trg}`}
           className={s.link}
         >
           {corpus} <span className={s.ver}>{version}</span>
+          {String(latest) === "True" && <span className={s.latest}>Latest</span>}
         </Link>
       </td>
 
