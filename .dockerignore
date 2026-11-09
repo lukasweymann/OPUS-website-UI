@@ -1,0 +1,17 @@
+.git
+.env*
+**/.env*
+.aws
+.codex
+.agents
+opus-secrets.mk
+node_modules
+.next
+.venv
+dev-opus
+logs
+*.log
+data/opus/*.db-shm
+data/opus/*.db-wal
+data/opus/opusdata.candidate.db
+data/opus/opusdata.previous.db

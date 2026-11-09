@@ -13,6 +13,11 @@ make auto-refresh
 
 The script writes logs to `logs/opus-auto-refresh.log` by default and uses
 `flock` to avoid overlapping runs.
+Run it through `make auto-refresh` when credentials are stored in
+`opus-secrets.mk`, so Make exports them for Docker Compose. If an existing
+systemd timer or cron job calls the script directly, update that installed job
+or supply the credentials through exported environment variables or a Compose
+`.env` file before the next deployment.
 
 ## systemd timer
 
@@ -25,7 +30,7 @@ Description=Refresh OPUS website DB and rebuild on corpus-list changes
 [Service]
 Type=oneshot
 WorkingDirectory=/home/lukas/OPUS-website-UI
-ExecStart=/home/lukas/OPUS-website-UI/bin/auto-refresh-opus-db.sh
+ExecStart=/usr/bin/make auto-refresh
 ```
 
 Install the following as `/etc/systemd/system/opus-web-auto-refresh.timer`:
@@ -62,5 +67,5 @@ journalctl -u opus-web-auto-refresh.service
 If systemd timers are not available, run it daily from cron:
 
 ```cron
-17 3 * * * /home/lukas/OPUS-website-UI/bin/auto-refresh-opus-db.sh
+17 3 * * * cd /home/lukas/OPUS-website-UI && make auto-refresh
 ```

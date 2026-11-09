@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { Eye } from "lucide-react";
 
 import SyntheticDropdown from "@/app/components/Synthetic/Dropdown/Dropdown";
-import s from "./SyntheticMatrix.module.css";
+import s from "@/styles/PairMatrix.module.css";
 
 const nf = new Intl.NumberFormat("en-US");
 const nfCompact = new Intl.NumberFormat("en", {

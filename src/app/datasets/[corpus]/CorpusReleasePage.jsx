@@ -22,15 +22,6 @@ const MATRIX_PAIR_MIN = 4;
 const MATRIX_LANGUAGE_LIMIT = 250;
 const MATRIX_PAIR_LIMIT = 7500;
 
-export const SKIP = new Set([
-  "komi",
-  "mpc1",
-  "un",
-  "elra-w0245",
-  "elra-w0248",
-  "elrc_416",
-]);
-
 async function fetchYaml(url) {
   const res = await fetch(url);
   if (!res.ok) return null;

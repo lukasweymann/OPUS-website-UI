@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 
 import LanguageGraphsSynthetic from "@/app/components/Synthetic/LanguageGraph/LanguageGraph";
 import SyntheticMatrix from "./SyntheticMatrix";
-import s from "./SyntheticExplorerTabs.module.css";
+import s from "@/styles/ExplorerTabs.module.css";
 
 export default function SyntheticExplorerTabs({
   graphValues = [],

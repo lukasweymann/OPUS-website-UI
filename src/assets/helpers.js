@@ -1,15 +1,7 @@
 import { callPythonReadData } from "@/lib/pythonClient";
+import { isExcludedCorpus } from "@/lib/corpusExclusions";
 
 function makeCorpusPredicate(type) {
-    const banned = new Set([
-        "komi",
-        "mpc1",
-        "un",
-        "elra-w0245",
-        "elra-w0248",
-        "elrc_416",
-    ]);
-
     return function predicate(corpus) {
         const name = (corpus || "").toLowerCase();
         const hasElra = name.includes("elra");
@@ -22,7 +14,7 @@ function makeCorpusPredicate(type) {
                     ? !hasElra && hasElrc
                     : !hasElra && !hasElrc;
 
-        return typeOk && !banned.has(name);
+        return typeOk && !isExcludedCorpus(corpus);
     };
 }
 import corpora from "./corporaList";

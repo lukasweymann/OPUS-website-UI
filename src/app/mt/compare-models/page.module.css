@@ -77,12 +77,6 @@
     align-items: end;
 }
 
-.titles {
-    display: grid;
-    gap: 6px;
-    min-width: 0;
-}
-
 .k,
 .lbl {
     font-size: 12px;

@@ -1,5 +1,6 @@
-import CorpusReleasePage, { SKIP } from "./CorpusReleasePage";
+import CorpusReleasePage from "./CorpusReleasePage";
 import { callPythonReadData } from "@/lib/pythonClient";
+import { isExcludedCorpus } from "@/lib/corpusExclusions";
 
 export const dynamicParams = true;
 
@@ -11,7 +12,7 @@ export async function generateStaticParams() {
 
   return corpora
     .map((c) => String(c))
-    .filter((c) => !SKIP.has(c.toLowerCase()))
+    .filter((c) => !isExcludedCorpus(c))
     .map((corpus) => ({ corpus }));
 }
 

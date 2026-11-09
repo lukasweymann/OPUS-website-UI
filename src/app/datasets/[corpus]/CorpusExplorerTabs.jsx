@@ -5,7 +5,7 @@ import { useId, useState } from "react";
 import LanguageGraphs from "@/app/components/Dataset/LanguageGraph/LanguageGraph";
 import SmallCorpusResources from "./SmallCorpusResources";
 import CorpusMatrix from "./CorpusMatrix";
-import s from "./CorpusExplorerTabs.module.css";
+import s from "@/styles/ExplorerTabs.module.css";
 
 export default function CorpusExplorerTabs({
   corpus,

@@ -3,6 +3,9 @@ frontend/node_modules
 node_modules
 .env
 .env.local
+opus-secrets.mk
+Dockerfile
+Dockerfile.dbtools
 frontend/.env
 
 db_scores/venv/

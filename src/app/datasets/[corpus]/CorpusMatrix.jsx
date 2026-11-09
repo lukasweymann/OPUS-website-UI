@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { Eye } from "lucide-react";
 
 import TableDropdown from "@/app/components/CorporaSearchTable/TableDropdown/TableDropdown";
-import s from "./CorpusMatrix.module.css";
+import s from "@/styles/PairMatrix.module.css";
 
 const nf = new Intl.NumberFormat("en-US");
 

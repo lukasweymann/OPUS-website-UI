@@ -55,8 +55,6 @@
 
 .soft .controls {
     margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
 }
 
 .soft .tableWrap {

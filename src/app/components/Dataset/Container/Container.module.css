@@ -40,8 +40,6 @@
 
 .res {
     margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
 }
 
 .resHead {
@@ -62,8 +60,6 @@
 
 .loadingArea {
     margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
     min-height: clamp(150px, 22vw, 220px);
     display: grid;
     place-items: center;

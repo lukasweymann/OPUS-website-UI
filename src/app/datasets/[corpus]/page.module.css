@@ -9,7 +9,6 @@
 
 .card {
     border: 0;
-    border-bottom: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
     background: transparent;
     border-radius: 0;
     box-shadow: none;

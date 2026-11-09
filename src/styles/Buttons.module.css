@@ -4,7 +4,7 @@
    --text-main, --text-muted, --shadow-sm, --ring
 */
 
-:where(.primaryButton, .secondaryButton, .tertiaryButton) {
+:where(.primaryButton, .secondaryButton) {
   position: relative;
   overflow: hidden;
 
@@ -42,7 +42,7 @@
     filter 160ms ease;
 }
 
-:where(.primaryButton, .secondaryButton, .tertiaryButton)::before {
+:where(.primaryButton, .secondaryButton)::before {
   /* subtle sheen like modern dashboards */
   content: "";
   position: absolute;
@@ -55,21 +55,21 @@
   transition: opacity 160ms ease;
 }
 
-:where(.primaryButton, .secondaryButton, .tertiaryButton):hover::before {
+:where(.primaryButton, .secondaryButton):hover::before {
   opacity: 1;
 }
 
-:where(.primaryButton, .secondaryButton, .tertiaryButton):active {
+:where(.primaryButton, .secondaryButton):active {
   transform: translateY(1px);
 }
 
-:where(.primaryButton, .secondaryButton, .tertiaryButton):focus-visible {
+:where(.primaryButton, .secondaryButton):focus-visible {
   outline: none;
   box-shadow: var(--ring), var(--shadow-sm), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
-:where(.primaryButton, .secondaryButton, .tertiaryButton)[aria-disabled="true"],
-:where(.primaryButton, .secondaryButton, .tertiaryButton):disabled {
+:where(.primaryButton, .secondaryButton)[aria-disabled="true"],
+:where(.primaryButton, .secondaryButton):disabled {
   opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
@@ -119,35 +119,11 @@
       color-mix(in srgb, var(--surface) 92%, transparent));
 }
 
-/* TERTIARY — low emphasis nav links
-   Quiet, but still “designed” on hover
-*/
-.tertiaryButton {
-  color: var(--text-muted);
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-}
-
-.tertiaryButton:hover {
-  color: var(--text-main);
-  border-color: var(--border);
-  background: rgba(15, 23, 42, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-}
-
-/* Dark-mode nuance: tertiary hover should feel like the OPUS glass blocks */
-@media (prefers-color-scheme: dark) {
-  .tertiaryButton:hover {
-    background: rgba(15, 23, 42, 0.70);
-  }
-}
-
 /* Motion accessibility */
 @media (prefers-reduced-motion: reduce) {
 
-  :where(.primaryButton, .secondaryButton, .tertiaryButton),
-  :where(.primaryButton, .secondaryButton, .tertiaryButton)::before {
+  :where(.primaryButton, .secondaryButton),
+  :where(.primaryButton, .secondaryButton)::before {
     transition: none;
   }
 }

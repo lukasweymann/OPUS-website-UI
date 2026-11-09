@@ -15,13 +15,17 @@ You can also check out [the Next.js GitHub repository](https://github.com/vercel
 
 The default way prescribed to deploy this service is by using Docker containers. It is also possible to deploy the application just like any Node.js or Next.js application.
 
-To build the Docker image the featured Dockerfile is used:
+Generate the Dockerfile from the tracked template, then build the image:
 
 ```shell
+$ make Dockerfile
 $ docker build -t opusweb:latest .
 ``` 
 
-Now the server can be deployed using a `docker-compose.yml` that includes a `nginx` proxy and self-renewable LetsEncrypt SSL certificates like the following:
+The tracked `docker-compose.yaml` passes mail and captcha settings to the container at runtime. Set `OPUS_EMAIL_SERVER`, `OPUS_EMAIL_USER`, `OPUS_EMAIL_PASSWORD`, `OPUS_EMAIL_RECEIVER`, and `OPUS_HCAPTCHA_SECRET` in the shell or an untracked `.env` file before starting it. When using `make auto-refresh`, these can instead be set in the ignored `opus-secrets.mk`. The contact form fails closed in production if its captcha secret is missing.
+Existing timer or cron jobs that call the refresh script directly must switch to `make auto-refresh` or provide those runtime values themselves before the next redeploy.
+
+The server can also be deployed with a `nginx` proxy and self-renewable LetsEncrypt SSL certificates like the following:
 ```
 version: '3.9'
 
@@ -31,15 +35,15 @@ services:
     image: opusweb:latest
     restart: unless-stopped
     environment:
-      - VIRTUAL_HOST=opus.nlp.eu
+      - VIRTUAL_HOST=opus.nlpl.eu
       - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=opus.nlp.eu
-      - LETSENCRYPT_EMAIL=mail@domain.com
-      - OPUS_EMAIL_SERVER=mail.domain.com
-      - OPUS_EMAIL_USER=info@domain.com
-      - OPUS_EMAIL_PASSWORD=password123
-      - OPUS_EMAIL_RECEIVER=someguy@domain.com
-      - OPUS_HCAPTCHA_SECRET=
+      - LETSENCRYPT_HOST=opus.nlpl.eu
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      - OPUS_EMAIL_SERVER=${OPUS_EMAIL_SERVER}
+      - OPUS_EMAIL_USER=${OPUS_EMAIL_USER}
+      - OPUS_EMAIL_PASSWORD=${OPUS_EMAIL_PASSWORD}
+      - OPUS_EMAIL_RECEIVER=${OPUS_EMAIL_RECEIVER}
+      - OPUS_HCAPTCHA_SECRET=${OPUS_HCAPTCHA_SECRET}
       - OPUS_EMAIL_TLS_REJECT_UNAUTHORIZED=true
   
   nginx-proxy:

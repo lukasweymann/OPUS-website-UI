@@ -47,12 +47,6 @@ ENV SCORES_DB=/opt/scores/scores.db
 ENV PYTHON_BIN=/opt/pyenv/bin/python
 ENV NODE_ENV=production
 ENV OPUS_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main/corpus
-ENV OPUS_EMAIL_SERVER=mail.domain.com
-ENV OPUS_EMAIL_USER=info@domain.com
-ENV OPUS_EMAIL_PASSWORD=password123
-ENV OPUS_EMAIL_RECEIVER=someguy@domain.com
-ENV OPUS_HCAPTCHA_SECRET=
-ENV OPUS_EMAIL_TLS_REJECT_UNAUTHORIZED=true
 ENV BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/OPUS/main
 ENV SYN_BASE_REPO=https://raw.githubusercontent.com/Helsinki-NLP/synOPUS
 ENV SAMPLE_BASE=https://raw.githubusercontent.com/Helsinki-NLP/OPUS-website/master/public_html
@@ -61,7 +55,6 @@ ENV BASE=https://raw.githubusercontent.com/Helsinki-NLP
 ENV VIRTUAL_HOST=opus.nlpl.eu
 ENV VIRTUAL_PORT=3000
 ENV LETSENCRYPT_HOST=opus.nlpl.eu
-ENV LETSENCRYPT_EMAIL=email@domain.com
 
 RUN mkdir -p /opt/langpairs && \
     python python_tools/langpairs_ingest_sqlite.py

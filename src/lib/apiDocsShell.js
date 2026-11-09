@@ -341,6 +341,107 @@ const SITE_FOOTER = `
 `;
 
 const SITE_STYLES = `
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+    .docs {
+      position: relative;
+    }
+    .docs-inner {
+      display: grid;
+      gap: 1.75rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.35);
+      padding: 0.15rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: rgba(15,23,42,0.7);
+      backdrop-filter: blur(10px);
+      justify-self: start;
+      width: max-content;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+    }
+    h1 {
+      margin: 0.75rem 0 0.25rem;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 0.25rem 0 0;
+    }
+    .endpoint-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-muted);
+      width: max-content;
+    }
+    .endpoint-line code,
+    .code,
+    .param-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .grid {
+      display: grid;
+    }
+    .section-title {
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin: 0 0 0.75rem;
+    }
+    .param-list {
+      display: grid;
+      margin: 0;
+    }
+    .param-name {
+      white-space: nowrap;
+    }
+    .param-desc b {
+      font-weight: 500;
+    }
+    .example-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.45rem;
+    }
+    .method {
+      display: inline-flex;
+      padding: 0.15rem 0.4rem;
+      border-radius: 999px;
+      font-weight: 650;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .pill {
+      padding: 0.12rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.3);
+    }
+    .code {
+      word-break: normal;
+    }
+    .muted {
+      margin-top: 0.5rem;
+    }
+    .footer-note {
+      margin: 0.75rem 0 0;
+      padding-top: 0.9rem;
+      border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+    }
+
     :root {
       color-scheme: light dark;
       --font-sans: system-ui, -apple-system, "JetBrains Mono", Roboto, sans-serif;
@@ -1458,9 +1559,8 @@ export function withApiDocsChrome(html, options = {}) {
   return html
     .replace(
       "</head>",
-      '  <link rel="icon" href="/images/favicon.ico" />\n</head>',
+      `  <style>\n${SITE_STYLES}\n  </style>\n  <link rel="icon" href="/images/favicon.ico" />\n</head>`,
     )
-    .replace("</style>", `${SITE_STYLES}\n  </style>`)
     .replace("<body>", `${bodyOpen}\n${SITE_HEADER}\n  <main class="api-docs-main">`)
     .replace("</body>", `  </main>\n${SITE_FOOTER}\n</body>`);
 }
