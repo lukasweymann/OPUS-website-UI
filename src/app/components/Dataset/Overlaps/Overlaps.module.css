@@ -34,6 +34,16 @@
     padding-bottom: 20px;
 }
 
+.loading {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-weight: 850;
+    color: var(--text-main);
+}
+
 .clickableChart :global(.recharts-surface) {
     cursor: pointer;
 }

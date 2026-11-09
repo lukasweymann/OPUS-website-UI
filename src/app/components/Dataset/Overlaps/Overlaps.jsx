@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   BarChart,
@@ -13,6 +13,7 @@ import {
 } from "recharts";
 
 import s from "./Overlaps.module.css";
+import LoaderSpinner from "../../ui/LoaderSpinner/LoaderSpinner";
 
 const nf = new Intl.NumberFormat("en", { maximumFractionDigits: 2 });
 
@@ -75,6 +76,7 @@ export default function Overlaps({ values, result }) {
   const router = useRouter();
   const activeCorpusRef = useRef(null);
   const directBarClickRef = useRef(0);
+  const [chartValues, setChartValues] = useState(null);
 
   const data = useMemo(() => {
     const rows = tsvRows(values);
@@ -112,7 +114,19 @@ export default function Overlaps({ values, result }) {
     result[0]?.label &&
     result[1]?.label;
 
-  if (!ready) return null;
+  useEffect(() => {
+    if (!ready) return;
+
+    // Let the confirmed-result loader paint before Recharts starts rendering.
+    let nextFrame;
+    const firstFrame = requestAnimationFrame(() => {
+      nextFrame = requestAnimationFrame(() => setChartValues(values));
+    });
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(nextFrame);
+    };
+  }, [ready, values]);
 
   // Brand-aligned overlap color (sits between your purple and mint)
   const overlapFill = "#76CDEC"; // keep as your “overlap cyan”
@@ -159,6 +173,8 @@ export default function Overlaps({ values, result }) {
     [goToCorpus],
   );
 
+  if (!ready) return null;
+
   return (
     <section className={s.wrap}>
       <header className={s.head}>
@@ -171,31 +187,38 @@ export default function Overlaps({ values, result }) {
       </header>
 
       <div className={`${s.chart} ${s.clickableChart}`}>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={data}
-            margin={{ top: 8, right: 10, left: 0, bottom: 8 }}
-            onClick={onChartClick}
-            onMouseMove={onChartMouseMove}
-            onMouseLeave={onChartMouseLeave}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" fontSize={12} tickMargin={8} />
-            <YAxis type="number" unit=" %" ticks={numbers} fontSize={12} />
-            <Tooltip
-              content={<OverlapTooltip />}
-              wrapperStyle={{ outline: "none", zIndex: 50 }}
-            />
+        {chartValues === values ? (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={data}
+              margin={{ top: 8, right: 10, left: 0, bottom: 8 }}
+              onClick={onChartClick}
+              onMouseMove={onChartMouseMove}
+              onMouseLeave={onChartMouseLeave}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" fontSize={12} tickMargin={8} />
+              <YAxis type="number" unit=" %" ticks={numbers} fontSize={12} />
+              <Tooltip
+                content={<OverlapTooltip />}
+                wrapperStyle={{ outline: "none", zIndex: 50 }}
+              />
 
-            <Bar
-              dataKey="perc"
-              fill={overlapFill}
-              activeBar={{ fill: overlapActive }}
-              cursor="pointer"
-              onClick={onBarDirectClick}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+              <Bar
+                dataKey="perc"
+                fill={overlapFill}
+                activeBar={{ fill: overlapActive }}
+                cursor="pointer"
+                onClick={onBarDirectClick}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className={s.loading} role="status">
+            <LoaderSpinner size={42} decorative />
+            <span>Preparing overlap graph…</span>
+          </div>
+        )}
       </div>
     </section>
   );
