@@ -83,7 +83,7 @@ export default function SampleClient({
                 <Link href={backHref} className={s.corpusLink}>
                   {corpus}
                 </Link>{" "}
-                <span className={s.ver}>v{version}</span>
+                <span className={s.ver}>{version}</span>
               </h1>
 
               <div className={s.actions}>
